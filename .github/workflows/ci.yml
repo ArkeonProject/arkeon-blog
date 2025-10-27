@@ -1,0 +1,44 @@
+name: 🧩 CI - Build & Test (develop)
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup PNPM
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: 🧰 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: 📦 Install dependencies
+        run: pnpm install
+
+      - name: 🧪 Run lint
+        run: pnpm run lint --if-present
+
+      - name: 🧱 Run tests
+        run: pnpm run test --if-present
+
+      - name: 🧰 Build check
+        run: pnpm run build
+
+      - name: 📊 Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: dist
