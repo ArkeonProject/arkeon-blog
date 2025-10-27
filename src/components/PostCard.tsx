@@ -1,10 +1,7 @@
+import type { PostListItem } from "../types/post";
+
 interface PostCardProps {
-  post: {
-    title: string;
-    excerpt: string;
-    cover_image?: string;
-    published_at: string;
-  };
+  post: PostListItem;
 }
 
 export default function PostCard({ post }: PostCardProps) {
@@ -15,6 +12,7 @@ export default function PostCard({ post }: PostCardProps) {
           src={post.cover_image}
           alt={post.title}
           className="rounded-lg mb-4 w-full object-cover h-48"
+          loading="lazy"
         />
       )}
       <h2 className="text-xl font-semibold mb-2">{post.title}</h2>

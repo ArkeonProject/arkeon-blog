@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.76.1",
+    "dompurify": "^3.3.0",
+    "marked": "^16.4.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-helmet-async": "^2.0.5",
     "react-router-dom": "^7.9.4"
   },
   "devDependencies": {

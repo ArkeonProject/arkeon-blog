@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import BlogPage from "./pages/BlogPage";
 import PostPage from "./pages/PostPage";
+import ContactPage from "./pages/ContactPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="/" element={<Navigate to="/blog" replace />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/post/:slug" element={<PostPage />} />
+          <Route path="/contact" element={<ContactPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
