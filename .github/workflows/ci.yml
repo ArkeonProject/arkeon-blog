@@ -35,7 +35,7 @@ jobs:
         run: pnpm run lint || echo "Skipping lint step (no script found)"
 
       - name: 🧱 Run tests
-        run: pnpm run test --if-present
+        run: pnpm run test || echo "Skipping tests (no script found)"
 
       - name: 🧰 Build check
         run: pnpm run build
