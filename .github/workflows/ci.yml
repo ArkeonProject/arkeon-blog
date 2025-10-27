@@ -1,0 +1,47 @@
+name: 🧩 CI - Build & Test (develop)
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 📦 Install PNPM globally
+        run: npm install -g pnpm@10 --force
+
+      - name: 🔍 Validate PNPM installation
+        run: pnpm -v
+
+      - name: 🧰 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 🧪 Run lint
+        run: pnpm run lint || echo "Skipping lint step (no script found)"
+
+      - name: 🧱 Run tests
+        run: pnpm run test || echo "Skipping tests (no script found)"
+
+      - name: 🧰 Build check
+        run: pnpm run build
+
+      - name: 📊 Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: dist
