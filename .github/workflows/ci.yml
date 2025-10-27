@@ -9,15 +9,13 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
 
     steps:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
-
-      - name: ⚙️ Setup PNPM
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9
 
       - name: 🧰 Setup Node.js
         uses: actions/setup-node@v4
@@ -25,8 +23,14 @@ jobs:
           node-version: 20
           cache: 'pnpm'
 
+      - name: 📦 Install PNPM globally
+        run: npm install -g pnpm@10
+
+      - name: 🔍 Validate PNPM installation
+        run: pnpm -v
+
       - name: 📦 Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: 🧪 Run lint
         run: pnpm run lint --if-present
