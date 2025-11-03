@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+/* Estilos globales personalizados */
+html, body {
+  font-family: system-ui, sans-serif;
+}
+
+html {
+  color-scheme: light;
+}
