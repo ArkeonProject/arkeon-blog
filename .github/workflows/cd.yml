@@ -12,10 +12,8 @@ jobs:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
 
-      - name: ⚙️ Setup PNPM
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9
+      - name: 📦 Install PNPM globally
+        run: npm install -g pnpm@10 --force
 
       - name: 🧰 Setup Node.js
         uses: actions/setup-node@v4
@@ -24,7 +22,7 @@ jobs:
           cache: 'pnpm'
 
       - name: 📦 Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: 🧱 Build project
         run: pnpm run build
@@ -39,6 +37,3 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: ./
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
