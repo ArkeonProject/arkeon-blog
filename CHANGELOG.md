@@ -4,6 +4,12 @@
 
 ---
 
+## [v0.2.0] - 2025-11-05
+### 🚀 Added
+- Implementación de CHANGELOG
+
+---
+
 ## [v0.1.0] - 2025-11-05
 ### 🚀 Added
 - Implementación de tags automáticos en CD.
