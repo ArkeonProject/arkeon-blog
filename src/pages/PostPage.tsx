@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "../lib/supabase";
+import { useLocale } from "../context/LocaleContext";
 import type { PostDetail } from "../types/post";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
@@ -10,9 +11,13 @@ marked.setOptions({ async: false });
 
 export default function PostPage() {
   const { slug } = useParams();
+  const { locale } = useLocale();
   const [post, setPost] = useState<PostDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // Convertir locale del contexto ("es"/"en") a formato de base de datos ("ES"/"EN")
+  const languageFilter = locale.toUpperCase();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -20,6 +25,7 @@ export default function PostPage() {
         .from("posts")
         .select("*")
         .eq("slug", slug)
+        .eq("language", languageFilter)
         .single();
 
       if (error) {
@@ -32,7 +38,7 @@ export default function PostPage() {
     };
 
     fetchPost();
-  }, [slug]);
+  }, [slug, locale]);
 
   const htmlContent = useMemo(() => {
     if (!post?.content) return "";

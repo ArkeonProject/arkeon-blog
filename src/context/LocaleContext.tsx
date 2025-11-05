@@ -1,4 +1,6 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import esMessages from "../locales/es.json";
+import enMessages from "../locales/en.json";
 
 type Locale = "es" | "en";
 
@@ -11,32 +13,25 @@ interface LocaleContextValue {
 const LOCALE_KEY = "locale";
 
 const MESSAGES: Record<Locale, Record<string, string>> = {
-  es: {
-    brand: "Arkeon Blog",
-    nav_posts: "Publicaciones",
-    nav_contact: "Contacto",
-    language: "Idioma",
-  },
-  en: {
-    brand: "Arkeon Blog",
-    nav_posts: "Posts",
-    nav_contact: "Contact",
-    language: "Language",
-  },
+  es: esMessages,
+  en: enMessages,
 };
 
 const LocaleContext = createContext<LocaleContextValue | undefined>(undefined);
 
-export function LocaleProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(() => {
+interface LocaleProviderProps {
+  readonly children: React.ReactNode;
+}
+
+export function LocaleProvider({ children }: LocaleProviderProps) {
+  const [locale, setLocale] = useState<Locale>(() => {
     const saved = localStorage.getItem(LOCALE_KEY) as Locale | null;
     return saved ?? "es";
   });
 
-  const setLocale = (l: Locale) => {
-    setLocaleState(l);
-    localStorage.setItem(LOCALE_KEY, l);
-  };
+  useEffect(() => {
+    localStorage.setItem(LOCALE_KEY, locale);
+  }, [locale]);
 
   const t = useMemo(() => {
     const dict = MESSAGES[locale];

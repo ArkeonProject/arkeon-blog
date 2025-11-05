@@ -1,7 +1,7 @@
 import type { PostListItem } from "../types/post";
 
 interface PostCardProps {
-  post: PostListItem;
+  readonly post: PostListItem;
 }
 
 export default function PostCard({ post }: PostCardProps) {

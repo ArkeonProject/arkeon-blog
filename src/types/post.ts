@@ -5,6 +5,7 @@ export interface PostListItem {
   excerpt: string;
   cover_image?: string;
   published_at: string;
+  language?: string;
 }
 
 export interface PostDetail {
@@ -13,4 +14,5 @@ export interface PostDetail {
   cover_image?: string;
   author: string;
   published_at: string;
+  language?: string;
 }

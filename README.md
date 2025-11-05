@@ -1,92 +1,115 @@
-# Arkeon Blog
+# 🚀 Arkeon Blog
 
-Arkeon Blog es una plataforma moderna y eficiente para la publicación de contenido, construida con tecnologías de última generación para ofrecer un rendimiento óptimo y una experiencia de usuario excepcional.
+**Arkeon Blog** es una plataforma moderna creada para los amantes de la tecnología, el análisis y la innovación.  
+Combina diseño limpio, rendimiento excepcional y contenido cuidadosamente seleccionado para ofrecer **noticias tecnológicas actualizadas, comparativas detalladas y análisis objetivos de productos** que ayudan a los usuarios a mantenerse informados y tomar mejores decisiones de compra.
 
-## Tecnologías principales
+---
 
-- **React**: Biblioteca para construir interfaces de usuario.
-- **TypeScript**: Superset de JavaScript que añade tipado estático.
-- **Vite**: Herramienta de construcción rápida y ligera para proyectos frontend.
-- **TailwindCSS v4.1**: Framework CSS utilitario para un diseño rápido y responsivo.
-- **Supabase**: Backend como servicio para autenticación, base de datos y almacenamiento.
-- **PNPM**: Gestor de paquetes rápido y eficiente.
+## 🧠 Visión del proyecto
 
-## Instalación
+En un entorno donde la información se mueve más rápido que nunca, **Arkeon Blog** nace con el propósito de ofrecer un espacio confiable y accesible donde la tecnología se entiende, se compara y se disfruta.
 
-Sigue estos pasos para configurar y ejecutar el proyecto localmente:
+Nuestra misión es **traducir la complejidad del mundo tech** en artículos claros, comparativas útiles y guías honestas, manteniendo siempre una mirada objetiva y una presentación visual moderna.
 
-1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/ArkeonProject/arkeon-blog.git
-   cd arkeon-blog
-   ```
+---
 
-2. Instala las dependencias utilizando PNPM:
-   ```bash
-   pnpm install
-   ```
+## ✨ Qué ofrece Arkeon Blog
 
-3. Configura las variables de entorno:
+### 📰 Noticias tecnológicas
+Cobertura de las últimas tendencias, lanzamientos y novedades del ecosistema tecnológico global.  
+Desde avances en inteligencia artificial hasta nuevos dispositivos, Arkeon Blog te mantiene al día con un tono informativo y accesible.
 
-   Crea un archivo `.env` en la raíz del proyecto con las siguientes variables (ajusta los valores según tu entorno):
+### ⚙️ Comparativas y análisis
+Análisis detallados de productos tecnológicos (smartphones, auriculares, monitores, gadgets del hogar, etc.), con un enfoque **neutral y basado en datos**.  
+Cada comparativa está pensada para ayudar al lector a **decidir con confianza** qué producto se adapta mejor a sus necesidades.
 
-   ```
-   VITE_SUPABASE_URL=tu_supabase_url
-   VITE_SUPABASE_ANON_KEY=tu_supabase_anon_key
-   ```
+### 💡 Recomendaciones inteligentes
+Selecciones curadas de los mejores productos del momento, con enlaces directos de afiliación a Amazon y otros comercios, **sin publicidad invasiva** ni intereses ocultos.
 
-4. Ejecuta el proyecto en modo desarrollo:
-   ```bash
-   pnpm dev
-   ```
+### 🌐 Sistema multiidioma
+Contenido disponible en español e inglés, con detección automática y selector manual de idioma, pensado para llegar a una audiencia internacional sin perder identidad.
 
-5. Para generar una versión de producción:
-   ```bash
-   pnpm build
-   ```
+### 📱 Experiencia fluida
+Una interfaz **minimalista y completamente responsive**, optimizada para una lectura agradable tanto en escritorio como en dispositivos móviles.
 
-## Estructura del proyecto
+---
 
-```
-arkeon-blog/
-├── public/                 # Archivos estáticos públicos
-├── src/
-│   ├── assets/             # Imágenes y recursos estáticos
-│   ├── components/         # Componentes React reutilizables
-│   ├── hooks/              # Custom hooks
-│   ├── pages/              # Páginas del sitio
-│   ├── styles/             # Estilos globales y configuración de TailwindCSS
-│   ├── utils/              # Funciones utilitarias
-│   └── main.tsx            # Punto de entrada de la aplicación
-├── .env                    # Variables de entorno
-├── pnpm-lock.yaml          # Lockfile de PNPM
-├── tailwind.config.ts      # Configuración de TailwindCSS
-├── vite.config.ts          # Configuración de Vite
-└── README.md               # Documentación del proyecto
-```
+## 🧩 Arquitectura y diseño
 
-## Flujo CI/CD
+**Arkeon Blog** está construido sobre una arquitectura moderna, ligera y eficiente.  
+Combina las mejores tecnologías del ecosistema web actual:
 
-El proyecto utiliza GitHub Actions para automatizar pruebas y despliegues:
+- ⚛️ **React 19 + TypeScript 5.9** – Interfaz dinámica, componentes reutilizables y tipado estricto para máxima robustez.  
+- 💨 **Vite + TailwindCSS** – Build ultrarrápido y diseño adaptable con un enfoque utilitario.  
+- 🔗 **Supabase (PostgreSQL + API REST)** – Backend ágil para gestionar publicaciones, autores y suscriptores de newsletter.  
+- 🔐 **DOMPurify + Marked** – Renderizado seguro y eficiente de contenido Markdown.  
+- 🌍 **React Router + React Helmet** – Navegación fluida con optimización SEO integrada.
 
-- **Integración Continua (CI):** Cada push o pull request dispara un workflow que ejecuta linter, tests y build para garantizar la calidad del código.
-- **Despliegue Continuo (CD):** Las versiones aprobadas se despliegan automáticamente en Vercel, asegurando que la última versión esté disponible en producción sin intervención manual.
+El resultado: una aplicación **SPA** rápida, optimizada y segura, que se comporta como una experiencia nativa.
 
-## Contribuir y tests
+---
 
-Para contribuir al proyecto:
+## 🧭 Estructura de contenido
 
-1. Haz un fork y crea una rama con tu feature o fix.
-2. Asegúrate de que el código pase las reglas de lint y los tests.
-3. Envía un pull request para revisión.
+El modelo de datos se centra en la simplicidad y la escalabilidad, con dos entidades principales:
 
-Para ejecutar los tests locales:
+### 🗞️ `posts`
+Contiene las publicaciones del blog:
+- `id` — Identificador único  
+- `title` — Título del artículo  
+- `slug` — URL amigable  
+- `excerpt` — Extracto o resumen  
+- `content` — Texto completo en Markdown  
+- `cover_image` — Imagen destacada   
+- `author` — Autor del artículo  
+- `language` — Idioma (`ES` / `EN`)  
+- `published_at` — Fecha de publicación  
 
-```bash
-pnpm test
-```
+### 📬 `newsletter_subscribers`
+Registra a los usuarios que desean recibir las últimas noticias y comparativas:
+- `email` — Dirección de correo  
+- `created_at` — Fecha de suscripción  
 
-## Créditos
+---
 
-Desarrollado y mantenido por **David López**.  
-¡Gracias por contribuir y hacer que Arkeon Blog sea mejor!
+## 💡 Filosofía de diseño
+
+El diseño de Arkeon Blog se basa en tres principios:
+
+| Principio | Descripción |
+|------------|--------------|
+| **Claridad** | Cada publicación está presentada de forma limpia, sin distracciones. |
+| **Velocidad** | Tiempo de carga mínimo gracias a una arquitectura ligera y dependencias optimizadas. |
+| **Accesibilidad** | Navegación intuitiva, soporte multiidioma y diseño responsive. |
+
+---
+
+## 🔍 Por qué Arkeon Blog es diferente
+
+A diferencia de otros portales tecnológicos, **Arkeon Blog** combina **rigor técnico, transparencia y estética**.  
+No busca solo informar, sino **crear una experiencia editorial digital** que invite a leer, comparar y descubrir.
+
+- 🧭 Orientado al usuario: interfaz pensada para la lectura, no para el clic.  
+- 📊 Objetivo y verificable: cada dato y análisis proviene de fuentes contrastadas.  
+- 🧠 Humano y accesible: lenguaje claro, sin tecnicismos innecesarios.  
+
+---
+
+## 📈 En resumen
+
+| Aspecto | Descripción |
+|----------|--------------|
+| 📰 **Contenido** | Noticias tecnológicas, comparativas y recomendaciones |
+| ⚙️ **Tecnología** | React, Supabase, Vite, TailwindCSS |
+| 🌍 **Idiomas** | Español e Inglés |
+| 📬 **Interacción** | Newsletter y sistema de comentarios (en desarrollo) |
+| 💡 **Objetivo** | Ser un referente de calidad y transparencia en divulgación tecnológica |
+
+---
+
+<div align="center">
+
+💜 **Arkeon Blog** — Tecnología con propósito, análisis con criterio y diseño con alma.  
+Construido con pasión por **David López**.
+
+</div>

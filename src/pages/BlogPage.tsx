@@ -4,11 +4,13 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import PostCard from "../components/PostCard.tsx";
 import NewsletterForm from "../components/NewsletterForm.tsx";
+import { useLocale } from "../context/LocaleContext";
 import type { PostListItem } from "../types/post";
 
 const PAGE_SIZE = 6;
 
 export default function BlogPage() {
+  const { locale } = useLocale();
   const [posts, setPosts] = useState<PostListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -16,12 +18,16 @@ export default function BlogPage() {
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
 
+  // Convertir locale del contexto ("es"/"en") a formato de base de datos ("ES"/"EN")
+  const languageFilter = locale.toUpperCase();
+
   const loadPage = async (pageIndex: number) => {
     const from = pageIndex * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
     const { data, error } = await supabase
       .from("posts")
-      .select("id, title, slug, excerpt, cover_image, published_at")
+      .select("id, title, slug, excerpt, cover_image, published_at, language")
+      .eq("language", languageFilter)
       .order("published_at", { ascending: false })
       .range(from, to);
 
@@ -34,13 +40,16 @@ export default function BlogPage() {
   };
 
   useEffect(() => {
+    setLoading(true);
+    setPage(0);
+    setHasMore(true);
     (async () => {
       const first = await loadPage(0);
       setPosts(first);
       setHasMore(first.length === PAGE_SIZE);
       setLoading(false);
     })();
-  }, []);
+  }, [locale]);
 
   const loadMore = async () => {
     if (loadingMore || !hasMore) return;
@@ -52,6 +61,13 @@ export default function BlogPage() {
     setHasMore(next.length === PAGE_SIZE);
     setLoadingMore(false);
   };
+
+  // Recalcular hasMore cuando cambia el locale para evitar problemas
+  useEffect(() => {
+    if (posts.length > 0 && posts.length < PAGE_SIZE) {
+      setHasMore(false);
+    }
+  }, [posts.length]);
 
   if (loading) return <p className="text-center mt-10">Cargando publicaciones...</p>;
   if (errorMsg) return <p className="text-center mt-10 text-red-600">{errorMsg}</p>;
