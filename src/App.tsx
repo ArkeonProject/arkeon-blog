@@ -7,7 +7,7 @@ import Footer from "./components/Footer";
 
 function Layout() {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 text-gray-900">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#0a1628] via-[#0d1f38] to-[#060f1a] text-white">
       <Header />
       <main className="grow container mx-auto px-4 py-8">
         <Outlet />

@@ -80,7 +80,7 @@ Después de un release o hotfix aplicado en `main`, actualiza `develop`:
 
 ```bash
 git checkout develop
-git fetch origin main
+git fetch origin
 git rebase origin/main
 git push origin develop --force-with-lease
 ```
