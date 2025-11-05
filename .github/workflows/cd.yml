@@ -3,6 +3,9 @@ name: 🚀 CD - Deploy to Production (main)
 on:
   push:
     branches: [main]
+    
+permissions:
+  contents: write 
 
 jobs:
   deploy:
