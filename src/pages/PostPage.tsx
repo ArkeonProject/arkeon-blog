@@ -11,7 +11,7 @@ marked.setOptions({ async: false });
 
 export default function PostPage() {
   const { slug } = useParams();
-  const { locale } = useLocale();
+  const { locale, t } = useLocale();
   const [post, setPost] = useState<PostDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -30,7 +30,7 @@ export default function PostPage() {
 
       if (error) {
         console.error(error);
-        setErrorMsg("No se pudo cargar la publicación. Intenta nuevamente más tarde.");
+        setErrorMsg(t("post_error"));
       } else {
         setPost(data as PostDetail);
       }
@@ -46,9 +46,9 @@ export default function PostPage() {
     return DOMPurify.sanitize(html);
   }, [post?.content]);
 
-  if (loading) return <p className="text-center mt-10">Cargando...</p>;
-  if (errorMsg) return <p className="text-center mt-10 text-red-600">{errorMsg}</p>;
-  if (!post) return <p className="text-center mt-10">Publicación no encontrada</p>;
+  if (loading) return <p className="text-center mt-10 text-white/70">{t("post_loading")}</p>;
+  if (errorMsg) return <p className="text-center mt-10 text-red-400">{errorMsg}</p>;
+  if (!post) return <p className="text-center mt-10 text-white/70">{t("post_not_found")}</p>;
 
   const description = post.content.length > 160 ? post.content.slice(0, 157) + "…" : post.content;
 
@@ -62,20 +62,26 @@ export default function PostPage() {
         {post.cover_image && <meta property="og:image" content={post.cover_image} />}
       </Helmet>
 
-      <Link to="/blog" className="text-blue-600 hover:underline">← Volver al blog</Link>
+      <Link to="/blog" className="text-[#007EAD] hover:text-[#007EAD]/80 transition-colors duration-300 inline-flex items-center gap-2 mb-6">
+        <span>←</span> {t("post_back_to_blog")}
+      </Link>
       {post.cover_image && (
         <img
           src={post.cover_image}
           alt={post.title}
-          className="rounded-xl my-6 w-full object-cover h-64"
+          className="rounded-xl my-6 w-full object-cover h-64 border border-[#007EAD]/20 shadow-lg shadow-[#007EAD]/10"
           loading="lazy"
         />
       )}
-      <h1 className="text-4xl font-bold mb-2">{post.title}</h1>
-      <p className="text-sm text-gray-500 mb-6">
-        {new Date(post.published_at).toLocaleDateString()} — {post.author}
+      <h1 className="text-4xl font-bold mb-2 text-white">{post.title}</h1>
+      <p className="text-sm text-white/60 mb-6">
+        {new Date(post.published_at).toLocaleDateString(locale === "es" ? "es-ES" : "en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })} — <span className="text-[#007EAD]">{post.author}</span>
       </p>
-      <article className="prose max-w-none text-gray-800">
+      <article className="prose prose-invert max-w-none prose-headings:text-white prose-p:text-white/80 prose-a:text-[#007EAD] prose-strong:text-white prose-code:text-[#007EAD] prose-pre:bg-[#0f1f38]/50 prose-pre:border prose-pre:border-[#007EAD]/20">
         <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
       </article>
     </div>

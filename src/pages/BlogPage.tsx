@@ -3,6 +3,8 @@ import { supabase } from "../lib/supabase";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import PostCard from "../components/PostCard.tsx";
+import FeaturedPostCard from "../components/FeaturedPostCard.tsx";
+import InfiniteCarousel from "../components/InfiniteCarousel.tsx";
 import NewsletterForm from "../components/NewsletterForm.tsx";
 import { useLocale } from "../context/LocaleContext";
 import type { PostListItem } from "../types/post";
@@ -10,8 +12,9 @@ import type { PostListItem } from "../types/post";
 const PAGE_SIZE = 6;
 
 export default function BlogPage() {
-  const { locale } = useLocale();
+  const { locale, t } = useLocale();
   const [posts, setPosts] = useState<PostListItem[]>([]);
+  const [featuredPost, setFeaturedPost] = useState<PostListItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [page, setPage] = useState(0);
@@ -33,7 +36,7 @@ export default function BlogPage() {
 
     if (error) {
       console.error(error);
-      setErrorMsg("No se pudieron cargar las publicaciones. Intenta nuevamente más tarde.");
+      setErrorMsg(t("blog_error"));
       return [] as PostListItem[];
     }
     return (data ?? []) as PostListItem[];
@@ -45,8 +48,16 @@ export default function BlogPage() {
     setHasMore(true);
     (async () => {
       const first = await loadPage(0);
-      setPosts(first);
+      // Separar la primera publicación (la más reciente) como destacada
+      if (first.length > 0) {
+        setFeaturedPost(first[0]);
+        setPosts(first.slice(1));
       setHasMore(first.length === PAGE_SIZE);
+      } else {
+        setFeaturedPost(null);
+        setPosts([]);
+        setHasMore(false);
+      }
       setLoading(false);
     })();
   }, [locale]);
@@ -62,49 +73,78 @@ export default function BlogPage() {
     setLoadingMore(false);
   };
 
-  // Recalcular hasMore cuando cambia el locale para evitar problemas
-  useEffect(() => {
-    if (posts.length > 0 && posts.length < PAGE_SIZE) {
-      setHasMore(false);
-    }
-  }, [posts.length]);
 
-  if (loading) return <p className="text-center mt-10">Cargando publicaciones...</p>;
-  if (errorMsg) return <p className="text-center mt-10 text-red-600">{errorMsg}</p>;
+  if (loading) return <p className="text-center mt-20 text-white/70 tracking-wide font-semibold text-lg">{t("blog_loading")}</p>;
+  if (errorMsg) return <p className="text-center mt-20 text-red-500 tracking-wide font-semibold text-lg">{errorMsg}</p>;
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <Helmet>
-        <title>Blog | Arkeon</title>
-        <meta name="description" content="Artículos y novedades del proyecto Arkeon." />
-        <meta property="og:title" content="Blog | Arkeon" />
-        <meta property="og:description" content="Artículos y novedades del proyecto Arkeon." />
-      </Helmet>
+    <div className="min-h-screen bg-linear-to-br from-[#0b1226] via-[#071622] to-[#0a172b] text-white font-sans antialiased rounded-3xl shadow-lg shadow-[#007EAD]/20">
+      <div className="max-w-5xl mx-auto px-6 py-16 md:py-24">
+        <Helmet>
+          <title>{t("blog_title")} | Arkeon</title>
+          <meta name="description" content={t("blog_meta_description")} />
+          <meta property="og:title" content={`${t("blog_title")} | Arkeon`} />
+          <meta property="og:description" content={t("blog_meta_description")} />
+        </Helmet>
 
-      <h1 className="text-4xl font-bold mb-10 text-center">📰 Blog de Arkeon</h1>
+        {/* Sección de introducción */}
+        <header className="text-center mb-20 max-w-3xl mx-auto">
+          <h1 className="text-6xl md:text-7xl font-extrabold mb-6 bg-linear-to-r from-white via-[#00aaff]/70 to-white bg-clip-text text-transparent drop-shadow-lg animate-fade-in tracking-tight leading-tight">
+            {t("blog_intro_title")}
+          </h1>
+          <p className="text-3xl md:text-4xl font-semibold text-[#00aaff] mb-8 drop-shadow-md animate-fade-in-delay-1 tracking-wide">
+            {t("blog_intro_subtitle")}
+          </p>
+          <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed tracking-wide animate-fade-in-delay-2">
+            {t("blog_intro_description")}
+          </p>
+        </header>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        {posts.map((post) => (
-          <Link key={post.id} to={`/post/${post.slug}`}>
-            <PostCard post={post} />
-          </Link>
-        ))}
+        {/* Tarjeta destacada de la última publicación */}
+        {featuredPost && (
+          <section className="mb-20 shadow-lg shadow-[#007EAD]/30 rounded-3xl overflow-hidden transition-transform transform hover:scale-[1.02] duration-500">
+            <FeaturedPostCard post={featuredPost} />
+          </section>
+        )}
       </div>
 
-      {hasMore && (
-        <div className="flex justify-center mt-8">
-          <button
-            onClick={loadMore}
-            disabled={loadingMore}
-            className="px-4 py-2 rounded bg-gray-900 text-white hover:bg-gray-800 disabled:opacity-60"
-          >
-            {loadingMore ? "Cargando…" : "Cargar más"}
-          </button>
-        </div>
-      )}
+      {/* Carrusel infinito - ocupa todo el ancho */}
+      <section className="mb-20">
+        <InfiniteCarousel />
+      </section>
 
-      <div className="mt-16">
-        <NewsletterForm />
+      <div className="max-w-5xl mx-auto px-6 pb-24">
+        {/* Grid de publicaciones restantes */}
+        {posts.length > 0 && (
+          <section className="grid md:grid-cols-2 gap-10">
+            {posts.map((post) => (
+              <Link 
+                key={post.id} 
+                to={`/post/${post.slug}`} 
+                className="block rounded-2xl shadow-md shadow-[#007EAD]/20 hover:shadow-[#00aaff]/50 transition-shadow duration-400"
+                aria-label={post.title}
+              >
+                <PostCard post={post} />
+              </Link>
+            ))}
+          </section>
+        )}
+
+        {hasMore && (
+          <div className="flex justify-center mt-14">
+            <button
+              onClick={loadMore}
+              disabled={loadingMore}
+              className="px-8 py-4 rounded-xl bg-linear-to-r from-[#007EAD] to-[#00aaff] text-white font-semibold tracking-wide shadow-lg shadow-[#007EAD]/50 hover:from-[#00aaff] hover:to-[#007EAD] hover:shadow-[#00aaff]/70 focus:outline-none focus:ring-4 focus:ring-[#00aaff]/40 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+            >
+              {loadingMore ? t("blog_loading_more") : t("blog_load_more")}
+            </button>
+          </div>
+        )}
+
+        <div className="mt-28">
+          <NewsletterForm />
+        </div>
       </div>
     </div>
   );
