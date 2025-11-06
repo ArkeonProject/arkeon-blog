@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useLocale } from "../context/LocaleContext";
-import { Globe, Menu, X } from "lucide-react";
+import { FiGlobe as Globe, FiMenu as Menu, FiX as X } from "react-icons/fi";
 import { useState, useRef, useEffect } from "react";
 
 type Locale = "es" | "en";

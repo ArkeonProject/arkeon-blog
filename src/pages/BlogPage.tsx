@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "../lib/supabase";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -21,10 +21,9 @@ export default function BlogPage() {
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  // Convertir locale del contexto ("es"/"en") a formato de base de datos ("ES"/"EN")
   const languageFilter = locale.toUpperCase();
 
-  const loadPage = async (pageIndex: number) => {
+  const loadPage = useCallback(async (pageIndex: number) => {
     const from = pageIndex * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
     const { data, error } = await supabase
@@ -40,7 +39,7 @@ export default function BlogPage() {
       return [] as PostListItem[];
     }
     return (data ?? []) as PostListItem[];
-  };
+  }, [languageFilter, t]);
 
   useEffect(() => {
     setLoading(true);
@@ -48,7 +47,6 @@ export default function BlogPage() {
     setHasMore(true);
     (async () => {
       const first = await loadPage(0);
-      // Separar la primera publicación (la más reciente) como destacada
       if (first.length > 0) {
         setFeaturedPost(first[0]);
         setPosts(first.slice(1));
@@ -60,7 +58,7 @@ export default function BlogPage() {
       }
       setLoading(false);
     })();
-  }, [locale]);
+  }, [locale, loadPage]);
 
   const loadMore = async () => {
     if (loadingMore || !hasMore) return;
@@ -87,7 +85,6 @@ export default function BlogPage() {
           <meta property="og:description" content={t("blog_meta_description")} />
         </Helmet>
 
-        {/* Sección de introducción */}
         <header className="text-center mb-20 max-w-3xl mx-auto">
           <h1 className="text-6xl md:text-7xl font-extrabold mb-6 bg-linear-to-r from-white via-[#00aaff]/70 to-white bg-clip-text text-transparent drop-shadow-lg animate-fade-in tracking-tight leading-tight">
             {t("blog_intro_title")}
@@ -100,7 +97,6 @@ export default function BlogPage() {
           </p>
         </header>
 
-        {/* Tarjeta destacada de la última publicación */}
         {featuredPost && (
           <section className="mb-20 shadow-lg shadow-[#007EAD]/30 rounded-3xl overflow-hidden transition-transform transform hover:scale-[1.02] duration-500">
             <FeaturedPostCard post={featuredPost} />
@@ -108,13 +104,11 @@ export default function BlogPage() {
         )}
       </div>
 
-      {/* Carrusel infinito - ocupa todo el ancho */}
       <section className="mb-20">
         <InfiniteCarousel />
       </section>
 
       <div className="max-w-5xl mx-auto px-6 pb-24">
-        {/* Grid de publicaciones restantes */}
         {posts.length > 0 && (
           <section className="grid md:grid-cols-2 gap-10">
             {posts.map((post) => (
