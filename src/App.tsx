@@ -4,15 +4,49 @@ import PostPage from "./pages/PostPage";
 import ContactPage from "./pages/ContactPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import AboutPage from "./pages/AboutPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import TermsPage from "./pages/TermsPage";
+import CookiesPolicyPage from "./pages/CookiesPolicyPage";
+import CookieConsent from "react-cookie-consent";
+import { useLocale } from "./context/LocaleContext";
 
 function Layout() {
+  const { t } = useLocale();
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#0a1628] via-[#0d1f38] to-[#060f1a] text-white">
+    <div className="flex flex-col min-h-screen bg-linear-to-b from-[#0a1628] via-[#0d1f38] to-[#060f1a] text-white">
       <Header />
       <main className="grow container mx-auto px-4 py-8">
         <Outlet />
       </main>
       <Footer />
+      <CookieConsent
+        location="bottom"
+        buttonText={t("cookies_accept")}
+        cookieName="arkeonConsent"
+        style={{
+          background: "#0b1226",
+          color: "white",
+          fontSize: "14px",
+          textAlign: "center",
+        }}
+        buttonStyle={{
+          background: "#007EAD",
+          color: "white",
+          borderRadius: "8px",
+          fontWeight: "600",
+          padding: "8px 16px",
+        }}
+        expires={365}
+      >
+        {t("cookies_banner_text")}{" "}
+        <a
+          href="/cookies"
+          className="text-[#00aaff] underline hover:text-[#007EAD] transition-colors duration-300"
+        >
+          {t("footer_cookies")}
+        </a>
+      </CookieConsent>
     </div>
   );
 }
@@ -26,6 +60,10 @@ export default function App() {
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/post/:slug" element={<PostPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/privacy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/cookies" element={<CookiesPolicyPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "../lib/supabase";
@@ -16,29 +16,28 @@ export default function PostPage() {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Convertir locale del contexto ("es"/"en") a formato de base de datos ("ES"/"EN")
   const languageFilter = locale.toUpperCase();
 
+  const fetchPost = useCallback(async () => {
+    const { data, error } = await supabase
+      .from("posts")
+      .select("*")
+      .eq("slug", slug)
+      .eq("language", languageFilter)
+      .single();
+
+    if (error) {
+      console.error(error);
+      setErrorMsg(t("post_error"));
+    } else {
+      setPost(data as PostDetail);
+    }
+    setLoading(false);
+  }, [slug, languageFilter, t]);
+
   useEffect(() => {
-    const fetchPost = async () => {
-      const { data, error } = await supabase
-        .from("posts")
-        .select("*")
-        .eq("slug", slug)
-        .eq("language", languageFilter)
-        .single();
-
-      if (error) {
-        console.error(error);
-        setErrorMsg(t("post_error"));
-      } else {
-        setPost(data as PostDetail);
-      }
-      setLoading(false);
-    };
-
     fetchPost();
-  }, [slug, locale]);
+  }, [fetchPost]);
 
   const htmlContent = useMemo(() => {
     if (!post?.content) return "";
@@ -53,7 +52,7 @@ export default function PostPage() {
   const description = post.content.length > 160 ? post.content.slice(0, 157) + "…" : post.content;
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-8 md:p-12 bg-linear-to-br from-[#0b1226] via-[#071622] to-[#0a172b] rounded-3xl shadow-lg shadow-[#007EAD]/20">
       <Helmet>
         <title>{post.title} | Arkeon</title>
         <meta name="description" content={description} />
@@ -62,7 +61,7 @@ export default function PostPage() {
         {post.cover_image && <meta property="og:image" content={post.cover_image} />}
       </Helmet>
 
-      <Link to="/blog" className="text-[#007EAD] hover:text-[#007EAD]/80 transition-colors duration-300 inline-flex items-center gap-2 mb-6">
+      <Link to="/blog" className="text-[#00aaff] hover:text-[#00bbee] transition-colors duration-300 inline-flex items-center gap-2 mb-6">
         <span>←</span> {t("post_back_to_blog")}
       </Link>
       {post.cover_image && (
@@ -73,15 +72,16 @@ export default function PostPage() {
           loading="lazy"
         />
       )}
-      <h1 className="text-4xl font-bold mb-2 text-white">{post.title}</h1>
+      <h1 className="text-4xl font-bold mb-2 text-[#00aaff]">{post.title}</h1>
       <p className="text-sm text-white/60 mb-6">
         {new Date(post.published_at).toLocaleDateString(locale === "es" ? "es-ES" : "en-US", {
           year: "numeric",
           month: "long",
           day: "numeric",
-        })} — <span className="text-[#007EAD]">{post.author}</span>
+        })} — <span className="text-[#00aaff]">{post.author}</span>
       </p>
-      <article className="prose prose-invert max-w-none prose-headings:text-white prose-p:text-white/80 prose-a:text-[#007EAD] prose-strong:text-white prose-code:text-[#007EAD] prose-pre:bg-[#0f1f38]/50 prose-pre:border prose-pre:border-[#007EAD]/20">
+      <div className="border-t border-[#007EAD]/20 mt-8 mb-8" />
+      <article className="prose prose-lg prose-invert max-w-none prose-headings:text-[#00aaff] prose-p:text-white/80 prose-a:text-[#00aaff] hover:prose-a:text-[#00bbee] prose-strong:text-white prose-code:text-[#007EAD] prose-pre:bg-[#0f1f38]/50 prose-pre:border prose-pre:border-[#007EAD]/20 leading-relaxed">
         <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
       </article>
     </div>

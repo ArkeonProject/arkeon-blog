@@ -4,6 +4,30 @@
 
 ---
 
+## [v0.3.0] - 2025-11-05
+### 🚀 Added
+- Página **About** con soporte multilenguaje.
+- Página **Contact** actualizada con traducciones y estilo coherente con el blog.
+- Página **Terms of Use** con estructura legal y soporte en inglés y español.
+- Página **Privacy Policy** con traducciones y formato profesional.
+- Página **Cookies Policy** con integración de `react-cookie-consent` y traducción multilenguaje.
+- Componente global de **Cookie Banner** añadido a `App.tsx`.
+- Integración de **react-icons** reemplazando `lucide-react`.
+- Reestructuración del **Header** con diseño minimalista, soporte responsive y selector de idioma con clic.
+- Mejoras visuales en **Footer** y coherencia cromática con el tema oscuro.
+- Mejoras visuales en **PostPage**
+- Incorporación del sistema de traducción `useLocale` en todas las páginas estáticas.
+- Mejoras en el **InfiniteCarousel** con bordes redondeados, difuminado lateral y alineación visual coherente.
+
+### 🧰 Changed
+- Eliminación completa de `lucide-react` y actualización a `react-icons`.
+- Ajustes visuales generales para adaptar el tema oscuro en todo el sitio.
+- Estilos de `BlogPage` mejorados con fondos degradados, sombras y animaciones suaves.
+- `loadPage` encapsulado con `useCallback` para corregir dependencias de React Hook.
+- Banner de cookies añadido globalmente con soporte de idioma dinámico.
+
+---
+
 ## [v0.2.0] - 2025-11-05
 ### 🚀 Added
 - Implementación de CHANGELOG
