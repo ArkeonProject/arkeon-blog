@@ -1,4 +1,5 @@
-import { Mail, Github, Linkedin, Heart, ExternalLink } from "lucide-react";
+import { FaGithub, FaLinkedin, FaEnvelope, FaHeart } from "react-icons/fa";
+
 import { useLocale } from "../context/LocaleContext";
 
 export default function Footer() {
@@ -76,12 +77,6 @@ export default function Footer() {
                   {t("footer_cookies")}
                 </a>
               </li>
-              <li>
-                <a href="/rss" className="text-white/70 hover:text-[#007EAD] transition-all duration-300 flex items-center gap-1 hover:translate-x-1">
-                  {t("footer_rss")}
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </li>
             </ul>
           </div>
 
@@ -93,7 +88,7 @@ export default function Footer() {
                 href="mailto:davidlopez00@proton.me" 
                 className="flex items-center gap-2 text-sm text-white/70 hover:text-[#007EAD] transition-colors duration-300 group"
               >
-                <Mail className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
+                <FaEnvelope className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
                 <span className="break-all">davidlopez00@proton.me</span>
               </a>
               
@@ -106,7 +101,7 @@ export default function Footer() {
                   className="p-2 bg-[#0f1f38]/50 border border-[#007EAD]/30 rounded-lg hover:bg-[#007EAD]/10 hover:border-[#007EAD] hover:shadow-lg hover:shadow-[#007EAD]/20 transition-all duration-300 group backdrop-blur-sm"
                   aria-label="GitHub"
                 >
-                  <Github className="w-5 h-5 text-white/70 group-hover:text-[#007EAD] group-hover:scale-110 transition-all duration-300" />
+                  <FaGithub className="w-5 h-5 text-white/70 group-hover:text-[#007EAD] group-hover:scale-110 transition-all duration-300" />
                 </a>
                 <a 
                   href="https://www.linkedin.com/in/david-l%C3%B3pez-santamar%C3%ADa-946965260/" 
@@ -115,7 +110,7 @@ export default function Footer() {
                   className="p-2 bg-[#0f1f38]/50 border border-[#007EAD]/30 rounded-lg hover:bg-[#007EAD]/10 hover:border-[#007EAD] hover:shadow-lg hover:shadow-[#007EAD]/20 transition-all duration-300 group backdrop-blur-sm"
                   aria-label="LinkedIn"
                 >
-                  <Linkedin className="w-5 h-5 text-white/70 group-hover:text-[#007EAD] group-hover:scale-110 transition-all duration-300" />
+                  <FaLinkedin className="w-5 h-5 text-white/70 group-hover:text-[#007EAD] group-hover:scale-110 transition-all duration-300" />
                 </a>
               </div>
             </div>
@@ -132,7 +127,7 @@ export default function Footer() {
             
             <p className="flex items-center gap-2">
               {t("footer_developed")} 
-              <Heart className="w-4 h-4 text-[#007EAD] fill-[#007EAD] animate-pulse" /> 
+              <FaHeart className="w-4 h-4 text-[#007EAD] fill-[#007EAD] animate-pulse" /> 
               {t("footer_by")} <span className="font-medium text-white">{t("footer_creator") || "David López"}</span>
             </p>
           </div>
