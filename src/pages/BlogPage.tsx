@@ -1,12 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
-import { supabase } from "../lib/supabase";
-import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import PostCard from "../components/PostCard.tsx";
-import FeaturedPostCard from "../components/FeaturedPostCard.tsx";
-import InfiniteCarousel from "../components/InfiniteCarousel.tsx";
-import NewsletterForm from "../components/NewsletterForm.tsx";
-import { useLocale } from "../context/LocaleContext";
+import InfiniteCarousel from "../components/layout/InfiniteCarousel";
+import NewsletterForm from "../components/forms/NewsletterForm";
+import FeaturedPostCard from "../components/posts/FeaturedPostCard";
+import PostList from "../components/posts/PostList";
+import Button from "../components/ui/Button";
+import { supabase } from "../lib/supabase";
+import { trackEvent } from "../lib/analytics";
+import { useLocale } from "../hooks/useLocale";
 import type { PostListItem } from "../types/post";
 
 const PAGE_SIZE = 6;
@@ -50,7 +51,7 @@ export default function BlogPage() {
       if (first.length > 0) {
         setFeaturedPost(first[0]);
         setPosts(first.slice(1));
-      setHasMore(first.length === PAGE_SIZE);
+        setHasMore(first.length === PAGE_SIZE);
       } else {
         setFeaturedPost(null);
         setPosts([]);
@@ -69,9 +70,12 @@ export default function BlogPage() {
     setPage(nextPage);
     setHasMore(next.length === PAGE_SIZE);
     setLoadingMore(false);
+    trackEvent("blog_load_more", {
+      page: nextPage,
+      fetched: next.length,
+      locale,
+    });
   };
-
-
   if (loading) return <p className="text-center mt-20 text-white/70 tracking-wide font-semibold text-lg">{t("blog_loading")}</p>;
   if (errorMsg) return <p className="text-center mt-20 text-red-500 tracking-wide font-semibold text-lg">{errorMsg}</p>;
 
@@ -110,29 +114,21 @@ export default function BlogPage() {
 
       <div className="max-w-5xl mx-auto px-6 pb-24">
         {posts.length > 0 && (
-          <section className="grid md:grid-cols-2 gap-10">
-            {posts.map((post) => (
-              <Link 
-                key={post.id} 
-                to={`/post/${post.slug}`} 
-                className="block rounded-2xl shadow-md shadow-[#007EAD]/20 hover:shadow-[#00aaff]/50 transition-shadow duration-400"
-                aria-label={post.title}
-              >
-                <PostCard post={post} />
-              </Link>
-            ))}
+          <section>
+            <PostList posts={posts} />
           </section>
         )}
 
         {hasMore && (
           <div className="flex justify-center mt-14">
-            <button
+            <Button
               onClick={loadMore}
-              disabled={loadingMore}
-              className="px-8 py-4 rounded-xl bg-linear-to-r from-[#007EAD] to-[#00aaff] text-white font-semibold tracking-wide shadow-lg shadow-[#007EAD]/50 hover:from-[#00aaff] hover:to-[#007EAD] hover:shadow-[#00aaff]/70 focus:outline-none focus:ring-4 focus:ring-[#00aaff]/40 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+              loading={loadingMore}
+              loadingText={t("blog_loading_more")}
+              disabled={!hasMore}
             >
-              {loadingMore ? t("blog_loading_more") : t("blog_load_more")}
-            </button>
+              {t("blog_load_more")}
+            </Button>
           </div>
         )}
 

@@ -49,6 +49,48 @@ El resultado: una aplicación **SPA** rápida, optimizada y segura, que se compo
 
 ---
 
+## 🗂️ Estructura del proyecto
+
+```text
+arkeon-blog/
+├── .github/
+│   ├── workflows/          # CI/CD (lint + deploy)
+│   │   ├── ci.yml
+│   │   └── deploy.yml
+│   ├── release-drafter.yml
+│   └── PULL_REQUEST_TEMPLATE.md
+├── docs/                   # Manuales y estrategia
+│   ├── git-strategy.md
+│   └── releases.md
+├── public/                 # Assets estáticos (favicon, manifest, icons)
+│   ├── icons/
+│   ├── manifest.json
+│   └── robots.txt
+├── src/
+│   ├── assets/illustrations
+│   ├── components/
+│   │   ├── layout/         # Header, Footer, etc.
+│   │   ├── posts/          # PostCard, FeaturedPostCard, PostList
+│   │   ├── forms/          # NewsletterForm
+│   │   └── ui/             # Button, Card
+│   ├── context/            # LocaleProvider
+│   ├── hooks/              # useLocale, useSupabaseQuery
+│   ├── lib/                # supabase, analytics, cookies
+│   ├── pages/
+│   ├── router/             # AppRouter
+│   ├── styles/
+│   └── types/
+├── tests/
+│   ├── components/
+│   └── pages/
+├── vercel.json             # Configuración de despliegue
+└── vite.config.ts
+```
+
+Todo el código nuevo respeta esta jerarquía, haciendo más fácil localizar componentes y mantener responsabilidades bien separadas.
+
+---
+
 ## 🧭 Estructura de contenido
 
 El modelo de datos se centra en la simplicidad y la escalabilidad, con dos entidades principales:

@@ -1,43 +1,39 @@
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useMemo, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { supabase } from "../lib/supabase";
-import { useLocale } from "../context/LocaleContext";
-import type { PostDetail } from "../types/post";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
+import { supabase } from "../lib/supabase";
+import { useLocale } from "../hooks/useLocale";
+import { useSupabaseQuery } from "../hooks/useSupabaseQuery";
+import type { PostDetail } from "../types/post";
 
 marked.setOptions({ async: false });
 
 export default function PostPage() {
   const { slug } = useParams();
   const { locale, t } = useLocale();
-  const [post, setPost] = useState<PostDetail | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
   const languageFilter = locale.toUpperCase();
 
-  const fetchPost = useCallback(async () => {
+  const queryPost = useCallback(async () => {
+    if (!slug) {
+      return { data: null, error: null };
+    }
     const { data, error } = await supabase
       .from("posts")
       .select("*")
       .eq("slug", slug)
       .eq("language", languageFilter)
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.error(error);
-      setErrorMsg(t("post_error"));
-    } else {
-      setPost(data as PostDetail);
     }
-    setLoading(false);
-  }, [slug, languageFilter, t]);
+    return { data: (data as PostDetail | null) ?? null, error };
+  }, [languageFilter, slug]);
 
-  useEffect(() => {
-    fetchPost();
-  }, [fetchPost]);
+  const { data: post, loading, error } = useSupabaseQuery<PostDetail | null>(queryPost);
+  const errorMsg = error ? t("post_error") : null;
 
   const htmlContent = useMemo(() => {
     if (!post?.content) return "";
@@ -45,6 +41,7 @@ export default function PostPage() {
     return DOMPurify.sanitize(html);
   }, [post?.content]);
 
+  if (!slug) return <p className="text-center mt-10 text-white/70">{t("post_not_found")}</p>;
   if (loading) return <p className="text-center mt-10 text-white/70">{t("post_loading")}</p>;
   if (errorMsg) return <p className="text-center mt-10 text-red-400">{errorMsg}</p>;
   if (!post) return <p className="text-center mt-10 text-white/70">{t("post_not_found")}</p>;

@@ -1,0 +1,5 @@
+# https://arkeon.blog robots file
+User-agent: *
+Allow: /
+
+Sitemap: https://arkeon.blog/sitemap.xml

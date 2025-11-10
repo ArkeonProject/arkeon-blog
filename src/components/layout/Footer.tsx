@@ -1,6 +1,6 @@
 import { FaGithub, FaLinkedin, FaEnvelope, FaHeart } from "react-icons/fa";
 
-import { useLocale } from "../context/LocaleContext";
+import { useLocale } from "../../hooks/useLocale";
 
 export default function Footer() {
   const { t } = useLocale();

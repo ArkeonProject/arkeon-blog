@@ -1,10 +1,11 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import esMessages from "../locales/es.json";
 import enMessages from "../locales/en.json";
+import { LocaleContext } from "./LocaleContextObject";
 
-type Locale = "es" | "en";
+export type Locale = "es" | "en";
 
-interface LocaleContextValue {
+export interface LocaleContextValue {
   locale: Locale;
   setLocale: (l: Locale) => void;
   t: (key: string) => string;
@@ -17,10 +18,8 @@ const MESSAGES: Record<Locale, Record<string, string>> = {
   en: enMessages,
 };
 
-const LocaleContext = createContext<LocaleContextValue | undefined>(undefined);
-
 interface LocaleProviderProps {
-  readonly children: React.ReactNode;
+  readonly children: ReactNode;
 }
 
 export function LocaleProvider({ children }: LocaleProviderProps) {
@@ -41,11 +40,4 @@ export function LocaleProvider({ children }: LocaleProviderProps) {
   const value = useMemo(() => ({ locale, setLocale, t }), [locale, t]);
 
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;
-}
-
-// eslint-disable-next-line react-refresh/only-export-components
-export function useLocale() {
-  const ctx = useContext(LocaleContext);
-  if (!ctx) throw new Error("useLocale debe usarse dentro de LocaleProvider");
-  return ctx;
 }

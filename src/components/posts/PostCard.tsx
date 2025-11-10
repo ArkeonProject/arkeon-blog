@@ -1,5 +1,6 @@
-import { useLocale } from "../context/LocaleContext";
-import type { PostListItem } from "../types/post";
+import { useLocale } from "../../hooks/useLocale";
+import type { PostListItem } from "../../types/post";
+import Card from "../ui/Card";
 
 interface PostCardProps {
   readonly post: PostListItem;
@@ -10,7 +11,7 @@ export default function PostCard({ post }: PostCardProps) {
   const dateFormat = locale === "es" ? "es-ES" : "en-US";
 
   return (
-    <article className="relative border border-gray-800 rounded-xl p-6 shadow-md shadow-[#007EAD]/20 bg-gradient-to-br from-[#0a1628] to-[#0f1f38] backdrop-blur-sm group transition-all duration-400 hover:shadow-[0_0_15px_4px_rgba(0,126,173,0.6)] hover:scale-105 hover:z-10">
+    <Card className="relative p-6 group transition-all duration-300 hover:shadow-[0_0_18px_rgba(0,126,173,0.5)] hover:scale-[1.02] hover:z-10">
       {post.cover_image && (
         <img
           src={post.cover_image}
@@ -30,6 +31,6 @@ export default function PostCard({ post }: PostCardProps) {
         })}
       </p>
       <p className="text-white/70">{post.excerpt}</p>
-    </article>
+    </Card>
   );
 }

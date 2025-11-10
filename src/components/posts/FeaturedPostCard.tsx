@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { useLocale } from "../context/LocaleContext";
-import type { PostListItem } from "../types/post";
+import { useLocale } from "../../hooks/useLocale";
+import type { PostListItem } from "../../types/post";
 
 interface FeaturedPostCardProps {
   readonly post: PostListItem;
@@ -54,4 +54,3 @@ export default function FeaturedPostCard({ post }: FeaturedPostCardProps) {
     </Link>
   );
 }
-

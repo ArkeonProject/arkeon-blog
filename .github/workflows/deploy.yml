@@ -1,4 +1,4 @@
-name: 🚀 CD - Deploy to Production (main)
+name: 🚀 Deploy - Production (main)
 
 on:
   push:
