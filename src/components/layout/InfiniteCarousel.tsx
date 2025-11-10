@@ -1,4 +1,4 @@
-import { useLocale } from "../context/LocaleContext";
+import { useLocale } from "../../hooks/useLocale";
 
 export default function InfiniteCarousel() {
   const { t } = useLocale();

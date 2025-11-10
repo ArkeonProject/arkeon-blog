@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { supabase } from "../lib/supabase";
-import { useLocale } from "../context/LocaleContext";
+import { supabase } from "../../lib/supabase";
+import { useLocale } from "../../hooks/useLocale";
+import Button from "../ui/Button";
+import Card from "../ui/Card";
 
 export default function NewsletterForm() {
   const { t } = useLocale();
@@ -34,17 +36,10 @@ export default function NewsletterForm() {
     setSending(false);
   };
 
-  let buttonText;
-  if (sending) {
-    buttonText = t("newsletter_subscribing");
-  } else if (success) {
-    buttonText = t("newsletter_subscribed");
-  } else {
-    buttonText = t("newsletter_subscribe");
-  }
+  const buttonLabel = success ? t("newsletter_subscribed") : t("newsletter_subscribe");
 
   return (
-    <div className="bg-linear-to-br from-[#0a1628] to-[#0f1f38] p-6 rounded-2xl text-center shadow-md shadow-[#007EAD]/20 border border-[#007EAD]/30 backdrop-blur-sm transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,126,173,0.5)]">
+    <Card className="p-6 text-center transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,126,173,0.5)]">
       <h2 className="text-2xl font-bold mb-2 text-white">
         💌 <span className="text-[#007EAD]">{t("newsletter_title")}</span>
       </h2>
@@ -60,13 +55,15 @@ export default function NewsletterForm() {
           className="border border-gray-700 bg-gray-900/50 text-white placeholder-white/50 p-3 rounded-lg w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-[#007EAD]/60 focus:border-[#007EAD] backdrop-blur-sm transition-all duration-300"
           disabled={sending || success}
         />
-        <button
+        <Button
           onClick={subscribe}
-          className="bg-linear-to-r from-[#007EAD] to-[#005f7a] text-white px-6 py-3 rounded-lg shadow-md shadow-[#007EAD]/50 hover:shadow-lg hover:shadow-[#007EAD]/70 hover:scale-105 transition-transform duration-300 disabled:opacity-60 disabled:cursor-not-allowed font-medium"
-          disabled={sending || success}
+          loading={sending}
+          loadingText={t("newsletter_subscribing")}
+          disabled={success}
+          className="w-full sm:w-auto"
         >
-          {buttonText}
-        </button>
+          {buttonLabel}
+        </Button>
       </div>
       {errorMsg && <p className="text-red-400 mt-3">{errorMsg}</p>}
       {success && (
@@ -74,6 +71,6 @@ export default function NewsletterForm() {
           {t("newsletter_success")}
         </p>
       )}
-    </div>
+    </Card>
   );
 }

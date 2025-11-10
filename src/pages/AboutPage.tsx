@@ -1,4 +1,4 @@
-import { useLocale } from "../context/LocaleContext";
+import { useLocale } from "../hooks/useLocale";
 
 const AboutPage = () => {
   const { t } = useLocale();

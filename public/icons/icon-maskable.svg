@@ -1,0 +1,12 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="maskableTitle">
+  <title id="maskableTitle">Arkeon Maskable Icon</title>
+  <defs>
+    <linearGradient id="maskGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00aaff"/>
+      <stop offset="100%" stop-color="#007EAD"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="64" fill="url(#maskGradient)"/>
+  <path d="M130 360L256 120l126 240h-62l-64-125-64 125z" fill="none" stroke="#ffffff" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
+  <path d="M186 404h140" stroke="#ffffff" stroke-width="20" stroke-linecap="round" opacity="0.9"/>
+</svg>
