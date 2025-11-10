@@ -4,6 +4,17 @@
 
 ---
 
+## [v0.4.0] - 2025-11-10
+### 🧰 Changed
+- La interfaz ahora prescinde de iconografía externa y utiliza únicamente el logotipo oficial de Arkeon.
+- Referencias públicas actualizadas para apuntar a `www.arkeontech.es` y al nuevo favicon.
+- Refactorización de código
+
+### 🗑 Removed
+- Dependencia de `react-icons` para reducir peso y mantener coherencia visual.
+
+---
+
 ## [v0.3.0] - 2025-11-05
 ### 🚀 Added
 - Página **About** con soporte multilenguaje.

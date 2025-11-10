@@ -25,7 +25,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-linear-to-b from-[#0a1628] to-[#0d1a2d]/98 backdrop-blur-xl border-b border-[#007EAD]/20 shadow-lg shadow-[#007EAD]/5">
       <div className="max-w-5xl mx-auto px-6 flex items-center justify-between h-30">
         {/* Left: Blog name */}
-        <div className="flex items-center min-w-0 shrink-0">
+        <div className="hidden md:flex items-center min-w-0 shrink-0">
           <Link to="/" className="block group">
             <span className="font-bold text-white text-xl tracking-tight transition-all duration-300 group-hover:text-[#007EAD]">
               Arkeon<span className="text-[#007EAD] group-hover:text-white">Blog</span>
@@ -40,7 +40,7 @@ export default function Header() {
               <img
                 src="/arkeon-logo.svg"
                 alt="Arkeon Blog"
-                className="h-36 w-36 mx-auto transition-all duration-500 group-hover:scale-105 relative z-10"
+                className="h-20 w-20 md:h-36 md:w-36 mx-auto transition-all duration-500 group-hover:scale-105 relative z-10"
               />
             </div>
           </Link>
