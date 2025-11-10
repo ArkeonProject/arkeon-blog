@@ -1,5 +1,5 @@
-# https://arkeon.blog robots file
+# https://www.arkeontech.es robots file
 User-agent: *
 Allow: /
 
-Sitemap: https://arkeon.blog/sitemap.xml
+Sitemap: https://www.arkeontech.es/sitemap.xml
