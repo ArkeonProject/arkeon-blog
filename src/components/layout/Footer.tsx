@@ -10,10 +10,10 @@ export default function Footer() {
     <footer className="bg-linear-to-b from-[#0a1628] to-[#060f1a] border-t border-[#007EAD]/20 mt-20 shadow-[0_-10px_40px_rgba(0,126,173,0.1)]">
       <div className="container mx-auto px-6 py-12">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 text-center md:text-left">
           {/* Brand Section */}
           <div className="space-y-4">
-            <div className="flex items-center gap-3 group">
+            <div className="flex items-center gap-3 group justify-center md:justify-start">
               <div className="relative">
                 <div className="absolute inset-0 bg-[#007EAD]/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <img 
@@ -32,7 +32,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div className="flex flex-col items-center md:items-start">
             <h4 className="font-semibold text-white mb-4 text-sm tracking-wide uppercase">{t("footer_quick_links")}</h4>
             <ul className="space-y-2 text-sm">
               <li>
@@ -59,7 +59,7 @@ export default function Footer() {
           </div>
 
           {/* Resources */}
-          <div>
+          <div className="flex flex-col items-center md:items-start">
             <h4 className="font-semibold text-white mb-4 text-sm tracking-wide uppercase">{t("footer_resources")}</h4>
             <ul className="space-y-2 text-sm">
               <li>
@@ -81,19 +81,19 @@ export default function Footer() {
           </div>
 
           {/* Social & Contact */}
-          <div>
+          <div className="flex flex-col items-center md:items-start">
             <h4 className="font-semibold text-white mb-4 text-sm tracking-wide uppercase">{t("footer_connect")}</h4>
             <div className="space-y-4">
               <a 
                 href="mailto:davidlopez00@proton.me" 
-                className="flex items-center gap-2 text-sm text-white/70 hover:text-[#007EAD] transition-colors duration-300 group"
+                className="flex items-center gap-2 text-sm text-white/70 hover:text-[#007EAD] transition-colors duration-300 group justify-center md:justify-start"
               >
                 <FaEnvelope className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
                 <span className="break-all">davidlopez00@proton.me</span>
               </a>
               
               {/* Social Links */}
-              <div className="flex gap-3">
+              <div className="flex gap-3 justify-center md:justify-start">
                 <a 
                   href="https://github.com/ArkeonProject" 
                   target="_blank" 
@@ -119,13 +119,14 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-[#007EAD]/20">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-white/60">
-            <p className="flex items-center gap-1">
-              © {currentYear} <span className="font-semibold text-[#007EAD]">{t("brand")}</span>. 
-              {t("footer_rights")}
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-white/60 text-center md:text-left">
+            <p className="flex flex-col sm:flex-row items-center justify-center gap-1">
+              <span>© {currentYear}</span>
+              <span className="font-semibold text-[#007EAD]">{t("brand")}</span>
+              <span>{t("footer_rights")}</span>
             </p>
             
-            <p className="flex items-center gap-2">
+            <p className="flex items-center gap-2 justify-center">
               {t("footer_developed")} 
               <FaHeart className="w-4 h-4 text-[#007EAD] fill-[#007EAD] animate-pulse" /> 
               {t("footer_by")} <span className="font-medium text-white">{t("footer_creator") || "David López"}</span>

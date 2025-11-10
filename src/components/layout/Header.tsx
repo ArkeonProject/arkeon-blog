@@ -33,14 +33,14 @@ export default function Header() {
           </Link>
         </div>
         {/* Center: Logo */}
-        <div className="flex justify-center items-center flex-1">
+        <div className="flex items-center flex-1 justify-start md:justify-center">
           <Link to="/" className="block group">
             <div className="relative">
               <div className="absolute inset-0 bg-[#007EAD]/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <img
                 src="/arkeon-logo.svg"
                 alt="Arkeon Blog"
-                className="h-20 w-20 md:h-36 md:w-36 mx-auto transition-all duration-500 group-hover:scale-105 relative z-10"
+                className="h-20 w-20 md:h-36 md:w-36 mx-0 md:mx-auto transition-all duration-500 group-hover:scale-105 relative z-10"
               />
             </div>
           </Link>
