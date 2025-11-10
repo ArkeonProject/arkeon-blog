@@ -4,6 +4,13 @@
 
 ---
 
+## [v0.4.1] - 2025-11-10
+### 🧰 Changed
+- Correcciones en vercel.json en cuanto a enrrutamiento.
+
+
+---
+
 ## [v0.4.0] - 2025-11-10
 ### 🧰 Changed
 - Referencias públicas actualizadas para apuntar a `www.arkeontech.es` y al nuevo favicon.
