@@ -43,6 +43,14 @@
   "newsletter_error_duplicate": "This email is already subscribed.",
   "newsletter_error_generic": "Could not complete subscription. Please try again.",
   "newsletter_success": "Thank you for subscribing! 🎉",
+  "newsletter_confirm_loading": "Verifying your request…",
+  "newsletter_confirm_success_title": "Subscription confirmed",
+  "newsletter_confirm_success_message": "Your subscription is now active. Thank you for joining our newsletter!",
+  "newsletter_confirm_error_title": "We couldn't confirm your link",
+  "newsletter_confirm_error_message": "The link has expired or is invalid. Please request a new confirmation email.",
+  "newsletter_confirm_missing": "Provide a valid confirmation token to continue.",
+  "newsletter_confirm_back": "Back to blog",
+  "newsletter_confirm_contact": "Contact support",
   "carousel_message": "📧 Subscribe to our newsletter to stay updated with the latest posts • Don't miss any article! • Join our tech community 🚀",
   "contact_title": "Contact",
   "contact_description": "You can reach me at",
@@ -88,4 +96,3 @@
   "cookies_banner_text": "We use cookies to improve your experience on Arkeon Blog. You can change your settings at any time.",
   "cookies_accept": "Accept"
 }
-
