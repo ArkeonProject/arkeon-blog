@@ -7,6 +7,7 @@ import AboutPage from "../pages/AboutPage";
 import PrivacyPolicyPage from "../pages/PrivacyPolicyPage";
 import TermsPage from "../pages/TermsPage";
 import CookiesPolicyPage from "../pages/CookiesPolicyPage";
+import ConfirmPage from "../pages/newsletter/ConfirmPage";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import { useLocale } from "../hooks/useLocale";
@@ -65,6 +66,7 @@ export default function AppRouter() {
           <Route path="/privacy" element={<PrivacyPolicyPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/cookies" element={<CookiesPolicyPage />} />
+          <Route path="/newsletter/confirm" element={<ConfirmPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

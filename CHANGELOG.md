@@ -2,6 +2,24 @@
 
 > Registro de versiones del proyecto, sincronizado con los tags de GitHub.
 
+
+---
+
+## [v1.0.0] - 2025-11-12
+### 🚀 Added
+- Sistema completo de newsletter con integración a Supabase y Resend.
+- Confirmación de suscripciones vía correo electrónico.
+- Seguridad avanzada con Row-Level Security (RLS) en la base de datos.
+- Implementación estable de todas las funcionalidades principales del blog.
+- Integración total con servicios externos para manejo de usuarios y envíos.
+  
+### 🧰 Changed
+- Estructura del proyecto consolidada y estable.
+- Proceso de despliegue completo y optimizado en Vercel.
+- Pipeline de CI/CD configurado y funcionando de manera confiable.
+- Mejoras generales en rendimiento y mantenimiento del código.
+
+
 ---
 
 ## [v0.4.1] - 2025-11-10
