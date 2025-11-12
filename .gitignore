@@ -22,3 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Archivos de entorno y claves locales
+.supabase
+supabase/.branches.json
+supabase/.temp/
+supabase/.cache/
+supabase/.env
+supabase/.local
+
+# Variables privadas locales
+.env
+.env.local
