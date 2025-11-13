@@ -5,6 +5,12 @@
 
 ---
 
+## [v1.1.0] - 2025-11-13
+### 🚀 Added
+- Modificaciones para poder renderizar el texto de los posts.
+  
+---
+
 ## [v1.0.0] - 2025-11-12
 ### 🚀 Added
 - Sistema completo de newsletter con integración a Supabase y Resend.
