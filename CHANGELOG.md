@@ -5,7 +5,13 @@
 
 ---
 
-## [v1.2.0] - 2025-11-13
+## [v1.2.1] - 2025-11-15
+### 🚀 Added
+- Archivo txt necesario para anuncios
+  
+---
+
+## [v1.2.0] - 2025-11-15
 ### 🚀 Added
 - Google ads añadidos a la web.
   
