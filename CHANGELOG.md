@@ -5,6 +5,12 @@
 
 ---
 
+## [v1.2.0] - 2025-11-13
+### 🚀 Added
+- Google ads añadidos a la web.
+  
+---
+
 ## [v1.1.0] - 2025-11-13
 ### 🚀 Added
 - Modificaciones para poder renderizar el texto de los posts.
