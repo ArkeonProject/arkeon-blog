@@ -11,6 +11,7 @@ import { useLocale } from "../hooks/useLocale";
 import type { PostListItem } from "../types/post";
 
 const PAGE_SIZE = 6;
+const FIRST_PAGE_SIZE = PAGE_SIZE + 1;
 
 export default function BlogPage() {
   const { locale, t } = useLocale();
@@ -25,8 +26,10 @@ export default function BlogPage() {
   const languageFilter = locale.toUpperCase();
 
   const loadPage = useCallback(async (pageIndex: number) => {
-    const from = pageIndex * PAGE_SIZE;
-    const to = from + PAGE_SIZE - 1;
+    const isFirstPage = pageIndex === 0;
+    const pageSize = isFirstPage ? FIRST_PAGE_SIZE : PAGE_SIZE;
+    const from = isFirstPage ? 0 : FIRST_PAGE_SIZE + (pageIndex - 1) * PAGE_SIZE;
+    const to = from + pageSize - 1;
     const { data, error } = await supabase
       .from("posts")
       .select("id, title, slug, excerpt, cover_image, published_at, language")
@@ -51,7 +54,7 @@ export default function BlogPage() {
       if (first.length > 0) {
         setFeaturedPost(first[0]);
         setPosts(first.slice(1));
-        setHasMore(first.length === PAGE_SIZE);
+        setHasMore(first.length === FIRST_PAGE_SIZE);
       } else {
         setFeaturedPost(null);
         setPosts([]);
@@ -101,39 +104,39 @@ export default function BlogPage() {
           </p>
         </header>
 
-        {featuredPost && (
-          <section className="mb-20 shadow-lg shadow-[#007EAD]/30 rounded-3xl overflow-hidden transition-transform transform hover:scale-[1.02] duration-500">
-            <FeaturedPostCard post={featuredPost} />
-          </section>
-        )}
-      </div>
+        <div className="space-y-20">
+          {featuredPost && (
+            <section className="shadow-lg shadow-[#007EAD]/30 rounded-3xl overflow-hidden transition-transform transform hover:scale-[1.02] duration-500">
+              <FeaturedPostCard post={featuredPost} />
+            </section>
+          )}
 
-      <section className="mb-20">
-        <InfiniteCarousel />
-      </section>
-
-      <div className="max-w-5xl mx-auto px-6 pb-24">
-        {posts.length > 0 && (
           <section>
-            <PostList posts={posts} />
+            <InfiniteCarousel />
           </section>
-        )}
 
-        {hasMore && (
-          <div className="flex justify-center mt-14">
-            <Button
-              onClick={loadMore}
-              loading={loadingMore}
-              loadingText={t("blog_loading_more")}
-              disabled={!hasMore}
-            >
-              {t("blog_load_more")}
-            </Button>
-          </div>
-        )}
+          {posts.length > 0 && (
+            <section>
+              <PostList posts={posts} />
+            </section>
+          )}
 
-        <div className="mt-28">
-          <NewsletterForm />
+          {hasMore && (
+            <div className="flex justify-center">
+              <Button
+                onClick={loadMore}
+                loading={loadingMore}
+                loadingText={t("blog_loading_more")}
+                disabled={!hasMore}
+              >
+                {t("blog_load_more")}
+              </Button>
+            </div>
+          )}
+
+          <section>
+            <NewsletterForm />
+          </section>
         </div>
       </div>
     </div>
