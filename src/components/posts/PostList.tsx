@@ -18,7 +18,7 @@ export default function PostList({ posts, className = "" }: PostListProps) {
         <Link
           key={post.id}
           to={`/post/${post.slug}`}
-          className="block rounded-2xl shadow-md shadow-[#007EAD]/20 hover:shadow-[#00aaff]/50 transition-shadow duration-300"
+          className="block rounded-2xl shadow-md shadow-[#007EAD]/20 hover:shadow-[#00aaff]/50 transition-shadow duration-300 h-full"
           aria-label={post.title}
         >
           <PostCard post={post} />
