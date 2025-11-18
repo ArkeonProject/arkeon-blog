@@ -11,7 +11,7 @@ export default function InfiniteCarousel() {
 
   return (
     <div className="relative mx-auto w-full max-w-[92%] md:max-w-[95%] 
-    xl:max-w-[1000px] overflow-hidden py-5 mb-12 border border-[#007EAD]/30 
+    xl:max-w-[1000px] overflow-hidden py-5 border border-[#007EAD]/30 
     rounded-3xl backdrop-blur-sm bg-linear-to-r from-[#007EAD]/20 via-[#007EAD]/15 to-[#007EAD]/20 shadow-[0_0_20px_rgba(0,126,173,0.3)]">
       <div className="absolute left-0 top-0 pointer-events-none w-40 h-full bg-linear-to-r from-[#0a1628] via-[#0a1628]/70 to-transparent" />
       <div className="absolute right-0 top-0 pointer-events-none w-40 h-full bg-linear-to-l from-[#0a1628] via-[#0a1628]/70 to-transparent" />

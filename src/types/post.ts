@@ -6,6 +6,8 @@ export interface PostListItem {
   cover_image?: string;
   published_at: string;
   language?: string;
+  category?: string;
+  product_category?: string | null;
 }
 
 export interface PostDetail {
@@ -15,4 +17,6 @@ export interface PostDetail {
   author: string;
   published_at: string;
   language?: string;
+  category?: string;
+  product_category?: string | null;
 }

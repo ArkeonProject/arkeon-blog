@@ -8,7 +8,10 @@ import PrivacyPolicyPage from "../pages/PrivacyPolicyPage";
 import TermsPage from "../pages/TermsPage";
 import CookiesPolicyPage from "../pages/CookiesPolicyPage";
 import ConfirmPage from "../pages/newsletter/ConfirmPage";
+import NewsPage from "../pages/NewsPage";
+import ProductsPage from "../pages/ProductsPage";
 import Header from "../components/layout/Header";
+import CategoryBanner from "../components/layout/CategoryBanner";
 import Footer from "../components/layout/Footer";
 import { useLocale } from "../hooks/useLocale";
 import { COOKIE_CONSENT_NAME } from "../lib/cookies";
@@ -18,6 +21,7 @@ function Layout() {
   return (
     <div className="flex flex-col min-h-screen bg-linear-to-b from-[#0a1628] via-[#0d1f38] to-[#060f1a] text-white">
       <Header />
+      <CategoryBanner />
       <main className="grow container mx-auto px-4 py-8">
         <Outlet />
       </main>
@@ -60,6 +64,8 @@ export default function AppRouter() {
         <Route element={<Layout />}>
           <Route path="/" element={<Navigate to="/blog" replace />} />
           <Route path="/blog" element={<BlogPage />} />
+          <Route path="/news" element={<NewsPage />} />
+          <Route path="/products" element={<ProductsPage />} />
           <Route path="/post/:slug" element={<PostPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />
