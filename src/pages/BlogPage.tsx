@@ -3,7 +3,9 @@ import { Helmet } from "react-helmet-async";
 import InfiniteCarousel from "../components/layout/InfiniteCarousel";
 import NewsletterForm from "../components/forms/NewsletterForm";
 import FeaturedPostCard from "../components/posts/FeaturedPostCard";
+import FeaturedPostSkeleton from "../components/posts/FeaturedPostSkeleton";
 import PostList from "../components/posts/PostList";
+import PostCardSkeleton from "../components/posts/PostCardSkeleton";
 import Button from "../components/ui/Button";
 import { supabase } from "../lib/supabase";
 import { trackEvent } from "../lib/analytics";
@@ -79,11 +81,33 @@ export default function BlogPage() {
       locale,
     });
   };
-  if (loading) return <p className="text-center mt-20 text-white/70 tracking-wide font-semibold text-lg">{t("blog_loading")}</p>;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 text-gray-900 dark:bg-gradient-to-br dark:from-[#0b1226] dark:via-[#071622] dark:to-[#0a172b] dark:text-white font-sans antialiased rounded-3xl shadow-lg shadow-[#007EAD]/20 transition-colors duration-300">
+        <div className="max-w-5xl mx-auto px-6 py-16 md:py-24">
+          <header className="text-center mb-20 max-w-3xl mx-auto">
+            <div className="h-16 bg-gray-300 dark:bg-gray-700/50 rounded w-3/4 mx-auto mb-6 animate-pulse"></div>
+            <div className="h-10 bg-gray-300 dark:bg-gray-700/50 rounded w-1/2 mx-auto mb-8 animate-pulse"></div>
+            <div className="h-6 bg-gray-300 dark:bg-gray-700/50 rounded w-2/3 mx-auto animate-pulse"></div>
+          </header>
+
+          <div className="space-y-20">
+            <FeaturedPostSkeleton />
+            <div className="grid md:grid-cols-2 gap-10">
+              <PostCardSkeleton />
+              <PostCardSkeleton />
+              <PostCardSkeleton />
+              <PostCardSkeleton />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   if (errorMsg) return <p className="text-center mt-20 text-red-500 tracking-wide font-semibold text-lg">{errorMsg}</p>;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#0b1226] via-[#071622] to-[#0a172b] text-white font-sans antialiased rounded-3xl shadow-lg shadow-[#007EAD]/20">
+    <div className="min-h-screen bg-white text-gray-900 dark:bg-gradient-to-br dark:from-[#0b1226] dark:via-[#071622] dark:to-[#0a172b] dark:text-white font-sans antialiased rounded-3xl shadow-lg shadow-[#007EAD]/20 transition-colors duration-300">
       <div className="max-w-5xl mx-auto px-6 py-16 md:py-24">
         <Helmet>
           <title>{t("blog_title")} | Arkeon</title>
@@ -92,16 +116,36 @@ export default function BlogPage() {
           <meta property="og:description" content={t("blog_meta_description")} />
         </Helmet>
 
-        <header className="text-center mb-20 max-w-3xl mx-auto">
-          <h1 className="text-6xl md:text-7xl font-extrabold mb-6 bg-linear-to-r from-white via-[#00aaff]/70 to-white bg-clip-text text-transparent drop-shadow-lg animate-fade-in tracking-tight leading-tight">
-            {t("blog_intro_title")}
-          </h1>
-          <p className="text-3xl md:text-4xl font-semibold text-[#00aaff] mb-8 drop-shadow-md animate-fade-in-delay-1 tracking-wide">
-            {t("blog_intro_subtitle")}
-          </p>
-          <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed tracking-wide animate-fade-in-delay-2">
-            {t("blog_intro_description")}
-          </p>
+        <header className="relative -mt-16 pt-24 pb-16 mb-12 overflow-hidden rounded-t-3xl">
+          {/* Animated decorative elements only */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute -top-24 left-1/4 w-96 h-96 bg-[#007EAD]/20 dark:bg-[#007EAD]/10 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute top-12 right-1/3 w-72 h-72 bg-[#00aaff]/15 dark:bg-[#00aaff]/8 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+          </div>
+
+          <div className="relative max-w-4xl mx-auto text-center px-6">
+            {/* Animated accent line */}
+            <div className="w-24 h-1.5 bg-gradient-to-r from-transparent via-[#007EAD] to-transparent mx-auto mb-8 rounded-full animate-pulse"></div>
+
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 bg-gradient-to-r from-[#007EAD] via-[#00aaff] to-[#007EAD] bg-clip-text text-transparent animate-fade-in tracking-tight leading-tight bg-[length:200%_auto] animate-gradient">
+              {t("blog_intro_title")}
+            </h1>
+
+            <p className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white/95 mb-6 animate-fade-in-delay-1 drop-shadow-sm">
+              {t("blog_intro_subtitle")}
+            </p>
+
+            <p className="text-base md:text-lg text-gray-700 dark:text-white/75 max-w-2xl mx-auto leading-relaxed animate-fade-in-delay-2">
+              {t("blog_intro_description")}
+            </p>
+
+            {/* Bottom decorative element */}
+            <div className="flex items-center justify-center gap-2 mt-10">
+              <div className="w-2 h-2 rounded-full bg-[#007EAD] animate-bounce"></div>
+              <div className="w-2 h-2 rounded-full bg-[#00aaff] animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              <div className="w-2 h-2 rounded-full bg-[#007EAD] animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+            </div>
+          </div>
         </header>
 
         <div className="space-y-20">

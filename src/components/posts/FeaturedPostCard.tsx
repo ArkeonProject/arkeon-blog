@@ -13,7 +13,7 @@ export default function FeaturedPostCard({ post }: FeaturedPostCardProps) {
 
   return (
     <Link to={`/post/${post.slug}`} className="block group">
-      <article className="border border-[#007EAD]/20 rounded-2xl overflow-hidden shadow-lg shadow-[#007EAD]/10 hover:shadow-xl hover:shadow-[#007EAD]/20 transition-all duration-300 bg-linear-to-br from-[#0f1f38]/95 to-[#0a1628]/98 backdrop-blur-sm">
+      <article className="border border-gray-300 dark:border-[#007EAD]/20 rounded-2xl overflow-hidden shadow-lg shadow-gray-200 dark:shadow-[#007EAD]/10 hover:shadow-xl dark:hover:shadow-[#007EAD]/20 transition-all duration-300 bg-gradient-to-br from-white to-gray-50 dark:from-[#0f1f38]/95 dark:to-[#0a1628]/98 backdrop-blur-sm">
         <div className="md:flex">
           {post.cover_image && (
             <div className="md:w-1/2 overflow-hidden">
@@ -30,7 +30,7 @@ export default function FeaturedPostCard({ post }: FeaturedPostCardProps) {
               <span className="px-3 py-1 bg-[#007EAD] text-white text-xs font-semibold rounded-full uppercase tracking-wide shadow-lg shadow-[#007EAD]/30">
                 {t("featured_post_label")}
               </span>
-              <span className="text-white/60 text-sm">
+              <span className="text-gray-600 dark:text-white/60 text-sm">
                 {new Date(post.published_at).toLocaleDateString(dateFormat, {
                   year: "numeric",
                   month: "long",
@@ -38,10 +38,10 @@ export default function FeaturedPostCard({ post }: FeaturedPostCardProps) {
                 })}
               </span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white group-hover:text-[#007EAD] transition-colors duration-300">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white group-hover:text-[#007EAD] transition-colors duration-300">
               {post.title}
             </h2>
-            <p className="text-white/70 text-lg leading-relaxed line-clamp-3">
+            <p className="text-gray-700 dark:text-white/70 text-lg leading-relaxed line-clamp-3">
               {post.excerpt}
             </p>
             <div className="mt-6 flex items-center text-[#007EAD] font-semibold group-hover:gap-2 transition-all duration-300">

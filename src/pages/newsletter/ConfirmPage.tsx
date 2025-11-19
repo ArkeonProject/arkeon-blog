@@ -48,7 +48,7 @@ export default function ConfirmPage() {
           setStatus("error");
           setMessageKey("newsletter_confirm_error_message");
         }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         if (cancelled) return;
         setStatus("error");
@@ -94,7 +94,7 @@ export default function ConfirmPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-8 md:p-12 bg-linear-to-br from-[#0b1226] via-[#071622] to-[#0a172b] rounded-3xl shadow-lg shadow-[#007EAD]/20 text-white">
+    <div className="max-w-3xl mx-auto p-8 md:p-12 bg-gradient-to-br from-white to-gray-50 dark:from-[#0b1226] dark:via-[#071622] dark:to-[#0a172b] rounded-3xl shadow-lg dark:shadow-[#007EAD]/20 text-gray-900 dark:text-white transition-colors duration-300">
       <Helmet>
         <title>{t("newsletter_confirm_success_title")} | Arkeon</title>
         <meta name="description" content={t("newsletter_confirm_success_message")} />
@@ -103,10 +103,10 @@ export default function ConfirmPage() {
         <div>
           <p className="text-sm uppercase tracking-[0.3em] text-white/50 mb-4">{t("newsletter_title")}</p>
           <h1 className="text-3xl md:text-4xl font-bold mb-3">{renderHeading()}</h1>
-          {status !== "loading" && <p className="text-white/80 text-lg">{t(messageKey)}</p>}
+          {status !== "loading" && <p className="text-gray-700 dark:text-white/80 text-lg">{t(messageKey)}</p>}
         </div>
         {status === "loading" ? (
-          <p className="text-white/70 text-base animate-pulse">{t("newsletter_confirm_loading")}</p>
+          <p className="text-gray-600 dark:text-white/70 text-base animate-pulse">{t("newsletter_confirm_loading")}</p>
         ) : (
           <div>{renderActions()}</div>
         )}

@@ -41,7 +41,7 @@ export default function NewsPage() {
   }, [fetchNewsPosts]);
 
   if (loading) {
-    return <p className="text-center mt-20 text-white/70 tracking-wide font-semibold text-lg">{t("category_loading")}</p>;
+    return <p className="text-center mt-20 text-gray-600 dark:text-white/70 tracking-wide font-semibold text-lg">{t("category_loading")}</p>;
   }
 
   if (errorMsg) {
@@ -58,14 +58,14 @@ export default function NewsPage() {
       </Helmet>
 
       <section className="text-center mb-16">
-        <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-4">{t("news_title")}</h1>
-        <p className="text-white/80 text-lg md:text-xl max-w-3xl mx-auto">{t("news_description")}</p>
+        <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 dark:text-white mb-4">{t("news_title")}</h1>
+        <p className="text-gray-700 dark:text-white/80 text-lg md:text-xl max-w-3xl mx-auto">{t("news_description")}</p>
       </section>
 
       {posts.length > 0 ? (
         <PostList posts={posts} />
       ) : (
-        <p className="text-center text-white/70 text-lg">{t("news_empty")}</p>
+        <p className="text-center text-gray-600 dark:text-white/70 text-lg">{t("news_empty")}</p>
       )}
     </div>
   );
