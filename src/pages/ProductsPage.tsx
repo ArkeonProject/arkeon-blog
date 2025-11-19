@@ -113,7 +113,7 @@ export default function ProductsPage() {
   };
 
   if (loading) {
-    return <p className="text-center mt-20 text-white/70 tracking-wide font-semibold text-lg">{t("category_loading")}</p>;
+    return <p className="text-center mt-20 text-gray-600 dark:text-white/70 tracking-wide font-semibold text-lg">{t("category_loading")}</p>;
   }
 
   if (errorMsg) {
@@ -130,8 +130,8 @@ export default function ProductsPage() {
       </Helmet>
 
       <section className="text-center mb-10">
-        <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-4">{t("products_title")}</h1>
-        <p className="text-white/80 text-lg md:text-xl max-w-3xl mx-auto">{t("products_description")}</p>
+        <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 dark:text-white mb-4">{t("products_title")}</h1>
+        <p className="text-gray-700 dark:text-white/80 text-lg md:text-xl max-w-3xl mx-auto">{t("products_description")}</p>
       </section>
 
       <section className="mb-12">
@@ -140,30 +140,28 @@ export default function ProductsPage() {
             <button
               type="button"
               onClick={() => setIsFilterOpen((prev) => !prev)}
-              className="w-full flex items-center justify-between gap-3 px-5 py-3 rounded-2xl border border-[#00aaff]/40 bg-[#0f1f38]/60 text-white/90 hover:text-white hover:border-[#00aaff] transition-all duration-300 shadow-lg shadow-[#007EAD]/20"
+              className="w-full flex items-center justify-between gap-3 px-5 py-3 rounded-2xl border border-gray-300 dark:border-[#00aaff]/40 bg-gray-100 dark:bg-[#0f1f38]/60 text-gray-900 dark:text-white/90 hover:text-gray-900 dark:hover:text-white hover:border-[#00aaff] transition-all duration-300 shadow-lg dark:shadow-[#007EAD]/20"
             >
               <span className="flex items-center gap-3">
                 <FiFilter className="w-4 h-4 text-[#00aaff]" />
                 {selectedCategory === "all" ? t("products_filter_all") : selectedCategory}
               </span>
               <FiChevronDown
-                className={`w-4 h-4 text-[#00aaff] transition-transform duration-300 ${
-                  isFilterOpen ? "rotate-180" : ""
-                }`}
+                className={`w-4 h-4 text-[#00aaff] transition-transform duration-300 ${isFilterOpen ? "rotate-180" : ""
+                  }`}
               />
             </button>
 
             {isFilterOpen && (
-              <div className="absolute z-20 mt-3 w-full rounded-2xl border border-[#00aaff]/30 bg-[#0a1628]/95 backdrop-blur-xl shadow-2xl shadow-[#007EAD]/30 overflow-hidden">
+              <div className="absolute z-20 mt-3 w-full rounded-2xl border border-gray-300 dark:border-[#00aaff]/30 bg-white dark:bg-[#0a1628]/95 backdrop-blur-xl shadow-2xl dark:shadow-[#007EAD]/30 overflow-hidden">
                 <div className="max-h-64 overflow-y-auto p-2">
                   <button
                     type="button"
                     onClick={() => handleCategorySelect("all")}
-                    className={`w-full text-left px-4 py-3 rounded-xl font-medium capitalize transition-all duration-200 ${
-                      selectedCategory === "all"
-                        ? "bg-[#007EAD]/30 text-white border border-[#00aaff]/30"
-                        : "text-white/80 hover:text-white hover:bg-white/5"
-                    }`}
+                    className={`w-full text-left px-4 py-3 rounded-xl font-medium capitalize transition-all duration-200 ${selectedCategory === "all"
+                        ? "bg-[#007EAD]/30 text-gray-900 dark:text-white border border-[#00aaff]/30"
+                        : "text-gray-700 dark:text-white/80 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
+                      }`}
                   >
                     {t("products_filter_all")}
                   </button>
@@ -172,11 +170,10 @@ export default function ProductsPage() {
                       type="button"
                       key={category}
                       onClick={() => handleCategorySelect(category)}
-                      className={`w-full text-left px-4 py-3 rounded-xl font-medium capitalize transition-all duration-200 ${
-                        selectedCategory === category
-                          ? "bg-[#007EAD]/30 text-white border border-[#00aaff]/30"
-                          : "text-white/80 hover:text-white hover:bg-white/5"
-                      }`}
+                      className={`w-full text-left px-4 py-3 rounded-xl font-medium capitalize transition-all duration-200 ${selectedCategory === category
+                          ? "bg-[#007EAD]/30 text-gray-900 dark:text-white border border-[#00aaff]/30"
+                          : "text-gray-700 dark:text-white/80 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
+                        }`}
                     >
                       {category}
                     </button>
@@ -187,13 +184,13 @@ export default function ProductsPage() {
           </div>
 
           <div className="relative w-full md:max-w-sm">
-            <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
+            <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/40" />
             <input
               type="text"
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
               placeholder={t("products_search_placeholder")}
-              className="w-full bg-[#0f1f38]/60 border border-white/10 rounded-2xl py-3 pl-11 pr-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#00aaff]/40 focus:border-transparent transition-all duration-300 shadow-lg shadow-[#007EAD]/20"
+              className="w-full bg-gray-100 dark:bg-[#0f1f38]/60 border border-gray-300 dark:border-white/10 rounded-2xl py-3 pl-11 pr-4 text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#00aaff]/40 focus:border-transparent transition-all duration-300 shadow-lg dark:shadow-[#007EAD]/20"
             />
           </div>
         </div>
@@ -202,7 +199,7 @@ export default function ProductsPage() {
       {displayedPosts.length > 0 ? (
         <PostList posts={displayedPosts} />
       ) : (
-        <p className="text-center text-white/70 text-lg">{t("products_empty")}</p>
+        <p className="text-center text-gray-600 dark:text-white/70 text-lg">{t("products_empty")}</p>
       )}
     </div>
   );

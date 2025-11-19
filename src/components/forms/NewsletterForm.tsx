@@ -40,10 +40,10 @@ export default function NewsletterForm() {
 
   return (
     <Card className="p-6 text-center transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,126,173,0.5)]">
-      <h2 className="text-2xl font-bold mb-2 text-white">
+      <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">
         💌 <span className="text-[#007EAD]">{t("newsletter_title")}</span>
       </h2>
-      <p className="text-white/90 mb-4">
+      <p className="text-gray-700 dark:text-white/90 mb-4">
         {t("newsletter_description")}
       </p>
       <div className="flex flex-col sm:flex-row justify-center gap-2">
@@ -52,7 +52,7 @@ export default function NewsletterForm() {
           placeholder={t("newsletter_placeholder")}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="border border-gray-700 bg-gray-900/50 text-white placeholder-white/50 p-3 rounded-lg w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-[#007EAD]/60 focus:border-[#007EAD] backdrop-blur-sm transition-all duration-300"
+          className="border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 p-3 rounded-lg w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-[#007EAD]/60 focus:border-[#007EAD] backdrop-blur-sm transition-all duration-300"
           disabled={sending || success}
         />
         <Button

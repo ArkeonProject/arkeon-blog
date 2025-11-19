@@ -21,17 +21,17 @@ export default function PostCard({ post }: PostCardProps) {
         />
       )}
       <div className="flex flex-col flex-grow">
-        <h2 className="text-2xl font-semibold mb-1 text-white group-hover:text-[#007EAD] transition-colors duration-400">
+        <h2 className="text-2xl font-semibold mb-1 text-gray-900 dark:text-white group-hover:text-[#007EAD] transition-colors duration-400">
           {post.title}
         </h2>
-        <p className="text-white/40 text-sm mb-4 border-b border-gray-700 pb-4">
+        <p className="text-gray-500 dark:text-white/40 text-sm mb-4 border-b border-gray-300 dark:border-gray-700 pb-4">
           {new Date(post.published_at).toLocaleDateString(dateFormat, {
             year: "numeric",
             month: "long",
             day: "numeric",
           })}
         </p>
-        <p className="text-white/70 line-clamp-3">{post.excerpt || ""}</p>
+        <p className="text-gray-700 dark:text-white/70 line-clamp-3">{post.excerpt || ""}</p>
       </div>
     </Card>
   );

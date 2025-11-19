@@ -4,8 +4,8 @@ export default function TermsPage() {
   const { t } = useLocale();
 
   return (
-    <div className="max-w-3xl mx-auto p-8 bg-linear-to-br from-[#0b1226] via-[#071622] to-[#0a172b] rounded-3xl shadow-lg shadow-[#007EAD]/20 text-white font-sans leading-relaxed">
-      <h1 className="text-4xl font-semibold mb-6 text-[#00aaff]">
+    <div className="max-w-3xl mx-auto p-8 bg-gradient-to-br from-white to-gray-50 dark:from-[#0b1226] dark:via-[#071622] dark:to-[#0a172b] rounded-3xl shadow-lg dark:shadow-[#007EAD]/20 text-gray-900 dark:text-white font-sans leading-relaxed transition-colors duration-300">
+      <h1 className="text-4xl font-semibold mb-6 text-[#007EAD] dark:text-[#00aaff]">
         {t("terms_title")}
       </h1>
 

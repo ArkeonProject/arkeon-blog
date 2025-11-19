@@ -112,5 +112,7 @@
   "cookies_last_updated": "Última actualización:",
   "cookies_banner_text": "Usamos cookies para mejorar tu experiencia en Arkeon Blog. Puedes cambiar la configuración en cualquier momento.",
   "cookies_accept": "Aceptar",
-  "buy_in_amazon": "Comprar en Amazon"
+  "buy_in_amazon": "Comprar en Amazon",
+  "breadcrumb_home": "Inicio",
+  "breadcrumb_blog": "Blog"
 }
