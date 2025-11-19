@@ -1,24 +1,63 @@
 @import "tailwindcss";
 
+/* Enable dark mode with class selector (Tailwind v4) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+
 /* Estilos globales personalizados */
-html, body {
+html,
+body {
   font-family: system-ui, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-html {
+/* Theme Support */
+html.dark {
+  color-scheme: dark;
+}
+
+html.light {
   color-scheme: light;
+}
+
+/* Light Theme Variables */
+html.light {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f7fa;
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --accent-color: #007EAD;
+  --border-color: #e2e8f0;
+}
+
+/* Dark Theme Variables (default) */
+html.dark {
+  --bg-primary: #0b1226;
+  --bg-secondary: #0f1f38;
+  --text-primary: #ffffff;
+  --text-secondary: #dce6f4;
+  --accent-color: #00aaff;
+  --border-color: #1f2f46;
 }
 
 /* --- ESTILO PERSONALIZADO PARA POSTS --- */
 
 .prose strong {
-  color: #fff;
+  color: var(--text-primary);
 }
 
-.prose h2, .prose h3, .prose h4 {
+html.light .prose strong {
+  color: #1a202c;
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
   margin-top: 2rem;
   margin-bottom: 1rem;
-  color: #00aaff;
+  color: var(--accent-color);
   font-weight: 700;
 }
 
@@ -26,10 +65,11 @@ html {
   margin-top: 1rem;
   margin-bottom: 1rem;
   line-height: 1.7;
-  color: #dce6f4;
+  color: var(--text-secondary);
 }
 
-.prose ul, .prose ol {
+.prose ul,
+.prose ol {
   margin: 1rem 0;
   padding-left: 1.5rem;
 }
@@ -47,23 +87,28 @@ html {
 
 .prose table th,
 .prose table td {
-  border: 1px solid #1f2f46;
+  border: 1px solid var(--border-color);
   padding: 0.75rem;
 }
 
 .prose table th {
-  background: #0e2a42;
-  color: #00aaff;
+  background: var(--bg-secondary);
+  color: var(--accent-color);
   font-weight: bold;
 }
 
 .prose hr {
-  border-color: #1f2f46;
+  border-color: var(--border-color);
 }
 
 .prose img {
   border-radius: 12px;
-  border: 1px solid #1f2f46;
+  border: 1px solid var(--border-color);
   margin: 2rem 0;
   box-shadow: 0 4px 20px rgba(0, 126, 173, 0.15);
+}
+
+/* Light mode adjustments */
+html.light .prose img {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }

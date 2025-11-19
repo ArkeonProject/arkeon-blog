@@ -5,11 +5,11 @@ type ButtonSize = "sm" | "md" | "lg";
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-linear-to-r from-[#007EAD] to-[#00aaff] text-white shadow-lg shadow-[#007EAD]/40 hover:from-[#00aaff] hover:to-[#007EAD] hover:shadow-[#00aaff]/60 border border-transparent",
+    "bg-gradient-to-r from-[#007EAD] to-[#00aaff] text-white shadow-lg shadow-[#007EAD]/40 hover:from-[#00aaff] hover:to-[#007EAD] hover:shadow-[#00aaff]/60 border border-transparent",
   secondary:
-    "bg-transparent border border-[#007EAD]/40 text-white hover:border-[#00aaff] hover:text-[#00aaff]",
+    "bg-transparent border border-gray-400 dark:border-[#007EAD]/40 text-gray-900 dark:text-white hover:border-[#00aaff] hover:text-[#00aaff]",
   ghost:
-    "bg-transparent text-white hover:text-[#00aaff]",
+    "bg-transparent text-gray-900 dark:text-white hover:text-[#00aaff]",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {

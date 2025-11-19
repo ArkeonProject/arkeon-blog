@@ -7,6 +7,9 @@ import { supabase } from "../lib/supabase";
 import { useLocale } from "../hooks/useLocale";
 import { useSupabaseQuery } from "../hooks/useSupabaseQuery";
 import Button from "../components/ui/Button";
+import ReadingProgressBar from "../components/ui/ReadingProgressBar";
+import ShareButtons from "../components/ui/ShareButtons";
+import Breadcrumbs from "../components/ui/Breadcrumbs";
 import type { PostDetail } from "../types/post";
 
 marked.setOptions({ async: false });
@@ -73,81 +76,96 @@ export default function PostPage() {
 
 
 
-  if (!slug) return <p className="text-center mt-10 text-white/70">{t("post_not_found")}</p>;
-  if (loading) return <p className="text-center mt-10 text-white/70">{t("post_loading")}</p>;
-  if (errorMsg) return <p className="text-center mt-10 text-red-400">{errorMsg}</p>;
-  if (!post) return <p className="text-center mt-10 text-white/70">{t("post_not_found")}</p>;
+  if (!slug) return <p className="text-center mt-10 text-gray-600 dark:text-white/70">{t("post_not_found")}</p>;
+  if (loading) return <p className="text-center mt-10 text-gray-600 dark:text-white/70">{t("post_loading")}</p>;
+  if (errorMsg) return <p className="text-center mt-10 text-red-500 dark:text-red-400">{errorMsg}</p>;
+  if (!post) return <p className="text-center mt-10 text-gray-600 dark:text-white/70">{t("post_not_found")}</p>;
 
   const description =
     post.content.length > 160 ? post.content.slice(0, 157) + "…" : post.content;
 
   return (
-    <div className="max-w-4xl mx-auto p-8 md:p-12 bg-linear-to-br from-[#0b1226] via-[#071622] to-[#0a172b] rounded-3xl shadow-lg shadow-[#007EAD]/20">
-      <Helmet>
-        <title>{post.title} | Arkeon</title>
-        <meta name="description" content={description} />
-        <meta property="og:title" content={`${post.title} | Arkeon`} />
-        <meta property="og:description" content={description} />
-        {post.cover_image && <meta property="og:image" content={post.cover_image} />}
-      </Helmet>
+    <>
+      <ReadingProgressBar />
+      <div className="max-w-4xl mx-auto p-8 md:p-12 bg-gradient-to-br from-white to-gray-50 dark:from-[#0b1226] dark:via-[#071622] dark:to-[#0a172b] rounded-3xl shadow-lg dark:shadow-[#007EAD]/20 transition-colors duration-300">
+        <Breadcrumbs />
 
-      <Link
-        to="/blog"
-        className="text-[#00aaff] hover:text-[#00bbee] transition-colors duration-300 inline-flex items-center gap-2 mb-6"
-      >
-        <span>←</span> {t("post_back_to_blog")}
-      </Link>
+        <Helmet>
+          <title>{post.title} | Arkeon</title>
+          <meta name="description" content={description} />
+          <meta property="og:title" content={`${post.title} | Arkeon`} />
+          <meta property="og:description" content={description} />
+          {post.cover_image && <meta property="og:image" content={post.cover_image} />}
+        </Helmet>
 
-      {post.cover_image && (
-        <img
-          src={post.cover_image}
-          alt={post.title}
-          className="rounded-xl my-6 w-full object-cover h-64 border border-[#007EAD]/20 shadow-lg shadow-[#007EAD]/10"
-          loading="lazy"
-        />
-      )}
+        <Link
+          to="/blog"
+          className="text-[#00aaff] hover:text-[#00bbee] transition-colors duration-300 inline-flex items-center gap-2 mb-6"
+        >
+          <span>←</span> {t("post_back_to_blog")}
+        </Link>
 
-      <h1 className="text-4xl font-bold mb-2 text-[#00aaff]">{post.title}</h1>
-
-      <p className="text-sm text-white/60 mb-6">
-        {new Date(post.published_at).toLocaleDateString(
-          locale === "es" ? "es-ES" : "en-US",
-          { year: "numeric", month: "long", day: "numeric" }
-        )}{" "}
-        — <span className="text-[#00aaff]">{post.author}</span>
-      </p>
-
-      <div className="border-t border-[#007EAD]/20 mt-8 mb-8" />
-
-      <article
-        className="
-          prose prose-lg prose-invert max-w-none
-          prose-headings:text-[#00aaff]
-          prose-p:text-white/80
-          prose-a:text-[#00aaff] hover:prose-a:text-[#00bbee]
-          prose-strong:text-white
-          prose-code:text-[#007EAD]
-          prose-pre:bg-[#0f1f38]/50 prose-pre:border prose-pre:border-[#007EAD]/20
-          prose-img:rounded-xl prose-img:border prose-img:border-[#007EAD]/20 prose-img:shadow-lg prose-img:my-6
-          leading-relaxed
-        "
-      >
-        <div dangerouslySetInnerHTML={{ __html: beforeBuy }} />
-
-        {affiliateUrl && (
-          <div className="my-6 flex justify-center">
-            <Button
-              className="bg-[#00aaff] hover:bg-[#00bbee] text-white font-semibold px-6 py-3 rounded-xl shadow-md shadow-[#007EAD]/30 text-lg"
-            >
-              <a href={affiliateUrl} target="_blank" rel="noopener noreferrer">
-                {t("buy_in_amazon")}
-              </a>
-            </Button>
-          </div>
+        {post.cover_image && (
+          <img
+            src={post.cover_image}
+            alt={post.title}
+            className="rounded-xl my-6 w-full object-cover h-64 border border-gray-300 dark:border-[#007EAD]/20 shadow-lg dark:shadow-[#007EAD]/10"
+            loading="lazy"
+          />
         )}
 
-        <div dangerouslySetInnerHTML={{ __html: afterBuy }} />
-      </article>
-    </div>
+        <h1 className="text-4xl font-bold mb-2 text-[#007EAD] dark:text-[#00aaff]">{post.title}</h1>
+
+        <p className="text-sm text-gray-600 dark:text-white/60 mb-6">
+          {new Date(post.published_at).toLocaleDateString(
+            locale === "es" ? "es-ES" : "en-US",
+            { year: "numeric", month: "long", day: "numeric" }
+          )}{" "}
+          — <span className="text-[#00aaff]">{post.author}</span>
+        </p>
+
+        <div className="border-t border-gray-300 dark:border-[#007EAD]/20 mt-8 mb-8" />
+
+        <div className="mb-8">
+          <ShareButtons
+            url={window.location.href}
+            title={post.title}
+          />
+        </div>
+
+        <div className="border-t border-gray-300 dark:border-[#007EAD]/20 mb-8" />
+
+        <article
+          className="
+          prose prose-lg max-w-none
+          dark:prose-invert
+          prose-headings:text-[#007EAD] dark:prose-headings:text-[#00aaff]
+          prose-p:text-gray-700 dark:prose-p:text-white/80
+          prose-a:text-[#007EAD] dark:prose-a:text-[#00aaff] hover:prose-a:text-[#00bbee]
+          prose-strong:text-gray-900 dark:prose-strong:text-white
+          prose-code:text-[#007EAD]
+          prose-pre:bg-gray-100 dark:prose-pre:bg-[#0f1f38]/50 prose-pre:border prose-pre:border-gray-300 dark:prose-pre:border-[#007EAD]/20
+          prose-img:rounded-xl prose-img:border prose-img:border-gray-300 dark:prose-img:border-[#007EAD]/20 prose-img:shadow-lg prose-img:my-6
+          leading-relaxed
+        "
+        >
+          <div dangerouslySetInnerHTML={{ __html: beforeBuy }} />
+
+          {affiliateUrl && (
+            <div className="my-6 flex justify-center">
+              <Button
+                className="bg-[#00aaff] hover:bg-[#00bbee] text-white font-semibold px-6 py-3 rounded-xl shadow-md shadow-[#007EAD]/30 text-lg"
+              >
+                <a href={affiliateUrl} target="_blank" rel="noopener noreferrer">
+                  {t("buy_in_amazon")}
+                </a>
+              </Button>
+            </div>
+          )}
+
+          <div dangerouslySetInnerHTML={{ __html: afterBuy }} />
+        </article>
+      </div>
+    </>
   );
 }

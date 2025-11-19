@@ -13,26 +13,28 @@ import ProductsPage from "../pages/ProductsPage";
 import Header from "../components/layout/Header";
 import CategoryBanner from "../components/layout/CategoryBanner";
 import Footer from "../components/layout/Footer";
+import ScrollToTop from "../components/ui/ScrollToTop";
 import { useLocale } from "../hooks/useLocale";
 import { COOKIE_CONSENT_NAME } from "../lib/cookies";
 
 function Layout() {
   const { t } = useLocale();
   return (
-    <div className="flex flex-col min-h-screen bg-linear-to-b from-[#0a1628] via-[#0d1f38] to-[#060f1a] text-white">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-100 text-gray-900 dark:bg-gradient-to-b dark:from-[#0a1628] dark:via-[#0d1f38] dark:to-[#060f1a] dark:text-white transition-colors duration-300">
       <Header />
       <CategoryBanner />
       <main className="grow container mx-auto px-4 py-8">
         <Outlet />
       </main>
       <Footer />
+      <ScrollToTop />
       <CookieConsent
         location="bottom"
         buttonText={t("cookies_accept")}
         cookieName={COOKIE_CONSENT_NAME}
         style={{
-          background: "#0b1226",
-          color: "white",
+          background: "var(--bg-primary)",
+          color: "var(--text-primary)",
           fontSize: "14px",
           textAlign: "center",
         }}
