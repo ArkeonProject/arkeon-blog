@@ -5,13 +5,13 @@
 
 ---
 
-## [v1.3.1] - 2025-01-19
+## [v1.3.1] - 2025-11-22
 ### 🧰 Modificado
   - Adaptación de imágenes de cards de posts para que se ajusten tamaño predeterminado de cada imagen.  
   
 ---
 
-## [v1.3.0] - 2025-01-19
+## [v1.3.0] - 2025-11-19
 ### 🚀 Añadido
 - **Sistema de Categorías**: Implementación completa de categorías para posts y productos
   - Componente `CategoryBanner` para navegación entre secciones (Noticias/Productos)
