@@ -109,7 +109,7 @@ export default function PostPage() {
           <img
             src={post.cover_image}
             alt={post.title}
-            className="rounded-xl my-6 w-full object-cover h-64 border border-gray-300 dark:border-[#007EAD]/20 shadow-lg dark:shadow-[#007EAD]/10"
+            className="rounded-xl my-6 w-full object-cover aspect-auto border border-gray-300 dark:border-[#007EAD]/20 shadow-lg dark:shadow-[#007EAD]/10"
             loading="lazy"
           />
         )}

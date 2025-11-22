@@ -16,7 +16,7 @@ export default function PostCard({ post }: PostCardProps) {
         <img
           src={post.cover_image}
           alt={post.title}
-          className="rounded-lg mb-5 w-full object-cover h-52 group-hover:scale-105 transition-transform duration-400"
+          className="rounded-lg mb-5 w-full object-cover aspect-auto group-hover:scale-105 transition-transform duration-400"
           loading="lazy"
         />
       )}
