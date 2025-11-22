@@ -20,7 +20,7 @@ export default function FeaturedPostCard({ post }: FeaturedPostCardProps) {
               <img
                 src={post.cover_image}
                 alt={post.title}
-                className="w-full h-64 md:h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                className="w-full object-cover aspect-auto group-hover:scale-105 transition-transform duration-300"
                 loading="eager"
               />
             </div>
