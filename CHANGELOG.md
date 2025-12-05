@@ -5,6 +5,12 @@
 
 ---
 
+## [v1.3.2] - 2025-12-05
+### 🛡️ Seguridad
+- Actualización de `react` y `react-dom` a 19.1.2 para mitigar CVE-2025-55182 / CVE-2025-66478 en React Server Components.
+  
+---
+
 ## [v1.3.1] - 2025-11-22
 ### 🧰 Modificado
   - Adaptación de imágenes de cards de posts para que se ajusten tamaño predeterminado de cada imagen.  
