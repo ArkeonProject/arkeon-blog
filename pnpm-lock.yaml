@@ -18,26 +18,26 @@ importers:
         specifier: ^16.4.1
         version: 16.4.1
       react:
-        specifier: ^19.1.1
-        version: 19.2.0
+        specifier: ^19.1.2
+        version: 19.1.2
       react-cookie-consent:
         specifier: ^9.0.0
-        version: 9.0.0(react@19.2.0)
+        version: 9.0.0(react@19.1.2)
       react-dom:
-        specifier: ^19.1.1
-        version: 19.2.0(react@19.2.0)
+        specifier: ^19.1.2
+        version: 19.1.2(react@19.1.2)
       react-helmet-async:
         specifier: ^2.0.5
-        version: 2.0.5(react@19.2.0)
+        version: 2.0.5(react@19.1.2)
       react-icons:
         specifier: ^5.5.0
-        version: 5.5.0(react@19.2.0)
+        version: 5.5.0(react@19.1.2)
       react-markdown:
         specifier: ^10.1.0
-        version: 10.1.0(@types/react@19.2.2)(react@19.2.0)
+        version: 10.1.0(@types/react@19.2.2)(react@19.1.2)
       react-router-dom:
         specifier: ^7.9.4
-        version: 7.9.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 7.9.4(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
       remark-gfm:
         specifier: ^4.0.1
         version: 4.0.1
@@ -1727,10 +1727,10 @@ packages:
     peerDependencies:
       react: '>=16'
 
-  react-dom@19.2.0:
-    resolution: {integrity: sha512-UlbRu4cAiGaIewkPyiRGJk0imDN2T3JjieT6spoL2UeSf5od4n5LB/mQ4ejmxhCFT1tYe8IvaFulzynWovsEFQ==}
+  react-dom@19.1.2:
+    resolution: {integrity: sha512-dEoydsCp50i7kS1xHOmPXq4zQYoGWedUsvqv9H6zdif2r7yLHygyfP9qou71TulRN0d6ng9EbRVsQhSqfUc19g==}
     peerDependencies:
-      react: ^19.2.0
+      react: ^19.1.2
 
   react-fast-compare@3.2.2:
     resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
@@ -1772,8 +1772,8 @@ packages:
       react-dom:
         optional: true
 
-  react@19.2.0:
-    resolution: {integrity: sha512-tmbWg6W31tQLeB5cdIBOicJDJRR2KzXsV7uSK9iNfLWQ5bIZfxuPEHp7M8wiHyHnn0DD1i7w3Zmin0FtkrwoCQ==}
+  react@19.1.2:
+    resolution: {integrity: sha512-MdWVitvLbQULD+4DP8GYjZUrepGW7d+GQkNVqJEzNxE+e9WIa4egVFE/RDfVb1u9u/Jw7dNMmPB4IqxzbFYJ0w==}
     engines: {node: '>=0.10.0'}
 
   read-yaml-file@1.1.0:
@@ -1815,8 +1815,8 @@ packages:
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
 
-  scheduler@0.27.0:
-    resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
+  scheduler@0.26.0:
+    resolution: {integrity: sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA==}
 
   semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
@@ -3901,30 +3901,30 @@ snapshots:
 
   queue-microtask@1.2.3: {}
 
-  react-cookie-consent@9.0.0(react@19.2.0):
+  react-cookie-consent@9.0.0(react@19.1.2):
     dependencies:
       js-cookie: 2.2.1
-      react: 19.2.0
+      react: 19.1.2
 
-  react-dom@19.2.0(react@19.2.0):
+  react-dom@19.1.2(react@19.1.2):
     dependencies:
-      react: 19.2.0
-      scheduler: 0.27.0
+      react: 19.1.2
+      scheduler: 0.26.0
 
   react-fast-compare@3.2.2: {}
 
-  react-helmet-async@2.0.5(react@19.2.0):
+  react-helmet-async@2.0.5(react@19.1.2):
     dependencies:
       invariant: 2.2.4
-      react: 19.2.0
+      react: 19.1.2
       react-fast-compare: 3.2.2
       shallowequal: 1.1.0
 
-  react-icons@5.5.0(react@19.2.0):
+  react-icons@5.5.0(react@19.1.2):
     dependencies:
-      react: 19.2.0
+      react: 19.1.2
 
-  react-markdown@10.1.0(@types/react@19.2.2)(react@19.2.0):
+  react-markdown@10.1.0(@types/react@19.2.2)(react@19.1.2):
     dependencies:
       '@types/hast': 3.0.4
       '@types/mdast': 4.0.4
@@ -3933,7 +3933,7 @@ snapshots:
       hast-util-to-jsx-runtime: 2.3.6
       html-url-attributes: 3.0.1
       mdast-util-to-hast: 13.2.0
-      react: 19.2.0
+      react: 19.1.2
       remark-parse: 11.0.0
       remark-rehype: 11.1.2
       unified: 11.0.5
@@ -3944,21 +3944,21 @@ snapshots:
 
   react-refresh@0.18.0: {}
 
-  react-router-dom@7.9.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  react-router-dom@7.9.4(react-dom@19.1.2(react@19.1.2))(react@19.1.2):
     dependencies:
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-      react-router: 7.9.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      react: 19.1.2
+      react-dom: 19.1.2(react@19.1.2)
+      react-router: 7.9.4(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
 
-  react-router@7.9.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  react-router@7.9.4(react-dom@19.1.2(react@19.1.2))(react@19.1.2):
     dependencies:
       cookie: 1.0.2
-      react: 19.2.0
+      react: 19.1.2
       set-cookie-parser: 2.7.2
     optionalDependencies:
-      react-dom: 19.2.0(react@19.2.0)
+      react-dom: 19.1.2(react@19.1.2)
 
-  react@19.2.0: {}
+  react@19.1.2: {}
 
   read-yaml-file@1.1.0:
     dependencies:
@@ -4041,7 +4041,7 @@ snapshots:
 
   safer-buffer@2.1.2: {}
 
-  scheduler@0.27.0: {}
+  scheduler@0.26.0: {}
 
   semver@6.3.1: {}
 
