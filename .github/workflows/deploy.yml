@@ -1,62 +1,40 @@
-name: 🚀 Deploy - Production (main)
+name: CD - Node + Vercel (main)
 
 on:
   push:
-    branches: [main]
-    
+    branches: [ main ]
+
 permissions:
-  contents: write 
+  contents: read
 
 jobs:
   deploy:
+    name: Deploy to Vercel
     runs-on: ubuntu-latest
 
+    if: |
+      hashFiles('package.json') != '' &&
+      contains(github.secrets.*, 'VERCEL_PROJECT_ID')
+
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
     steps:
-      - name: 📥 Checkout repository
-        uses: actions/checkout@v4
-
-      - name: 📦 Install PNPM globally
-        run: npm install -g pnpm@10 --force
-
-      - name: 🧰 Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - run: npm install -g pnpm@10 --force
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
-
-      - name: 📦 Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: 🧱 Build project
-        run: pnpm run build
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-
-      - name: 🚀 Deploy to Vercel
-        uses: amondnet/vercel-action@v25
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+      - uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: ./
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-
-      - name: 🧮 Get version from package.json
-        id: pkg
-        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
-
-      - name: 🏷️ Create Git tag if not exists
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          VERSION="v${{ steps.pkg.outputs.version }}"
-          if git rev-parse "$VERSION" >/dev/null 2>&1; then
-            echo "⚠️ Tag $VERSION already exists, skipping..."
-          else
-            echo "🏷️ Creating tag $VERSION..."
-            git tag -a "$VERSION" -m "Release $VERSION"
-            git push origin "$VERSION"
-          fi
