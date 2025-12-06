@@ -20,3 +20,4 @@ jobs:
       description: ${{ github.event.inputs.description }}
       issue-number: ${{ github.event.inputs.issue-number }}
       project-type: 'node'
+    secrets: inherit
