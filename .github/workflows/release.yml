@@ -1,1 +1,33 @@
-404: Not Found
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version-bump:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+        default: minor
+
+jobs:
+  prepare-release:
+    name: Prepare Release
+    uses: ArkeonProject/organization-tools/.github/workflows/reusable/release-prepare.yml@v1.0.0
+    with:
+      version-bump: ${{ github.event.inputs.version-bump }}
+      project-type: 'node'
+      base-branch: 'develop'
+  
+  publish-release:
+    name: Publish Release
+    needs: prepare-release
+    if: github.ref == 'refs/heads/main'
+    uses: ArkeonProject/organization-tools/.github/workflows/reusable/release-publish.yml@v1.0.0
+    with:
+      project-type: 'node'
+      create-github-release: true
+      auto-back-merge: true
