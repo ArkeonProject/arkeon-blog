@@ -19,3 +19,4 @@ jobs:
       run-build: true
       upload-coverage: false
       upload-artifacts: true
+    secrets: inherit
