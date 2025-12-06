@@ -13,7 +13,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.76.1",
     "dompurify": "^3.3.0",
-    "marked": "^16.4.1",
+    "marked": "^17.0.1",
     "react": "^19.1.2",
     "react-cookie-consent": "^9.0.0",
     "react-dom": "^19.1.2",
