@@ -30,7 +30,7 @@ jobs:
   publish-release:
     name: Publish Release
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    uses: ArkeonProject/organization-tools/.github/workflows/release-publish.yml@v1.0.1
+    uses: ArkeonProject/organization-tools/.github/workflows/release-publish.yml@v1.0.2
     with:
       project-type: 'node'
       create-github-release: true
