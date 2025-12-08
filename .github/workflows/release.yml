@@ -20,7 +20,7 @@ jobs:
   prepare-release:
     name: Prepare Release
     if: github.event_name == 'workflow_dispatch'
-    uses: ArkeonProject/organization-tools/.github/workflows/release-prepare.yml@v1.0.1
+    uses: ArkeonProject/organization-tools/.github/workflows/release-prepare.yml@v1.0.2
     with:
       version-bump: ${{ github.event.inputs.version-bump }}
       project-type: 'node'
