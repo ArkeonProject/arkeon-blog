@@ -24,12 +24,17 @@ if (existsSync(envPath)) {
 const supabaseUrl = process.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-    console.error("❌ Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY");
-    process.exit(1);
-}
+// Create Supabase client only if credentials are available
+const supabase =
+    supabaseUrl && supabaseAnonKey
+        ? createClient(supabaseUrl, supabaseAnonKey)
+        : null;
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+if (!supabase) {
+    console.warn(
+        "⚠️  Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY - generating static-only sitemap"
+    );
+}
 
 const SITE_URL = "https://www.arkeontech.es";
 
@@ -53,15 +58,19 @@ async function generateSitemap(): Promise<void> {
         { url: "/cookies", priority: "0.3", changefreq: "yearly" },
     ];
 
-    // Fetch all published posts from Supabase
-    const { data: posts, error } = await supabase
-        .from("posts")
-        .select("slug, published_at")
-        .order("published_at", { ascending: false });
+    // Fetch all published posts from Supabase (if credentials available)
+    let posts: Post[] = [];
+    if (supabase) {
+        const { data, error } = await supabase
+            .from("posts")
+            .select("slug, published_at")
+            .order("published_at", { ascending: false });
 
-    if (error) {
-        console.error("❌ Error fetching posts:", error.message);
-        process.exit(1);
+        if (error) {
+            console.error("❌ Error fetching posts:", error.message);
+            process.exit(1);
+        }
+        posts = (data as Post[]) || [];
     }
 
     const today = new Date().toISOString().split("T")[0];
@@ -83,8 +92,8 @@ async function generateSitemap(): Promise<void> {
     }
 
     // Add dynamic post pages
-    if (posts && posts.length > 0) {
-        for (const post of posts as Post[]) {
+    if (posts.length > 0) {
+        for (const post of posts) {
             const lastmod = post.published_at
                 ? new Date(post.published_at).toISOString().split("T")[0]
                 : today;
@@ -105,7 +114,7 @@ async function generateSitemap(): Promise<void> {
     const outputPath = resolve(__dirname, "../dist/sitemap.xml");
     writeFileSync(outputPath, xml, "utf-8");
 
-    console.log(`✅ Sitemap generated with ${staticPages.length + (posts?.length || 0)} URLs`);
+    console.log(`✅ Sitemap generated with ${staticPages.length + posts.length} URLs`);
     console.log(`   → ${outputPath}`);
 }
 
