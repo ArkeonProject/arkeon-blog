@@ -25,7 +25,7 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.29.7",
+    "@changesets/cli": "^2.29.8",
     "@eslint/js": "^9.36.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.16",
