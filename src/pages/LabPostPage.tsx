@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
-import { FiTerminal, FiCode } from "react-icons/fi";
+import { FiTerminal, FiCode, FiShoppingCart } from "react-icons/fi";
 import { supabase } from "../lib/supabase";
 import { useLocale } from "../hooks/useLocale";
 import { useSupabaseQuery } from "../hooks/useSupabaseQuery";
@@ -46,11 +46,59 @@ export default function LabPostPage() {
     } = useSupabaseQuery<LabPostDetail | null>(queryPost);
     const errorMsg = error ? t("lab_post_error") : null;
 
-    const safeHtml = useMemo(() => {
-        if (!post?.content) return "";
-        const rawHtml = marked.parse(post.content) as string;
-        return DOMPurify.sanitize(rawHtml);
+    // Extract affiliate URL (AliExpress or Amazon)
+    const affiliateUrl = useMemo(() => {
+        if (!post?.content) return null;
+        const match = post.content.match(
+            /https:\/\/s\.click\.aliexpress\.com\/[^\s*)"]+|https:\/\/www\.amazon\.\w+\/[^\s*)"]+/
+        );
+        return match ? match[0] : null;
     }, [post?.content]);
+
+    // Parse markdown → HTML, removing raw affiliate URLs
+    const rawHtml = useMemo(() => {
+        if (!post?.content) return "";
+        return marked.parse(post.content) as string;
+    }, [post?.content]);
+
+    const cleanedHtml = useMemo(() => {
+        if (!rawHtml) return "";
+        // Remove AliExpress and Amazon raw URLs from rendered HTML (they might be inside <strong> or <p>)
+        let cleaned = rawHtml;
+        cleaned = cleaned.replace(
+            /https:\/\/s\.click\.aliexpress\.com\/[^\s<>"]+/g,
+            ""
+        );
+        cleaned = cleaned.replace(
+            /https:\/\/www\.amazon\.\w+\/[^\s<>"]+/g,
+            ""
+        );
+        return cleaned;
+    }, [rawHtml]);
+
+    const safeHtml = useMemo(
+        () => DOMPurify.sanitize(cleanedHtml),
+        [cleanedHtml]
+    );
+
+    // Split HTML around the purchase link heading (same pattern as PostPage)
+    const { beforeBuy, afterBuy } = useMemo(() => {
+        const headerRegex =
+            /<h3[^>]*>[^<]*(Enlace de compra|Purchase link)[^<]*<\/h3>/i;
+        const match = safeHtml.match(headerRegex);
+
+        if (!match) {
+            return { beforeBuy: safeHtml, afterBuy: "" };
+        }
+
+        const headerIndex = safeHtml.indexOf(match[0]);
+        const headerEnd = headerIndex + match[0].length;
+
+        return {
+            beforeBuy: safeHtml.slice(0, headerEnd),
+            afterBuy: safeHtml.slice(headerEnd),
+        };
+    }, [safeHtml]);
 
     if (!slug)
         return (
@@ -107,7 +155,7 @@ export default function LabPostPage() {
 
                 <Link
                     to="/lab"
-                    className="text-emerald-500 hover:text-emerald-400 transition-colors duration-300 inline-flex items-center gap-2 mb-6"
+                    className="text-[#00aaff] hover:text-[#00bbee] transition-colors duration-300 inline-flex items-center gap-2 mb-6"
                 >
                     <span>←</span> {t("lab_back_to_lab")}
                 </Link>
@@ -179,13 +227,29 @@ export default function LabPostPage() {
             prose-p:text-gray-700 dark:prose-p:text-white/80
             prose-a:text-[#007EAD] dark:prose-a:text-[#00aaff] hover:prose-a:text-[#00bbee]
             prose-strong:text-gray-900 dark:prose-strong:text-white
-            prose-code:text-emerald-600 dark:prose-code:text-emerald-400
-            prose-pre:bg-gray-100 dark:prose-pre:bg-[#0f1f38]/50 prose-pre:border prose-pre:border-gray-300 dark:prose-pre:border-[#007EAD]/20
+            prose-code:text-[#007EAD]
+            prose-pre:bg-gray-100 dark:prose-pre:bg-[#0f1f38]/50 prose-pre:border prose-pre:border-gray-300 dark:prose-pre:border-[#007EAD]/20 prose-pre:rounded-xl prose-pre:overflow-x-auto
             prose-img:rounded-xl prose-img:border prose-img:border-gray-300 dark:prose-img:border-[#007EAD]/20 prose-img:shadow-lg prose-img:my-6
             leading-relaxed
           "
                 >
-                    <div dangerouslySetInnerHTML={{ __html: safeHtml }} />
+                    <div dangerouslySetInnerHTML={{ __html: beforeBuy }} />
+
+                    {affiliateUrl && (
+                        <div className="not-prose my-8 flex justify-center">
+                            <a
+                                href={affiliateUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-3 no-underline text-white bg-gradient-to-r from-[#007EAD] to-[#00aaff] hover:from-[#00aaff] hover:to-[#007EAD] font-semibold px-8 py-4 rounded-xl shadow-lg shadow-[#007EAD]/30 text-lg transition-all duration-300 hover:scale-105"
+                            >
+                                <FiShoppingCart className="w-5 h-5" />
+                                {locale === "es" ? "Ver producto" : "View product"}
+                            </a>
+                        </div>
+                    )}
+
+                    <div dangerouslySetInnerHTML={{ __html: afterBuy }} />
                 </article>
             </div>
         </>

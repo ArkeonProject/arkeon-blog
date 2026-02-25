@@ -1,7 +1,19 @@
+import { Link } from "react-router-dom";
+import {
+    FiBox,
+    FiCheckCircle,
+    FiLayers,
+    FiServer,
+    FiTerminal,
+    FiCode,
+} from "react-icons/fi";
 import { useLocale } from "../../hooks/useLocale";
-import type { LabPostListItem } from "../../types/lab";
 import Card from "../ui/Card";
-import { FiTerminal, FiBox, FiCheckCircle, FiCode, FiServer, FiLayers } from "react-icons/fi";
+import type { LabPostListItem } from "../../types/lab";
+
+interface LabPostCardProps {
+    readonly post: LabPostListItem;
+}
 
 const TAG_ICONS: Record<string, React.ReactNode> = {
     docker: <FiBox className="w-3.5 h-3.5" />,
@@ -17,71 +29,89 @@ const DIFFICULTY_STYLES: Record<string, string> = {
     advanced: "bg-rose-500/15 text-rose-400 border-rose-500/30",
 };
 
-interface LabPostCardProps {
-    readonly post: LabPostListItem;
-}
-
 export default function LabPostCard({ post }: LabPostCardProps) {
     const { locale, t } = useLocale();
     const dateFormat = locale === "es" ? "es-ES" : "en-US";
-
     const difficultyKey = post.difficulty
         ? `lab_difficulty_${post.difficulty}`
         : null;
 
     return (
-        <Card className="relative p-6 group transition-all duration-300 hover:shadow-[0_0_18px_rgba(0,126,173,0.5)] hover:scale-[1.02] hover:z-10 flex flex-col h-full overflow-hidden">
-            {/* Decorative terminal-style accent */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#007EAD] via-[#00aaff] to-[#007EAD] opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
+        <Link
+            to={`/lab/${post.slug}`}
+            className="block h-full"
+            aria-label={post.title}
+        >
+            <Card className="relative p-0 group transition-all duration-500 hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:scale-[1.02] hover:z-10 flex flex-col h-full overflow-hidden">
+                {/* Terminal accent bar */}
+                <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-600 group-hover:h-2 transition-all duration-300" />
 
-            {post.cover_image && (
-                <img
-                    src={post.cover_image}
-                    alt={post.title}
-                    className="rounded-lg mb-5 w-full object-cover aspect-video group-hover:scale-105 transition-transform duration-400"
-                    loading="lazy"
-                />
-            )}
+                {post.cover_image && (
+                    <div className="relative overflow-hidden">
+                        <img
+                            src={post.cover_image}
+                            alt={post.title}
+                            className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700"
+                            loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    </div>
+                )}
 
-            <div className="flex flex-col flex-grow">
-                {/* Tags + Difficulty row */}
-                <div className="flex flex-wrap items-center gap-2 mb-3">
-                    {post.difficulty && difficultyKey && (
-                        <span
-                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold border ${DIFFICULTY_STYLES[post.difficulty] ?? "bg-gray-500/15 text-gray-400 border-gray-500/30"}`}
-                        >
-                            {t(difficultyKey)}
+                <div className="flex flex-col flex-grow p-6">
+                    {/* Difficulty + date */}
+                    <div className="flex items-center justify-between mb-3">
+                        <span className="text-gray-400 dark:text-white/35 text-xs font-medium uppercase tracking-wider">
+                            {new Date(post.published_at).toLocaleDateString(dateFormat, {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                            })}
                         </span>
+
+                        {post.difficulty && difficultyKey && (
+                            <span
+                                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold border ${DIFFICULTY_STYLES[post.difficulty] ?? "bg-gray-500/15 text-gray-400 border-gray-500/30"}`}
+                            >
+                                {t(difficultyKey)}
+                            </span>
+                        )}
+                    </div>
+
+                    {/* Title */}
+                    <h2 className="text-xl font-bold mb-3 text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300 line-clamp-2">
+                        {post.title}
+                    </h2>
+
+                    {/* Excerpt */}
+                    <p className="text-gray-600 dark:text-white/60 text-sm leading-relaxed line-clamp-3 flex-grow mb-4">
+                        {post.excerpt || ""}
+                    </p>
+
+                    {/* Tags */}
+                    {post.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mb-4">
+                            {post.tags.slice(0, 4).map((tag) => (
+                                <span
+                                    key={tag}
+                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-[#007EAD]/8 text-[#00aaff]/80 border border-[#007EAD]/15"
+                                >
+                                    {TAG_ICONS[tag] ?? <FiCode className="w-3 h-3" />}
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
                     )}
-                    {post.tags.slice(0, 3).map((tag) => (
-                        <span
-                            key={tag}
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-[#007EAD]/10 text-[#00aaff] border border-[#007EAD]/20"
-                        >
-                            {TAG_ICONS[tag.toLowerCase()] ?? (
-                                <FiCode className="w-3.5 h-3.5" />
-                            )}
-                            {tag}
+
+                    {/* Footer */}
+                    <div className="pt-3 border-t border-gray-200 dark:border-white/10">
+                        <span className="text-emerald-500 dark:text-emerald-400 text-sm font-semibold group-hover:tracking-wider transition-all duration-300 inline-flex items-center gap-1.5">
+                            <FiTerminal className="w-3.5 h-3.5" />
+                            {locale === "es" ? "Leer artículo →" : "Read article →"}
                         </span>
-                    ))}
+                    </div>
                 </div>
-
-                <h2 className="text-2xl font-semibold mb-1 text-gray-900 dark:text-white group-hover:text-[#007EAD] transition-colors duration-400">
-                    {post.title}
-                </h2>
-
-                <p className="text-gray-500 dark:text-white/40 text-sm mb-4 border-b border-gray-300 dark:border-gray-700 pb-4">
-                    {new Date(post.published_at).toLocaleDateString(dateFormat, {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                    })}
-                </p>
-
-                <p className="text-gray-700 dark:text-white/70 line-clamp-3">
-                    {post.excerpt || ""}
-                </p>
-            </div>
-        </Card>
+            </Card>
+        </Link>
     );
 }
