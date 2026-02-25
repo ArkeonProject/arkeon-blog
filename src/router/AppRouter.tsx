@@ -9,6 +9,8 @@ import TermsPage from "../pages/TermsPage";
 import CookiesPolicyPage from "../pages/CookiesPolicyPage";
 import ConfirmPage from "../pages/newsletter/ConfirmPage";
 import NewsPage from "../pages/NewsPage";
+import LabPage from "../pages/LabPage";
+import LabPostPage from "../pages/LabPostPage";
 import ProductsPage from "../pages/ProductsPage";
 import Header from "../components/layout/Header";
 import CategoryBanner from "../components/layout/CategoryBanner";
@@ -68,6 +70,8 @@ export default function AppRouter() {
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/news" element={<NewsPage />} />
           <Route path="/products" element={<ProductsPage />} />
+          <Route path="/lab" element={<LabPage />} />
+          <Route path="/lab/:slug" element={<LabPostPage />} />
           <Route path="/post/:slug" element={<PostPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />

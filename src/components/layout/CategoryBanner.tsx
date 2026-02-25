@@ -10,6 +10,10 @@ const CATEGORY_LINKS = [
     path: "/products",
     key: "products",
   },
+  {
+    path: "/lab",
+    key: "lab",
+  },
 ];
 
 export default function CategoryBanner() {
