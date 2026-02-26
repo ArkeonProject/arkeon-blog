@@ -1,7 +1,7 @@
 {
   "name": "arkeon-blog",
   "private": true,
-  "version": "1.4.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,12 @@
     "generate-sitemap": "npx tsx scripts/sitemap-generator.ts",
     "lint": "eslint .",
     "preview": "vite preview",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "lab:publish": "npx tsx scripts/lab-cli.ts publish",
+    "lab:update": "npx tsx scripts/lab-cli.ts update",
+    "lab:list": "npx tsx scripts/lab-cli.ts list",
+    "lab:delete": "npx tsx scripts/lab-cli.ts delete",
+    "lab:help": "npx tsx scripts/lab-cli.ts help"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.76.1",

@@ -1,187 +1,288 @@
 import { useEffect, useState, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
-import InfiniteCarousel from "../components/layout/InfiniteCarousel";
+import { Link } from "react-router-dom";
+import { FiTerminal, FiSearch, FiCode } from "react-icons/fi";
 import NewsletterForm from "../components/forms/NewsletterForm";
+import InfiniteCarousel from "../components/layout/InfiniteCarousel";
 import FeaturedPostCard from "../components/posts/FeaturedPostCard";
-import FeaturedPostSkeleton from "../components/posts/FeaturedPostSkeleton";
-import PostList from "../components/posts/PostList";
-import PostCardSkeleton from "../components/posts/PostCardSkeleton";
-import Button from "../components/ui/Button";
+import PostCard from "../components/posts/PostCard";
+import LabPostCard from "../components/posts/LabPostCard";
+import Pagination from "../components/ui/Pagination";
 import { supabase } from "../lib/supabase";
-import { trackEvent } from "../lib/analytics";
 import { useLocale } from "../hooks/useLocale";
 import type { PostListItem } from "../types/post";
+import type { LabPostListItem } from "../types/lab";
 
-const PAGE_SIZE = 6;
-const FIRST_PAGE_SIZE = PAGE_SIZE + 1;
+const PAGE_SIZE = 7;
 
 export default function BlogPage() {
   const { locale, t } = useLocale();
   const [posts, setPosts] = useState<PostListItem[]>([]);
-  const [featuredPost, setFeaturedPost] = useState<PostListItem | null>(null);
+  const [labPosts, setLabPosts] = useState<LabPostListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
   const languageFilter = locale.toUpperCase();
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
-  const loadPage = useCallback(async (pageIndex: number) => {
-    const isFirstPage = pageIndex === 0;
-    const pageSize = isFirstPage ? FIRST_PAGE_SIZE : PAGE_SIZE;
-    const from = isFirstPage ? 0 : FIRST_PAGE_SIZE + (pageIndex - 1) * PAGE_SIZE;
-    const to = from + pageSize - 1;
-    const { data, error } = await supabase
-      .from("posts")
-      .select("id, title, slug, excerpt, cover_image, published_at, language")
-      .eq("language", languageFilter)
-      .order("published_at", { ascending: false })
-      .range(from, to);
+  const fetchPosts = useCallback(async () => {
+    try {
+      setLoading(true);
+      setErrorMsg(null);
 
-    if (error) {
-      console.error(error);
-      setErrorMsg(t("blog_error"));
-      return [] as PostListItem[];
+      let query = supabase
+        .from("posts")
+        .select("*", { count: "exact" })
+        .eq("language", languageFilter)
+        .order("published_at", { ascending: false });
+
+      if (searchQuery) {
+        query = query.ilike("title", `%${searchQuery}%`);
+      }
+
+      const from = (currentPage - 1) * PAGE_SIZE;
+      const to = from + PAGE_SIZE - 1;
+
+      const { data, error, count } = await query.range(from, to);
+
+      if (error) throw error;
+
+      setPosts(data || []);
+      setTotalCount(count || 0);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error("Error fetching posts:", err);
+      setErrorMsg(message);
+    } finally {
+      setLoading(false);
     }
-    return (data ?? []) as PostListItem[];
-  }, [languageFilter, t]);
+  }, [languageFilter, currentPage, searchQuery]);
+
+  // Fetch latest 3 lab posts
+  useEffect(() => {
+    const fetchLabPosts = async () => {
+      try {
+        const { data } = await supabase
+          .from("lab_posts")
+          .select("*")
+          .eq("language", languageFilter)
+          .order("published_at", { ascending: false })
+          .limit(3);
+        setLabPosts(data || []);
+      } catch (err) {
+        console.error("Error fetching lab posts:", err);
+      }
+    };
+    fetchLabPosts();
+  }, [languageFilter]);
 
   useEffect(() => {
-    setLoading(true);
-    setPage(0);
-    setHasMore(true);
-    (async () => {
-      const first = await loadPage(0);
-      if (first.length > 0) {
-        setFeaturedPost(first[0]);
-        setPosts(first.slice(1));
-        setHasMore(first.length === FIRST_PAGE_SIZE);
-      } else {
-        setFeaturedPost(null);
-        setPosts([]);
-        setHasMore(false);
-      }
-      setLoading(false);
-    })();
-  }, [locale, loadPage]);
+    fetchPosts();
+  }, [fetchPosts]);
 
-  const loadMore = async () => {
-    if (loadingMore || !hasMore) return;
-    setLoadingMore(true);
-    const nextPage = page + 1;
-    const next = await loadPage(nextPage);
-    setPosts((prev) => [...prev, ...next]);
-    setPage(nextPage);
-    setHasMore(next.length === PAGE_SIZE);
-    setLoadingMore(false);
-    trackEvent("blog_load_more", {
-      page: nextPage,
-      fetched: next.length,
-      locale,
-    });
-  };
-  if (loading) {
+  const featuredPost = posts[0];
+  const otherPosts = posts.slice(1);
+
+  if (loading && currentPage === 1 && posts.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 text-gray-900 dark:bg-gradient-to-br dark:from-[#0b1226] dark:via-[#071622] dark:to-[#0a172b] dark:text-white font-sans antialiased rounded-3xl shadow-lg shadow-[#007EAD]/20 transition-colors duration-300">
-        <div className="max-w-5xl mx-auto px-6 py-16 md:py-24">
-          <header className="text-center mb-20 max-w-3xl mx-auto">
-            <div className="h-16 bg-gray-300 dark:bg-gray-700/50 rounded w-3/4 mx-auto mb-6 animate-pulse"></div>
-            <div className="h-10 bg-gray-300 dark:bg-gray-700/50 rounded w-1/2 mx-auto mb-8 animate-pulse"></div>
-            <div className="h-6 bg-gray-300 dark:bg-gray-700/50 rounded w-2/3 mx-auto animate-pulse"></div>
-          </header>
-
-          <div className="space-y-20">
-            <FeaturedPostSkeleton />
-            <div className="grid md:grid-cols-2 gap-10">
-              <PostCardSkeleton />
-              <PostCardSkeleton />
-              <PostCardSkeleton />
-              <PostCardSkeleton />
-            </div>
-          </div>
-        </div>
+      <div className="min-h-screen pt-32 px-4 text-center">
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary border-t-transparent mx-auto" />
       </div>
     );
   }
-  if (errorMsg) return <p className="text-center mt-20 text-red-500 tracking-wide font-semibold text-lg">{errorMsg}</p>;
+
+  if (errorMsg) return (
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="tech-card card-accent-border p-10 text-center rounded-2xl max-w-md">
+        <div className="text-3xl mb-4">⚠️</div>
+        <h2 className="text-xl font-bold mb-3 font-display">{locale === "es" ? "Error de conexión" : "Connection Error"}</h2>
+        <p className="text-muted-foreground text-sm mb-6">{errorMsg}</p>
+        <button onClick={() => fetchPosts()} className="h-10 px-6 bg-primary text-primary-foreground text-sm font-bold rounded-xl hover:scale-[1.02] active:scale-95 transition-all">
+          {locale === "es" ? "Reintentar" : "Retry"}
+        </button>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 dark:bg-gradient-to-br dark:from-[#0b1226] dark:via-[#071622] dark:to-[#0a172b] dark:text-white font-sans antialiased rounded-3xl shadow-lg shadow-[#007EAD]/20 transition-colors duration-300">
-      <div className="max-w-5xl mx-auto px-6 py-16 md:py-24">
-        <Helmet>
-          <title>{t("blog_title")} | Arkeon</title>
-          <meta name="description" content={t("blog_meta_description")} />
-          <meta property="og:title" content={`${t("blog_title")} | Arkeon`} />
-          <meta property="og:description" content={t("blog_meta_description")} />
-        </Helmet>
+    <div className="relative pt-16 pb-24 overflow-hidden">
+      <Helmet>
+        <title>{t("blog_title")} — Arkeon Journal</title>
+        <meta name="description" content={t("blog_meta_description")} />
+      </Helmet>
 
-        <header className="relative -mt-16 pt-24 pb-16 mb-12 overflow-hidden rounded-t-3xl">
-          {/* Animated decorative elements only */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute -top-24 left-1/4 w-96 h-96 bg-[#007EAD]/20 dark:bg-[#007EAD]/10 rounded-full blur-3xl animate-pulse"></div>
-            <div className="absolute top-12 right-1/3 w-72 h-72 bg-[#00aaff]/15 dark:bg-[#00aaff]/8 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-          </div>
+      {/* Atmospheric Background */}
+      <div className="grain-overlay" />
+      <div className="dot-grid" />
+      <div className="glow-spot top-[-10%] left-[-10%] scale-150 opacity-15" />
+      <div className="glow-spot bottom-[-20%] right-[-10%] opacity-10 scale-125" />
 
-          <div className="relative max-w-4xl mx-auto text-center px-6">
-            {/* Animated accent line */}
-            <div className="w-24 h-1.5 bg-gradient-to-r from-transparent via-[#007EAD] to-transparent mx-auto mb-8 rounded-full animate-pulse"></div>
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
+        {/* HERO SECTION */}
+        {currentPage === 1 && (
+          <header className="pt-28 md:pt-40 pb-12 text-center space-y-8 animate-reveal relative">
+            <div
+              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-surface border border-border/50 text-[10px] uppercase tracking-[0.3em] font-bold text-muted-foreground animate-float"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              <FiTerminal className="text-primary animate-pulse" />
+              {t("intelligence_in_motion")}
+            </div>
 
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 bg-gradient-to-r from-[#007EAD] via-[#00aaff] to-[#007EAD] bg-clip-text text-transparent animate-fade-in tracking-tight leading-tight bg-[length:200%_auto] animate-gradient">
-              {t("blog_intro_title")}
-            </h1>
+            <div className="space-y-3">
+              <h1 className="text-7xl md:text-[9rem] font-bold font-display uppercase leading-[0.85] tracking-tighter text-glow">
+                Arkeon <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-b from-muted-foreground/40 to-muted-foreground/5 dark:from-muted-foreground/25 dark:to-transparent">
+                  {t("journal")}
+                </span>
+              </h1>
+            </div>
 
-            <p className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white/95 mb-6 animate-fade-in-delay-1 drop-shadow-sm">
-              {t("blog_intro_subtitle")}
-            </p>
-
-            <p className="text-base md:text-lg text-gray-700 dark:text-white/75 max-w-2xl mx-auto leading-relaxed animate-fade-in-delay-2">
+            <p className="max-w-2xl mx-auto text-base md:text-lg text-muted-foreground font-body leading-relaxed">
               {t("blog_intro_description")}
             </p>
 
-            {/* Bottom decorative element */}
-            <div className="flex items-center justify-center gap-2 mt-10">
-              <div className="w-2 h-2 rounded-full bg-[#007EAD] animate-bounce"></div>
-              <div className="w-2 h-2 rounded-full bg-[#00aaff] animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-              <div className="w-2 h-2 rounded-full bg-[#007EAD] animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+            <div className="flex justify-center pt-4">
+              <div className="relative group w-full max-w-xl">
+                <div className="absolute inset-0 rounded-2xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500"
+                  style={{
+                    boxShadow: "0 0 40px color-mix(in oklch, var(--color-primary) 15%, transparent)",
+                  }}
+                />
+                <div className="relative flex items-center p-1.5 bg-surface border border-border/60 rounded-2xl focus-within:border-primary/40 transition-all duration-300"
+                  style={{
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.03), 0 0 0 1px color-mix(in oklch, var(--color-border) 40%, transparent)",
+                  }}
+                >
+                  <FiSearch className="ml-4 text-muted-foreground group-focus-within:text-primary transition-colors text-lg" />
+                  <input
+                    type="text"
+                    placeholder={t("search_placeholder")}
+                    className="flex-1 px-3 py-3 bg-transparent border-none focus:outline-none focus:ring-0 font-body text-base placeholder:text-muted-foreground/40"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  <button
+                    className="px-6 py-3 bg-primary text-primary-foreground font-bold rounded-xl hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-widest text-[11px]"
+                    style={{ fontFamily: "var(--font-mono)" }}
+                  >
+                    {t("explore")}
+                  </button>
+                </div>
+              </div>
             </div>
+          </header>
+        )}
+
+        {/* FEATURED & GRID */}
+        {posts.length > 0 ? (
+          <section className="space-y-20">
+            {currentPage === 1 && featuredPost && (
+              <div className="animate-reveal [animation-delay:200ms]">
+                <FeaturedPostCard post={featuredPost} />
+              </div>
+            )}
+
+            {/* LAB SECTION */}
+            {currentPage === 1 && labPosts.length > 0 && (
+              <div className="animate-reveal space-y-8">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                      <FiCode className="w-4 h-4 text-emerald-500" />
+                    </div>
+                    <h2 className="text-2xl md:text-3xl font-bold font-display tracking-tight">
+                      {t("lab_latest")}
+                    </h2>
+                  </div>
+                  <Link
+                    to="/lab"
+                    className="inline-flex items-center gap-2 text-xs font-bold text-emerald-500 uppercase tracking-[0.15em] hover:text-emerald-400 transition-colors group"
+                    style={{ fontFamily: "var(--font-mono)" }}
+                  >
+                    {t("lab_view_all")}
+                    <span className="group-hover:translate-x-0.5 transition-transform duration-200">→</span>
+                  </Link>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {labPosts.map((post, idx) => (
+                    <div
+                      key={post.id}
+                      className="animate-reveal"
+                      style={{ animationDelay: `${idx * 100}ms` }}
+                    >
+                      <LabPostCard post={post} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Ticker — below lab section */}
+            {currentPage === 1 && (
+              <div className="animate-reveal [animation-delay:300ms] -mx-4 sm:-mx-6 lg:-mx-8">
+                <InfiniteCarousel />
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {otherPosts.map((post, idx) => (
+                <div
+                  key={post.id}
+                  className="animate-reveal"
+                  style={{ animationDelay: `${(idx + 1) * 80}ms` }}
+                >
+                  <Link to={`/post/${post.slug}`} className="block h-full">
+                    <PostCard post={post} />
+                  </Link>
+                </div>
+              ))}
+            </div>
+
+            {/* Newsletter */}
+            {currentPage === 1 && (
+              <div className="tech-card card-accent-border p-10 md:p-16 rounded-2xl text-center space-y-8 animate-reveal">
+                <div className="dot-grid" />
+                <div className="relative max-w-2xl mx-auto space-y-5">
+                  <h2 className="text-3xl md:text-5xl font-bold font-display leading-[0.95] tracking-tight">
+                    {t("ready_next_era").split(" ").slice(0, -2).join(" ")}{" "}
+                    <span className="text-primary">{t("ready_next_era").split(" ").slice(-2).join(" ")}</span>
+                  </h2>
+                  <p className="text-muted-foreground text-base md:text-lg font-body">
+                    {t("newsletter_description")}
+                  </p>
+                </div>
+                <div className="relative max-w-md mx-auto">
+                  <NewsletterForm />
+                </div>
+              </div>
+            )}
+          </section>
+        ) : (
+          <section className="py-20 text-center animate-reveal">
+            <h2 className="text-3xl font-bold font-display text-muted-foreground/30">
+              {locale === "es" ? "No se encontraron artículos" : "No articles found"}
+            </h2>
+          </section>
+        )}
+
+        {/* PAGINATION */}
+        {totalPages > 1 && (
+          <div className="flex justify-center pb-12 animate-reveal">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={(page) => {
+                setCurrentPage(page);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+            />
           </div>
-        </header>
-
-        <div className="space-y-20">
-          {featuredPost && (
-            <section className="shadow-lg shadow-[#007EAD]/30 rounded-3xl overflow-hidden transition-transform transform hover:scale-[1.02] duration-500">
-              <FeaturedPostCard post={featuredPost} />
-            </section>
-          )}
-
-          <section>
-            <InfiniteCarousel />
-          </section>
-
-          {posts.length > 0 && (
-            <section>
-              <PostList posts={posts} />
-            </section>
-          )}
-
-          {hasMore && (
-            <div className="flex justify-center">
-              <Button
-                onClick={loadMore}
-                loading={loadingMore}
-                loadingText={t("blog_loading_more")}
-                disabled={!hasMore}
-              >
-                {t("blog_load_more")}
-              </Button>
-            </div>
-          )}
-
-          <section>
-            <NewsletterForm />
-          </section>
-        </div>
+        )}
       </div>
     </div>
   );
