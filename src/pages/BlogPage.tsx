@@ -52,9 +52,10 @@ export default function BlogPage() {
 
       setPosts(data || []);
       setTotalCount(count || 0);
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
       console.error("Error fetching posts:", err);
-      setErrorMsg(err.message);
+      setErrorMsg(message);
     } finally {
       setLoading(false);
     }
