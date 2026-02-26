@@ -18,6 +18,12 @@
   "footer_developed": "Desarrollado con",
   "footer_by": "por",
   "footer_creator": "David López",
+  "explore": "Explorar",
+  "category_featured": "Destacado",
+  "intelligence_in_motion": "Inteligencia en movimiento",
+  "ready_next_era": "¿Listo para la próxima era?",
+  "journal": "Journal",
+  "search_placeholder": "Buscar artículos...",
   "featured_post_label": "Última Publicación",
   "read_more": "Leer más",
   "blog_title": "Blog de Arkeon",
@@ -32,6 +38,8 @@
   "category_news": "Noticias",
   "category_products": "Productos",
   "category_lab": "Lab",
+  "lab_latest": "Últimas del Lab",
+  "lab_view_all": "Ver todo el Lab",
   "category_loading": "Cargando contenido...",
   "lab_title": "Laboratorio",
   "lab_meta_description": "Guías técnicas sobre configuración de servidores, Docker Compose, testing y desarrollo.",
@@ -165,5 +173,8 @@
   "cookies_accept": "Aceptar",
   "buy_in_amazon": "Comprar en Amazon",
   "breadcrumb_home": "Inicio",
-  "breadcrumb_blog": "Blog"
+  "breadcrumb_blog": "Blog",
+  "footer_tagline": "Tu fuente de tecnología, desarrollo y diseño digital.",
+  "footer_legal": "Legal",
+  "nav_blog": "Blog"
 }

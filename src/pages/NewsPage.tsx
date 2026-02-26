@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
+import { FiRadio } from "react-icons/fi";
 import PostList from "../components/posts/PostList";
 import Pagination from "../components/ui/Pagination";
 import { supabase } from "../lib/supabase";
@@ -68,50 +69,74 @@ export default function NewsPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-10 md:py-16">
+    <div className="relative pt-16 pb-24 overflow-hidden">
       <Helmet>
-        <title>{t("news_title")} | Arkeon</title>
+        <title>{t("news_title")} — Arkeon</title>
         <meta name="description" content={t("news_meta_description")} />
-        <meta property="og:title" content={`${t("news_title")} | Arkeon`} />
+        <meta property="og:title" content={`${t("news_title")} — Arkeon`} />
         <meta property="og:description" content={t("news_meta_description")} />
       </Helmet>
 
-      <header className="text-center mb-16">
-        <h1 className="text-5xl md:text-6xl font-black text-gray-900 dark:text-white mb-4">
-          {t("news_title")}
-        </h1>
-        <p className="text-gray-600 dark:text-white/70 text-lg md:text-xl max-w-3xl mx-auto">
-          {t("news_description")}
-        </p>
-      </header>
+      {/* Background decoration */}
+      <div className="grain-overlay" />
+      <div className="dot-grid" />
+      <div className="glow-spot top-[-5%] right-[-5%] scale-125 opacity-10" />
 
-      {loading ? (
-        <div className="grid md:grid-cols-2 gap-8">
-          {[...Array(4)].map((_, i) => (
-            <div
-              key={i}
-              className="h-72 rounded-2xl bg-gray-200 dark:bg-white/5 animate-pulse"
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <header className="pt-24 md:pt-32 pb-16 text-center space-y-6 animate-reveal">
+          <div
+            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-surface border border-border/50 text-[10px] uppercase tracking-[0.3em] font-bold text-muted-foreground"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            <FiRadio className="text-primary animate-pulse" />
+            {t("category_news")}
+          </div>
+
+          <h1 className="text-6xl md:text-8xl font-bold font-display uppercase leading-[0.85] tracking-tighter text-glow">
+            {t("news_title")}
+          </h1>
+
+          <p className="max-w-2xl mx-auto text-base md:text-lg text-muted-foreground font-body leading-relaxed">
+            {t("news_description")}
+          </p>
+        </header>
+
+        {/* Content */}
+        {loading ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="h-72 rounded-2xl bg-surface border border-border/30 animate-pulse"
+              />
+            ))}
+          </div>
+        ) : errorMsg ? (
+          <div className="tech-card card-accent-border p-10 text-center rounded-2xl max-w-md mx-auto animate-reveal">
+            <div className="text-3xl mb-4">⚠️</div>
+            <p className="text-muted-foreground text-sm">{errorMsg}</p>
+          </div>
+        ) : posts.length > 0 ? (
+          <PostList posts={posts} />
+        ) : (
+          <div className="py-20 text-center animate-reveal">
+            <h2 className="text-2xl font-bold font-display text-muted-foreground/30">
+              {t("news_empty")}
+            </h2>
+          </div>
+        )}
+
+        {totalPages > 1 && (
+          <div className="flex justify-center mt-16 animate-reveal">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
             />
-          ))}
-        </div>
-      ) : errorMsg ? (
-        <p className="text-center text-red-500 font-semibold text-lg">{errorMsg}</p>
-      ) : posts.length > 0 ? (
-        <PostList posts={posts} />
-      ) : (
-        <p className="text-center text-gray-500 dark:text-white/50 text-lg py-20">
-          {t("news_empty")}
-        </p>
-      )}
-
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-          className="mt-12"
-        />
-      )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

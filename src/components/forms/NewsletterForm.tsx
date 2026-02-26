@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { useLocale } from "../../hooks/useLocale";
-import Button from "../ui/Button";
-import Card from "../ui/Card";
 
 export default function NewsletterForm() {
   const { t } = useLocale();
@@ -36,41 +34,36 @@ export default function NewsletterForm() {
     setSending(false);
   };
 
-  const buttonLabel = success ? t("newsletter_subscribed") : t("newsletter_subscribe");
-
   return (
-    <Card className="p-6 text-center transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,126,173,0.5)]">
-      <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">
-        💌 <span className="text-[#007EAD]">{t("newsletter_title")}</span>
-      </h2>
-      <p className="text-gray-700 dark:text-white/90 mb-4">
-        {t("newsletter_description")}
-      </p>
-      <div className="flex flex-col sm:flex-row justify-center gap-2">
+    <div className="w-full">
+      <form
+        className="flex flex-col sm:flex-row gap-3"
+        onSubmit={(e) => { e.preventDefault(); void subscribe(); }}
+      >
         <input
           type="email"
           placeholder={t("newsletter_placeholder")}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 p-3 rounded-lg w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-[#007EAD]/60 focus:border-[#007EAD] backdrop-blur-sm transition-all duration-300"
+          className="flex-1 bg-background border border-border/60 rounded-xl px-4 py-3 text-foreground text-sm focus:border-primary/50 focus:ring-1 focus:ring-primary/30 outline-none transition-all placeholder:text-muted-foreground/40"
+          style={{ fontFamily: "var(--font-body)" }}
           disabled={sending || success}
         />
-        <Button
-          onClick={subscribe}
-          loading={sending}
-          loadingText={t("newsletter_subscribing")}
-          disabled={success}
-          className="w-full sm:w-auto"
+        <button
+          type="submit"
+          disabled={sending || success}
+          className="bg-primary hover:brightness-110 text-primary-foreground font-bold py-3 px-8 rounded-xl whitespace-nowrap transition-all transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-sm uppercase tracking-widest"
+          style={{ fontFamily: "var(--font-mono)" }}
         >
-          {buttonLabel}
-        </Button>
-      </div>
-      {errorMsg && <p className="text-red-400 mt-3">{errorMsg}</p>}
+          {success ? "✓" : sending ? "..." : t("newsletter_subscribe")}
+        </button>
+      </form>
+      {errorMsg && <p className="text-red-400 mt-3 text-sm">{errorMsg}</p>}
       {success && (
-        <p className="text-[#007EAD] mt-3 font-medium">
+        <p className="text-primary mt-3 text-sm font-medium">
           {t("newsletter_success")}
         </p>
       )}
-    </Card>
+    </div>
   );
 }

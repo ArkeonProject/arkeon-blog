@@ -23,7 +23,7 @@ export default function LabPostCard({ post }: LabPostCardProps) {
             className="block h-full"
             aria-label={post.title}
         >
-            <article className="group relative bg-white dark:bg-[#111827] rounded-2xl overflow-hidden border border-gray-200 dark:border-white/5 hover:border-emerald-500/30 transition-all duration-500 flex flex-col h-full">
+            <article className="group relative glass-card rounded-2xl overflow-hidden hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-500 flex flex-col h-full hover:-translate-y-1">
                 {/* Emerald accent bar */}
                 <div className="absolute top-0 inset-x-0 h-1 bg-emerald-500 z-10" />
 

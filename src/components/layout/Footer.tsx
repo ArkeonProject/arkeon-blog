@@ -1,137 +1,133 @@
-import { FaGithub, FaLinkedin, FaEnvelope, FaHeart } from "react-icons/fa";
-
+import { Link } from "react-router-dom";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { FiHeart } from "react-icons/fi";
 import { useLocale } from "../../hooks/useLocale";
+
+const QUICK_LINKS = [
+  { path: "/blog", key: "nav_blog" },
+  { path: "/news", key: "category_news" },
+  { path: "/products", key: "category_products" },
+  { path: "/lab", key: "category_lab" },
+  { path: "/about", key: "footer_about" },
+  { path: "/contact", key: "nav_contact" },
+];
+
+const LEGAL_LINKS = [
+  { path: "/privacy", key: "footer_privacy" },
+  { path: "/terms", key: "footer_terms" },
+  { path: "/cookies", key: "footer_cookies" },
+];
 
 export default function Footer() {
   const { t } = useLocale();
-  const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gradient-to-b from-white to-gray-50 dark:bg-gradient-to-b dark:from-[#0a1628] dark:to-[#060f1a] border-t border-gray-200 dark:border-[#007EAD]/20 mt-20 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] dark:shadow-[0_-10px_40px_rgba(0,126,173,0.1)] transition-colors duration-300">
-      <div className="container mx-auto px-6 py-12">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 text-center md:text-left">
-          {/* Brand Section */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-3 group justify-center md:justify-start">
-              <div className="relative">
-                <div className="absolute inset-0 bg-[#007EAD]/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <img
-                  src="/arkeon-logo.svg"
-                  alt="Arkeon Logo"
-                  className="h-10 w-10 relative z-10 transition-transform duration-300 group-hover:scale-110"
-                />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white transition-colors duration-300 group-hover:text-[#007EAD]">
-                {t("brand")}
-              </h3>
-            </div>
-            <p className="text-gray-600 dark:text-white/60 text-sm leading-relaxed">
-              {t("footer_description")}
+    <footer className="relative bg-surface pt-0 pb-10">
+      {/* Gradient top border */}
+      <div className="footer-gradient-border w-full mb-14" />
+
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 pb-10">
+          {/* Brand */}
+          <div className="md:col-span-5 space-y-4">
+            <Link to="/blog" className="inline-flex items-center gap-2.5 group">
+              <img
+                src="/arkeon-logo.svg"
+                alt="Arkeon Logo"
+                className="w-7 h-7 rounded-lg group-hover:scale-105 transition-transform duration-300"
+                style={{
+                  boxShadow: "0 2px 6px color-mix(in oklch, var(--color-primary) 15%, transparent)",
+                }}
+              />
+              <span className="text-base font-bold font-display text-foreground uppercase tracking-tight group-hover:text-primary transition-colors duration-300">
+                Arkeon
+              </span>
+            </Link>
+            <p className="text-muted-foreground text-sm leading-relaxed max-w-sm">
+              {t("footer_tagline")}
             </p>
-          </div>
-
-          {/* Quick Links */}
-          <div className="flex flex-col items-center md:items-start">
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-4 text-sm tracking-wide uppercase">{t("footer_quick_links")}</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="/blog" className="text-gray-600 dark:text-white/70 hover:text-[#007EAD] transition-all duration-300 flex items-center gap-1 hover:translate-x-1">
-                  {t("footer_articles")}
-                </a>
-              </li>
-              <li>
-                <a href="/contact" className="text-gray-600 dark:text-white/70 hover:text-[#007EAD] transition-all duration-300 flex items-center gap-1 hover:translate-x-1">
-                  {t("nav_contact")}
-                </a>
-              </li>
-              <li>
-                <a href="/about" className="text-gray-600 dark:text-white/70 hover:text-[#007EAD] transition-all duration-300 flex items-center gap-1 hover:translate-x-1">
-                  {t("footer_about")}
-                </a>
-              </li>
-              <li>
-                {/* <a href="/portfolio" className="text-white/70 hover:text-[#007EAD] transition-all duration-300 flex items-center gap-1 hover:translate-x-1">
-                  {t("footer_portfolio")}
-                </a> */}
-              </li>
-            </ul>
-          </div>
-
-          {/* Resources */}
-          <div className="flex flex-col items-center md:items-start">
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-4 text-sm tracking-wide uppercase">{t("footer_resources")}</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="/privacy" className="text-gray-600 dark:text-white/70 hover:text-[#007EAD] transition-all duration-300 hover:translate-x-1 inline-block">
-                  {t("footer_privacy")}
-                </a>
-              </li>
-              <li>
-                <a href="/terms" className="text-gray-600 dark:text-white/70 hover:text-[#007EAD] transition-all duration-300 hover:translate-x-1 inline-block">
-                  {t("footer_terms")}
-                </a>
-              </li>
-              <li>
-                <a href="/cookies" className="text-gray-600 dark:text-white/70 hover:text-[#007EAD] transition-all duration-300 hover:translate-x-1 inline-block">
-                  {t("footer_cookies")}
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Social & Contact */}
-          <div className="flex flex-col items-center md:items-start">
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-4 text-sm tracking-wide uppercase">{t("footer_connect")}</h4>
-            <div className="space-y-4">
+            <div className="flex gap-2 pt-1">
               <a
-                href="mailto:davidlopez00@proton.me"
-                className="flex items-center gap-2 text-sm text-gray-600 dark:text-white/70 hover:text-[#007EAD] transition-colors duration-300 group justify-center md:justify-start"
+                href="https://github.com/ArkeonProject"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-lg bg-background border border-border/40 text-muted-foreground hover:text-primary hover:border-primary/30 transition-all duration-300"
+                aria-label="GitHub"
               >
-                <FaEnvelope className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
-                <span className="break-all">davidlopez00@proton.me</span>
+                <FaGithub className="w-4 h-4" />
               </a>
-
-              {/* Social Links */}
-              <div className="flex gap-3 justify-center md:justify-start">
-                <a
-                  href="https://github.com/ArkeonProject"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 bg-gray-100 dark:bg-[#0f1f38]/50 border border-gray-300 dark:border-[#007EAD]/30 rounded-lg hover:bg-gray-200 dark:hover:bg-[#007EAD]/10 hover:border-[#007EAD] hover:shadow-lg hover:shadow-[#007EAD]/20 transition-all duration-300 group backdrop-blur-sm"
-                  aria-label="GitHub"
-                >
-                  <FaGithub className="w-5 h-5 text-gray-700 dark:text-white/70 group-hover:text-[#007EAD] group-hover:scale-110 transition-all duration-300" />
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/david-l%C3%B3pez-santamar%C3%ADa-946965260/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 bg-gray-100 dark:bg-[#0f1f38]/50 border border-gray-300 dark:border-[#007EAD]/30 rounded-lg hover:bg-gray-200 dark:hover:bg-[#007EAD]/10 hover:border-[#007EAD] hover:shadow-lg hover:shadow-[#007EAD]/20 transition-all duration-300 group backdrop-blur-sm"
-                  aria-label="LinkedIn"
-                >
-                  <FaLinkedin className="w-5 h-5 text-gray-700 dark:text-white/70 group-hover:text-[#007EAD] group-hover:scale-110 transition-all duration-300" />
-                </a>
-              </div>
+              <a
+                href="https://www.linkedin.com/in/david-l%C3%B3pez-santamar%C3%ADa-946965260/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-lg bg-background border border-border/40 text-muted-foreground hover:text-primary hover:border-primary/30 transition-all duration-300"
+                aria-label="LinkedIn"
+              >
+                <FaLinkedin className="w-4 h-4" />
+              </a>
             </div>
+          </div>
+
+          {/* Quick links */}
+          <div className="md:col-span-4">
+            <h3
+              className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              {t("footer_quick_links")}
+            </h3>
+            <ul className="space-y-2.5">
+              {QUICK_LINKS.map(({ path, key }) => (
+                <li key={path}>
+                  <Link
+                    to={path}
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200 inline-flex items-center gap-2 group"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-border group-hover:bg-primary transition-colors duration-200" />
+                    {t(key)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div className="md:col-span-3">
+            <h3
+              className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              {t("footer_legal")}
+            </h3>
+            <ul className="space-y-2.5">
+              {LEGAL_LINKS.map(({ path, key }) => (
+                <li key={path}>
+                  <Link
+                    to={path}
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200 inline-flex items-center gap-2 group"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-border group-hover:bg-primary transition-colors duration-200" />
+                    {t(key)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-gray-200 dark:border-[#007EAD]/20">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-600 dark:text-white/60 text-center md:text-left">
-            <p className="flex flex-col sm:flex-row items-center justify-center gap-1">
-              <span>© {currentYear}</span>
-              <span className="font-semibold text-[#007EAD]">{t("brand")}</span>
-              <span>{t("footer_rights")}</span>
-            </p>
-
-            <p className="flex items-center gap-2 justify-center">
-              {t("footer_developed")}
-              <FaHeart className="w-4 h-4 text-[#007EAD] fill-[#007EAD] animate-pulse" />
-              {t("footer_by")} <span className="font-medium text-gray-900 dark:text-white">{t("footer_creator") || "David López"}</span>
-            </p>
-          </div>
+        {/* Bottom */}
+        <div className="border-t border-border/20 pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
+          <p
+            className="text-muted-foreground text-[11px] font-medium opacity-60 order-2 md:order-1"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            © {new Date().getFullYear()} Arkeon Project. {t("footer_rights")}
+          </p>
+          <p className="text-muted-foreground text-[11px] font-medium opacity-60 order-1 md:order-2 flex items-center gap-1.5">
+            {t("footer_developed")}{" "}
+            <FiHeart className="w-3 h-3 text-red-400 animate-pulse" />{" "}
+            {t("footer_by")} {t("footer_creator")}
+          </p>
         </div>
       </div>
     </footer>

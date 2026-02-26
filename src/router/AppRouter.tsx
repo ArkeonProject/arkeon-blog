@@ -13,7 +13,6 @@ import LabPage from "../pages/LabPage";
 import LabPostPage from "../pages/LabPostPage";
 import ProductsPage from "../pages/ProductsPage";
 import Header from "../components/layout/Header";
-import CategoryBanner from "../components/layout/CategoryBanner";
 import Footer from "../components/layout/Footer";
 import ScrollToTop from "../components/ui/ScrollToTop";
 import { useLocale } from "../hooks/useLocale";
@@ -22,10 +21,9 @@ import { COOKIE_CONSENT_NAME } from "../lib/cookies";
 function Layout() {
   const { t } = useLocale();
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-100 text-gray-900 dark:bg-gradient-to-b dark:from-[#0a1628] dark:via-[#0d1f38] dark:to-[#060f1a] dark:text-white transition-colors duration-300">
+    <div className="flex flex-col min-h-screen bg-background text-foreground transition-colors duration-300">
       <Header />
-      <CategoryBanner />
-      <main className="grow container mx-auto px-4 py-8">
+      <main className="grow container mx-auto px-4 py-12">
         <Outlet />
       </main>
       <Footer />
@@ -34,25 +32,30 @@ function Layout() {
         location="bottom"
         buttonText={t("cookies_accept")}
         cookieName={COOKIE_CONSENT_NAME}
+        containerClasses="glass-nav font-body !bottom-4 !left-4 !right-4 !w-auto rounded-2xl shadow-2xl border border-border"
         style={{
-          background: "var(--bg-primary)",
-          color: "var(--text-primary)",
+          background: "var(--color-glass)",
+          color: "var(--color-foreground)",
           fontSize: "14px",
-          textAlign: "center",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
         buttonStyle={{
-          background: "#007EAD",
-          color: "white",
-          borderRadius: "8px",
+          background: "var(--color-primary)",
+          color: "var(--color-primary-foreground)",
+          borderRadius: "var(--radius-md)",
           fontWeight: "600",
-          padding: "8px 16px",
+          fontSize: "13px",
+          padding: "10px 20px",
+          margin: "10px",
         }}
         expires={365}
       >
-        {t("cookies_banner_text")}{" "}
+        <span className="opacity-90">{t("cookies_banner_text")}{" "}</span>
         <a
           href="/cookies"
-          className="text-[#00aaff] underline hover:text-[#007EAD] transition-colors duration-300"
+          className="text-primary font-semibold underline underline-offset-4 hover:opacity-80 transition-opacity"
         >
           {t("footer_cookies")}
         </a>
