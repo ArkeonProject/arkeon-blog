@@ -13,16 +13,21 @@ export default function PostList({ posts, className = "" }: PostListProps) {
   }
 
   return (
-    <div className={`grid md:grid-cols-2 gap-10 ${className}`.trim()}>
-      {posts.map((post) => (
-        <Link
+    <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-6 ${className}`.trim()}>
+      {posts.map((post, idx) => (
+        <div
           key={post.id}
-          to={`/post/${post.slug}`}
-          className="block rounded-2xl shadow-md shadow-[#007EAD]/20 hover:shadow-[#00aaff]/50 transition-shadow duration-300 h-full"
-          aria-label={post.title}
+          className="animate-reveal"
+          style={{ animationDelay: `${idx * 80}ms` }}
         >
-          <PostCard post={post} />
-        </Link>
+          <Link
+            to={`/post/${post.slug}`}
+            className="block h-full"
+            aria-label={post.title}
+          >
+            <PostCard post={post} />
+          </Link>
+        </div>
       ))}
     </div>
   );

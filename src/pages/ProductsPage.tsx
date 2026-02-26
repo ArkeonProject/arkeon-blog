@@ -2,9 +2,12 @@ import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { FiFilter, FiChevronDown, FiSearch } from "react-icons/fi";
 import PostList from "../components/posts/PostList";
+import Pagination from "../components/ui/Pagination";
 import { supabase } from "../lib/supabase";
 import { useLocale } from "../hooks/useLocale";
 import type { PostListItem } from "../types/post";
+
+const PRODUCTS_PAGE_SIZE = 6;
 
 const PRODUCT_CATEGORY_VALUES = [
   "product",
@@ -25,6 +28,7 @@ export default function ProductsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const filterRef = useRef<HTMLDivElement>(null);
 
@@ -98,7 +102,7 @@ export default function ProductsPage() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, [isFilterOpen]);
 
-  const displayedPosts = useMemo(() => {
+  const filteredPosts = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
     if (!normalizedSearch) return posts;
     return posts.filter((post) => {
@@ -106,6 +110,17 @@ export default function ProductsPage() {
       return haystack.includes(normalizedSearch);
     });
   }, [posts, searchTerm]);
+
+  const totalPages = Math.ceil(filteredPosts.length / PRODUCTS_PAGE_SIZE);
+  const displayedPosts = useMemo(() => {
+    const start = (currentPage - 1) * PRODUCTS_PAGE_SIZE;
+    return filteredPosts.slice(start, start + PRODUCTS_PAGE_SIZE);
+  }, [filteredPosts, currentPage]);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedCategory]);
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
@@ -159,8 +174,8 @@ export default function ProductsPage() {
                     type="button"
                     onClick={() => handleCategorySelect("all")}
                     className={`w-full text-left px-4 py-3 rounded-xl font-medium capitalize transition-all duration-200 ${selectedCategory === "all"
-                        ? "bg-[#007EAD]/30 text-gray-900 dark:text-white border border-[#00aaff]/30"
-                        : "text-gray-700 dark:text-white/80 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
+                      ? "bg-[#007EAD]/30 text-gray-900 dark:text-white border border-[#00aaff]/30"
+                      : "text-gray-700 dark:text-white/80 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
                       }`}
                   >
                     {t("products_filter_all")}
@@ -171,8 +186,8 @@ export default function ProductsPage() {
                       key={category}
                       onClick={() => handleCategorySelect(category)}
                       className={`w-full text-left px-4 py-3 rounded-xl font-medium capitalize transition-all duration-200 ${selectedCategory === category
-                          ? "bg-[#007EAD]/30 text-gray-900 dark:text-white border border-[#00aaff]/30"
-                          : "text-gray-700 dark:text-white/80 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
+                        ? "bg-[#007EAD]/30 text-gray-900 dark:text-white border border-[#00aaff]/30"
+                        : "text-gray-700 dark:text-white/80 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
                         }`}
                     >
                       {category}
@@ -200,6 +215,18 @@ export default function ProductsPage() {
         <PostList posts={displayedPosts} />
       ) : (
         <p className="text-center text-gray-600 dark:text-white/70 text-lg">{t("products_empty")}</p>
+      )}
+
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(page) => {
+            setCurrentPage(page);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          className="mt-12"
+        />
       )}
     </div>
   );

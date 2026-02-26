@@ -20,7 +20,7 @@ jobs:
   prepare-release:
     name: Prepare Release
     if: github.event_name == 'workflow_dispatch'
-    uses: ArkeonProject/organization-tools/.github/workflows/release-prepare.yml@v1.0.1
+    uses: ArkeonProject/organization-tools/.github/workflows/release-prepare.yml@v1.1.4
     with:
       version-bump: ${{ github.event.inputs.version-bump }}
       project-type: 'node'
@@ -30,7 +30,7 @@ jobs:
   publish-release:
     name: Publish Release
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    uses: ArkeonProject/organization-tools/.github/workflows/release-publish.yml@v1.0.1
+    uses: ArkeonProject/organization-tools/.github/workflows/release-publish.yml@v1.1.4
     with:
       project-type: 'node'
       create-github-release: true
