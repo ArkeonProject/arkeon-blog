@@ -110,8 +110,9 @@ export default function BlogPage() {
   return (
     <div className="relative pt-16 pb-24 overflow-hidden">
       <Helmet>
-        <title>{t("blog_title")} — Arkeon Journal</title>
+        <title>{t("blog_title")} — Precisión Técnica</title>
         <meta name="description" content={t("blog_meta_description")} />
+        <link rel="canonical" href="https://www.arkeonixlabs.com/blog" />
       </Helmet>
 
       {/* Atmospheric Background */}
@@ -134,7 +135,7 @@ export default function BlogPage() {
 
             <div className="space-y-3">
               <h1 className="text-7xl md:text-[9rem] font-bold font-display uppercase leading-[0.85] tracking-tighter text-glow">
-                Arkeon <br />
+                Arkeonix <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-b from-muted-foreground/40 to-muted-foreground/5 dark:from-muted-foreground/25 dark:to-transparent">
                   {t("journal")}
                 </span>

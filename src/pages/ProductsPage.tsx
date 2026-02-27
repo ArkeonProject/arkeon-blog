@@ -138,9 +138,10 @@ export default function ProductsPage() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-10 md:py-16">
       <Helmet>
-        <title>{t("products_title")} | Arkeon</title>
+        <title>{t("products_title")} | Arkeonix Labs</title>
         <meta name="description" content={t("products_meta_description")} />
-        <meta property="og:title" content={`${t("products_title")} | Arkeon`} />
+        <link rel="canonical" href="https://www.arkeonixlabs.com/products" />
+        <meta property="og:title" content={`${t("products_title")} | Arkeonix Labs`} />
         <meta property="og:description" content={t("products_meta_description")} />
       </Helmet>
 

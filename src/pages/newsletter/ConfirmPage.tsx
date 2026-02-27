@@ -96,7 +96,7 @@ export default function ConfirmPage() {
   return (
     <div className="max-w-3xl mx-auto p-8 md:p-12 bg-gradient-to-br from-white to-gray-50 dark:from-[#0b1226] dark:via-[#071622] dark:to-[#0a172b] rounded-3xl shadow-lg dark:shadow-[#007EAD]/20 text-gray-900 dark:text-white transition-colors duration-300">
       <Helmet>
-        <title>{t("newsletter_confirm_success_title")} | Arkeon</title>
+        <title>{t("newsletter_confirm_success_title")} | Arkeonix Labs</title>
         <meta name="description" content={t("newsletter_confirm_success_message")} />
       </Helmet>
       <div className="text-center space-y-6">

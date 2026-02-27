@@ -1,23 +1,23 @@
-# 🚀 Arkeon Blog
+# 🚀 Arkeonix Labs
 
-**Arkeon Blog** es una plataforma moderna creada para los amantes de la tecnología, el análisis y la innovación.  
+**Arkeonix Labs** es una plataforma moderna creada para los amantes de la tecnología, el análisis y la innovación.  
 Combina diseño limpio, rendimiento excepcional y contenido cuidadosamente seleccionado para ofrecer **noticias tecnológicas actualizadas, comparativas detalladas y análisis objetivos de productos** que ayudan a los usuarios a mantenerse informados y tomar mejores decisiones de compra.
 
 ---
 
 ## 🧠 Visión del proyecto
 
-En un entorno donde la información se mueve más rápido que nunca, **Arkeon Blog** nace con el propósito de ofrecer un espacio confiable y accesible donde la tecnología se entiende, se compara y se disfruta.
+En un entorno donde la información se mueve más rápido que nunca, **Arkeonix Labs** nace con el propósito de ofrecer un espacio confiable y accesible donde la tecnología se entiende, se compara y se disfruta.
 
 Nuestra misión es **traducir la complejidad del mundo tech** en artículos claros, comparativas útiles y guías honestas, manteniendo siempre una mirada objetiva y una presentación visual moderna.
 
 ---
 
-## ✨ Qué ofrece Arkeon Blog
+## ✨ Qué ofrece Arkeonix Labs
 
 ### 📰 Noticias tecnológicas
 Cobertura de las últimas tendencias, lanzamientos y novedades del ecosistema tecnológico global.  
-Desde avances en inteligencia artificial hasta nuevos dispositivos, Arkeon Blog te mantiene al día con un tono informativo y accesible.
+Desde avances en inteligencia artificial hasta nuevos dispositivos, Arkeonix Labs te mantiene al día con un tono informativo y accesible.
 
 ### ⚙️ Comparativas y análisis
 Análisis detallados de productos tecnológicos (smartphones, auriculares, monitores, gadgets del hogar, etc.), con un enfoque **neutral y basado en datos**.  
@@ -36,7 +36,7 @@ Una interfaz **minimalista y completamente responsive**, optimizada para una lec
 
 ## 🧩 Arquitectura y diseño
 
-**Arkeon Blog** está construido sobre una arquitectura moderna, ligera y eficiente.  
+**Arkeonix Labs** está construido sobre una arquitectura moderna, ligera y eficiente.  
 Combina las mejores tecnologías del ecosistema web actual:
 
 - ⚛️ **React 19 + TypeScript 5.9** – Interfaz dinámica, componentes reutilizables y tipado estricto para máxima robustez.  
@@ -52,7 +52,7 @@ El resultado: una aplicación **SPA** rápida, optimizada y segura, que se compo
 ## 🗂️ Estructura del proyecto
 
 ```text
-arkeon-blog/
+arkeonix-labs/
 ├── .github/
 │   ├── workflows/          # CI/CD (lint + deploy)
 │   │   ├── ci.yml
@@ -116,7 +116,7 @@ Registra a los usuarios que desean recibir las últimas noticias y comparativas:
 
 ## 💡 Filosofía de diseño
 
-El diseño de Arkeon Blog se basa en tres principios:
+El diseño de Arkeonix Labs se basa en tres principios:
 
 | Principio | Descripción |
 |------------|--------------|
@@ -126,9 +126,9 @@ El diseño de Arkeon Blog se basa en tres principios:
 
 ---
 
-## 🔍 Por qué Arkeon Blog es diferente
+## 🔍 Por qué Arkeonix Labs es diferente
 
-A diferencia de otros portales tecnológicos, **Arkeon Blog** combina **rigor técnico, transparencia y estética**.  
+A diferencia de otros portales tecnológicos, **Arkeonix Labs** combina **rigor técnico, transparencia y estética**.  
 No busca solo informar, sino **crear una experiencia editorial digital** que invite a leer, comparar y descubrir.
 
 - 🧭 Orientado al usuario: interfaz pensada para la lectura, no para el clic.  
@@ -151,7 +151,7 @@ No busca solo informar, sino **crear una experiencia editorial digital** que inv
 
 <div align="center">
 
-💜 **Arkeon Blog** — Tecnología con propósito, análisis con criterio y diseño con alma.  
+💜 **Arkeonix Labs** — Tecnología con propósito, análisis con criterio y diseño con alma.  
 Construido con pasión por **David López**.
 
 </div>

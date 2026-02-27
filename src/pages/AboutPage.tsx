@@ -5,11 +5,11 @@ const AboutPage = () => {
   const { t } = useLocale();
 
   return (
-    <div className="max-w-4xl mx-auto p-8 bg-gradient-to-br from-white to-gray-50 dark:from-[#0b1226] dark:via-[#071622] dark:to-[#0a172b] rounded-3xl shadow-lg dark:shadow-[#007EAD]/20 transition-colors duration-300">
+    <div className="max-w-4xl mx-auto p-12 bg-gradient-to-br from-white to-gray-50 dark:from-[#0b1226] dark:via-[#071622] dark:to-[#0a172b] rounded-3xl shadow-lg dark:shadow-[#007EAD]/20 transition-colors duration-300">
       <Helmet>
-        <title>{t("about_title")} | Arkeon Blog</title>
+        <title>{t("about_title")} | Arkeonix Labs</title>
         <meta name="description" content={t("about_meta_description")} />
-        <link rel="canonical" href="https://www.arkeontech.es/about" />
+        <link rel="canonical" href="https://www.arkeonixlabs.com/about" />
       </Helmet>
 
       {/* Hero Section */}

@@ -34,7 +34,7 @@ export default function PostCard({ post }: PostCardProps) {
               style={{ fontFamily: "var(--font-mono)" }}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-primary-foreground/60 animate-pulse" />
-              {post.category || "Journal"}
+              {post.category || "Labs"}
             </span>
           </div>
         </div>

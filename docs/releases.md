@@ -1,4 +1,4 @@
-# 🏷️ Guía de Releases y Versionado — Arkeon Project
+# 🏷️ Guía de Releases y Versionado — Arkeonix Labs
 
 > **Objetivo:** mantener un flujo claro entre desarrollo (`develop`), producción (`main`) y versiones liberadas.
 

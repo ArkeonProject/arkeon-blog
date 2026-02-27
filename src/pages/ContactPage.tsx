@@ -19,7 +19,7 @@ export default function ContactPage() {
 
     // Create mailto link with form data
     const mailtoLink = `mailto:davidlopez00@proton.me?subject=${encodeURIComponent(
-      formData.subject || "Contacto desde Arkeon Blog"
+      formData.subject || "Consulta Técnica - Arkeonix Labs"
     )}&body=${encodeURIComponent(
       `Nombre: ${formData.name}\nEmail: ${formData.email}\n\nMensaje:\n${formData.message}`
     )}`;
@@ -32,11 +32,11 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-8 bg-gradient-to-br from-white to-gray-50 dark:from-[#0b1226] dark:via-[#071622] dark:to-[#0a172b] rounded-3xl shadow-lg dark:shadow-[#007EAD]/20 transition-colors duration-300">
+    <div className="max-w-4xl mx-auto p-12 bg-gradient-to-br from-white to-gray-50 dark:from-[#0b1226] dark:via-[#071622] dark:to-[#0a172b] rounded-3xl shadow-lg dark:shadow-[#007EAD]/20 transition-colors duration-300">
       <Helmet>
-        <title>{t("contact_title")} | Arkeon Blog</title>
+        <title>{t("contact_title")} | Arkeonix Labs</title>
         <meta name="description" content={t("contact_meta_description")} />
-        <link rel="canonical" href="https://www.arkeontech.es/contact" />
+        <link rel="canonical" href="https://www.arkeonixlabs.com/contact" />
       </Helmet>
 
       {/* Header */}

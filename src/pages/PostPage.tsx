@@ -6,7 +6,6 @@ import DOMPurify from "dompurify";
 import { supabase } from "../lib/supabase";
 import { useLocale } from "../hooks/useLocale";
 import { useSupabaseQuery } from "../hooks/useSupabaseQuery";
-import Button from "../components/ui/Button";
 import ReadingProgressBar from "../components/ui/ReadingProgressBar";
 import ShareButtons from "../components/ui/ShareButtons";
 import Breadcrumbs from "../components/ui/Breadcrumbs";
@@ -91,9 +90,10 @@ export default function PostPage() {
         <Breadcrumbs />
 
         <Helmet>
-          <title>{post.title} | Arkeon</title>
+          <title>{post.title} | Arkeonix Labs</title>
           <meta name="description" content={description} />
-          <meta property="og:title" content={`${post.title} | Arkeon`} />
+          <link rel="canonical" href={`https://www.arkeonixlabs.com/post/${slug}`} />
+          <meta property="og:title" content={`${post.title} | Arkeonix Labs`} />
           <meta property="og:description" content={description} />
           {post.cover_image && <meta property="og:image" content={post.cover_image} />}
         </Helmet>
@@ -152,14 +152,24 @@ export default function PostPage() {
           <div dangerouslySetInnerHTML={{ __html: beforeBuy }} />
 
           {affiliateUrl && (
-            <div className="my-6 flex justify-center">
-              <Button
-                className="bg-[#00aaff] hover:bg-[#00bbee] text-white font-semibold px-6 py-3 rounded-xl shadow-md shadow-[#007EAD]/30 text-lg"
+            <div className="my-10 flex justify-center">
+              <a
+                href={affiliateUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  inline-flex items-center justify-center
+                  px-8 py-4 
+                  bg-gradient-to-r from-[#007EAD] to-[#00aaff]
+                  text-white font-bold text-lg uppercase tracking-wider
+                  rounded-2xl shadow-xl shadow-[#007EAD]/30
+                  hover:scale-105 hover:shadow-[#00aaff]/40
+                  transition-all duration-300
+                  no-underline !text-white
+                "
               >
-                <a href={affiliateUrl} target="_blank" rel="noopener noreferrer">
-                  {t("buy_in_amazon")}
-                </a>
-              </Button>
+                {t("buy_in_amazon")}
+              </a>
             </div>
           )}
 
