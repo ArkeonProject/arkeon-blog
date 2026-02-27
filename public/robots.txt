@@ -1,4 +1,4 @@
-# https://www.arkeontech.es robots.txt
+# https://www.arkeonixlabs.com robots.txt
 # Optimized for SEO and Google indexing
 
 User-agent: *
@@ -8,7 +8,7 @@ Allow: /
 Disallow: /newsletter/confirm
 
 # Sitemap location
-Sitemap: https://www.arkeontech.es/sitemap.xml
+Sitemap: https://www.arkeonixlabs.com/sitemap.xml
 
 # Crawl-delay (optional, helps with server load)
 Crawl-delay: 1

@@ -1,4 +1,4 @@
-# 🧾 Changelog — Arkeon Blog
+# 🧾 Changelog — Arkeonix Labs
 
 > Registro de versiones del proyecto, sincronizado con los tags de GitHub.
 
@@ -112,7 +112,7 @@
 
 ## [v0.4.0] - 2025-11-10
 ### 🧰 Modificado
-- Referencias públicas actualizadas para apuntar a `www.arkeontech.es` y al nuevo favicon.
+- Referencias públicas actualizadas para apuntar a `www.arkeonixlabs.com` y al nuevo logo.
 - Refactorización de código
 
 ---

@@ -57,19 +57,19 @@ serve(async (req: Request): Promise<Response> => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "Arkeon Blog <no-reply@arkeontech.es>",
+        from: "Arkeonix Labs <no-reply@arkeonixlabs.com>",
         to: email,
-        subject: "Confirma tu suscripción a Arkeon Blog",
+        subject: "Confirma tu suscripción a Arkeonix Labs",
         html: `
           <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #0b1226;">
-            <h1 style="color:#007EAD;">¡Gracias por unirte a Arkeon Blog!</h1>
+            <h1 style="color:#007EAD;">¡Gracias por unirte a Arkeonix Labs!</h1>
             <p>Solo falta un paso para activar tu suscripción. Haz clic en el botón para confirmar tu correo.</p>
             <p style="text-align:center; margin: 32px 0;">
               <a href="${confirmationUrl}" style="background:#007EAD;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;">Confirmar suscripción</a>
             </p>
             <p>Si el botón no funciona, copia y pega este enlace en tu navegador:</p>
             <p><a href="${confirmationUrl}">${confirmationUrl}</a></p>
-            <p style="margin-top:32px;">Saludos,<br/>El equipo de Arkeon Blog</p>
+            <p style="margin-top:32px;">Saludos,<br/>El equipo de Arkeonix Labs</p>
           </div>
         `,
       }),
