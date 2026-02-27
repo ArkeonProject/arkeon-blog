@@ -1,7 +1,7 @@
 {
-  "name": "Arkeon Blog",
-  "short_name": "Arkeon",
-  "description": "Noticias, tutoriales y novedades tech curadas por el equipo de Arkeon.",
+  "name": "Arkeonix Labs",
+  "short_name": "Arkeonix",
+  "description": "Análisis técnicos detallados y vanguardia tecnológica bajo el estándar de Arkeonix Labs.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -10,7 +10,7 @@
   "lang": "es",
   "icons": [
     {
-      "src": "/arkeon-logo.svg",
+      "src": "/logo.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"

@@ -87,10 +87,11 @@ export default function LabPage() {
     return (
         <div className="max-w-5xl mx-auto px-6 py-10 md:py-16">
             <Helmet>
-                <title>{t("lab_title")} | Arkeon</title>
-                <meta name="description" content={t("lab_description")} />
-                <meta property="og:title" content={`${t("lab_title")} | Arkeon`} />
-                <meta property="og:description" content={t("lab_description")} />
+                <title>{t("lab_title")} | Arkeonix Labs</title>
+                <meta name="description" content={t("lab_meta_description")} />
+                <link rel="canonical" href="https://www.arkeonixlabs.com/lab" />
+                <meta property="og:title" content={`${t("lab_title")} | Arkeonix Labs`} />
+                <meta property="og:description" content={t("lab_meta_description")} />
             </Helmet>
 
             {/* Header */}
@@ -115,8 +116,8 @@ export default function LabPage() {
                     <button
                         onClick={() => handleTagClick(null)}
                         className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${activeTag === null
-                                ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30"
-                                : "bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-white/60 hover:bg-emerald-500/10 hover:text-emerald-500"
+                            ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30"
+                            : "bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-white/60 hover:bg-emerald-500/10 hover:text-emerald-500"
                             }`}
                     >
                         {locale === "es" ? "Todos" : "All"}
@@ -126,8 +127,8 @@ export default function LabPage() {
                             key={tag}
                             onClick={() => handleTagClick(tag)}
                             className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${activeTag === tag
-                                    ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30"
-                                    : "bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-white/60 hover:bg-emerald-500/10 hover:text-emerald-500"
+                                ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30"
+                                : "bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-white/60 hover:bg-emerald-500/10 hover:text-emerald-500"
                                 }`}
                         >
                             {tag}

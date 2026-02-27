@@ -36,7 +36,7 @@ if (!supabase) {
     );
 }
 
-const SITE_URL = "https://www.arkeontech.es";
+const SITE_URL = "https://www.arkeonixlabs.com";
 
 interface Post {
     slug: string;

@@ -152,7 +152,7 @@ async function publish(filePath: string, isDryRun: boolean) {
     }
 
     console.log(`✅ Published! ID: ${data.id}, slug: ${data.slug}`);
-    console.log(`   🔗 https://www.arkeontech.es/lab/${data.slug}\n`);
+    console.log(`   🔗 https://www.arkeonixlabs.com/lab/${data.slug}\n`);
 
     // Move file to published/
     const publishedDir = resolve(dirname(absPath), "../published");
@@ -258,7 +258,7 @@ const command = args[0];
 
 function printHelp() {
     console.log(`
-🧪 Arkeon Lab CLI — Publish technical articles
+🧪 Arkeonix Labs CLI — Publish technical articles
 
 Usage:
   pnpm lab:publish <file.md>           Publish a new article from markdown

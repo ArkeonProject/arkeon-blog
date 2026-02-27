@@ -23,7 +23,7 @@ function Layout() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground transition-colors duration-300">
       <Header />
-      <main className="grow container mx-auto px-4 py-12">
+      <main className="grow container mx-auto px-4 pt-24 pb-12">
         <Outlet />
       </main>
       <Footer />

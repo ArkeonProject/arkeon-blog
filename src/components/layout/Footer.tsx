@@ -32,15 +32,15 @@ export default function Footer() {
           <div className="md:col-span-5 space-y-4">
             <Link to="/blog" className="inline-flex items-center gap-2.5 group">
               <img
-                src="/arkeon-logo.svg"
-                alt="Arkeon Logo"
+                src="/logo.svg"
+                alt="Arkeonix Labs Logo"
                 className="w-7 h-7 rounded-lg group-hover:scale-105 transition-transform duration-300"
                 style={{
                   boxShadow: "0 2px 6px color-mix(in oklch, var(--color-primary) 15%, transparent)",
                 }}
               />
               <span className="text-base font-bold font-display text-foreground uppercase tracking-tight group-hover:text-primary transition-colors duration-300">
-                Arkeon
+                Arkeonix Labs
               </span>
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-sm">
@@ -48,11 +48,11 @@ export default function Footer() {
             </p>
             <div className="flex gap-2 pt-1">
               <a
-                href="https://github.com/ArkeonProject"
+                href="https://github.com/ArkeonixLabs"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-lg bg-background border border-border/40 text-muted-foreground hover:text-primary hover:border-primary/30 transition-all duration-300"
-                aria-label="GitHub"
+                aria-label="GitHub Arkeonix Labs"
               >
                 <FaGithub className="w-4 h-4" />
               </a>
@@ -121,7 +121,7 @@ export default function Footer() {
             className="text-muted-foreground text-[11px] font-medium opacity-60 order-2 md:order-1"
             style={{ fontFamily: "var(--font-mono)" }}
           >
-            © {new Date().getFullYear()} Arkeon Project. {t("footer_rights")}
+            © {new Date().getFullYear()} Arkeonix Labs. {t("footer_rights")}
           </p>
           <p className="text-muted-foreground text-[11px] font-medium opacity-60 order-1 md:order-2 flex items-center gap-1.5">
             {t("footer_developed")}{" "}

@@ -1,4 +1,4 @@
-export const COOKIE_CONSENT_NAME = "arkeonConsent";
+export const COOKIE_CONSENT_NAME = "arkeonixConsent";
 
 export function getCookie(name: string) {
   if (typeof document === "undefined") return null;

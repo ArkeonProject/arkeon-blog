@@ -71,9 +71,10 @@ export default function NewsPage() {
   return (
     <div className="relative pt-16 pb-24 overflow-hidden">
       <Helmet>
-        <title>{t("news_title")} — Arkeon</title>
+        <title>{t("news_title")} — Arkeonix Labs</title>
         <meta name="description" content={t("news_meta_description")} />
-        <meta property="og:title" content={`${t("news_title")} — Arkeon`} />
+        <link rel="canonical" href="https://www.arkeonixlabs.com/news" />
+        <meta property="og:title" content={`${t("news_title")} — Arkeonix Labs`} />
         <meta property="og:description" content={t("news_meta_description")} />
       </Helmet>
 

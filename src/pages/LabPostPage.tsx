@@ -141,11 +141,12 @@ export default function LabPostPage() {
                 <Breadcrumbs />
 
                 <Helmet>
-                    <title>{post.title} | Arkeon Lab</title>
+                    <title>{post.title} | Arkeonix Labs</title>
                     <meta name="description" content={description} />
+                    <link rel="canonical" href={`https://www.arkeonixlabs.com/lab/${slug}`} />
                     <meta
                         property="og:title"
-                        content={`${post.title} | Arkeon Lab`}
+                        content={`${post.title} | Arkeonix Labs`}
                     />
                     <meta property="og:description" content={description} />
                     {post.cover_image && (

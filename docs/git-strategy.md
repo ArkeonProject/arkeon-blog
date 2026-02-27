@@ -1,4 +1,4 @@
-# 🧭 Git Strategy — Arkeon Project
+# 🧭 Git Strategy — Arkeonix Labs
 
 > **Objetivo:** Mantener una historia limpia, lineal y auditable entre `main` y `develop`, evitando merges innecesarios y eliminando el riesgo de divergencias cíclicas.
 
