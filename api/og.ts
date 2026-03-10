@@ -11,8 +11,9 @@ export default async function handler(request: Request) {
   // Truncate title if too long
   const displayTitle = title.length > 70 ? title.slice(0, 67) + "…" : title;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return new ImageResponse(
-    {
+    ({
       type: "div",
       props: {
         style: {
@@ -219,7 +220,8 @@ export default async function handler(request: Request) {
           },
         ],
       },
-    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any),
     {
       width: 1200,
       height: 630,
