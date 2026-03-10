@@ -34,3 +34,4 @@ supabase/.local
 # Variables privadas locales
 .env
 .env.local
+.vercel

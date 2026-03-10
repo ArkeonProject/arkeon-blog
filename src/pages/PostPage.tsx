@@ -41,10 +41,17 @@ export default function PostPage() {
     return match ? match[0] : null;
   }, [post?.content]);
 
+  // Smart MD/HTML detection: HTML content starts with a tag or contains block-level HTML
+  const isHtmlContent = useMemo(
+    () => /^\s*<[a-zA-Z]/.test(post?.content ?? ""),
+    [post?.content]
+  );
+
   const rawHtml = useMemo(() => {
     if (!post?.content) return "";
+    if (isHtmlContent) return post.content;
     return marked.parse(post.content) as string;
-  }, [post?.content]);
+  }, [post?.content, isHtmlContent]);
 
   const cleanedHtml = useMemo(() => {
     if (!rawHtml) return "";
@@ -95,7 +102,26 @@ export default function PostPage() {
           <link rel="canonical" href={`https://www.arkeonixlabs.com/post/${slug}`} />
           <meta property="og:title" content={`${post.title} | Arkeonix Labs`} />
           <meta property="og:description" content={description} />
-          {post.cover_image && <meta property="og:image" content={post.cover_image} />}
+          <meta property="og:type" content="article" />
+          <meta
+            property="og:image"
+            content={
+              post.cover_image
+                ? post.cover_image
+                : `/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category ?? "")}&author=${encodeURIComponent(post.author)}`
+            }
+          />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={`${post.title} | Arkeonix Labs`} />
+          <meta name="twitter:description" content={description} />
+          <meta
+            name="twitter:image"
+            content={
+              post.cover_image
+                ? post.cover_image
+                : `/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category ?? "")}&author=${encodeURIComponent(post.author)}`
+            }
+          />
         </Helmet>
 
         <Link
