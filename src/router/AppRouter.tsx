@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import CookieConsent from "react-cookie-consent";
 import BlogPage from "../pages/BlogPage";
 import PostPage from "../pages/PostPage";
@@ -12,16 +13,25 @@ import NewsPage from "../pages/NewsPage";
 import LabPage from "../pages/LabPage";
 import LabPostPage from "../pages/LabPostPage";
 import ProductsPage from "../pages/ProductsPage";
+import ArkeonixPage from "../pages/ArkeonixPage";
+import AdminPage from "../pages/AdminPage";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import ScrollToTop from "../components/ui/ScrollToTop";
 import { useLocale } from "../hooks/useLocale";
 import { COOKIE_CONSENT_NAME } from "../lib/cookies";
 
+function RouteScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+}
+
 function Layout() {
   const { t } = useLocale();
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground transition-colors duration-300">
+      <RouteScrollToTop />
       <Header />
       <main className="grow container mx-auto px-4 pt-24 pb-12">
         <Outlet />
@@ -82,6 +92,8 @@ export default function AppRouter() {
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/cookies" element={<CookiesPolicyPage />} />
           <Route path="/newsletter/confirm" element={<ConfirmPage />} />
+          <Route path="/arkeonix" element={<ArkeonixPage />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

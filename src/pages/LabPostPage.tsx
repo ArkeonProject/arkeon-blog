@@ -55,11 +55,18 @@ export default function LabPostPage() {
         return match ? match[0] : null;
     }, [post?.content]);
 
-    // Parse markdown → HTML, removing raw affiliate URLs
+    // Smart MD/HTML detection: HTML content starts with a tag
+    const isHtmlContent = useMemo(
+        () => /^\s*<[a-zA-Z]/.test(post?.content ?? ""),
+        [post?.content]
+    );
+
+    // Parse markdown → HTML (or use raw HTML for new posts), removing affiliate URLs
     const rawHtml = useMemo(() => {
         if (!post?.content) return "";
+        if (isHtmlContent) return post.content;
         return marked.parse(post.content) as string;
-    }, [post?.content]);
+    }, [post?.content, isHtmlContent]);
 
     const cleanedHtml = useMemo(() => {
         if (!rawHtml) return "";
@@ -149,9 +156,26 @@ export default function LabPostPage() {
                         content={`${post.title} | Arkeonix Labs`}
                     />
                     <meta property="og:description" content={description} />
-                    {post.cover_image && (
-                        <meta property="og:image" content={post.cover_image} />
-                    )}
+                    <meta property="og:type" content="article" />
+                    <meta
+                        property="og:image"
+                        content={
+                            post.cover_image
+                                ? post.cover_image
+                                : `/api/og?title=${encodeURIComponent(post.title)}&category=Lab&author=Arkeonix Labs`
+                        }
+                    />
+                    <meta name="twitter:card" content="summary_large_image" />
+                    <meta name="twitter:title" content={`${post.title} | Arkeonix Labs`} />
+                    <meta name="twitter:description" content={description} />
+                    <meta
+                        name="twitter:image"
+                        content={
+                            post.cover_image
+                                ? post.cover_image
+                                : `/api/og?title=${encodeURIComponent(post.title)}&category=Lab&author=Arkeonix Labs`
+                        }
+                    />
                 </Helmet>
 
                 <Link
