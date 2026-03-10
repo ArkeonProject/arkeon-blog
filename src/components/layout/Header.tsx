@@ -54,7 +54,7 @@ export default function Header() {
     >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div
-          className={`flex items-center justify-between transition-all duration-500 ${isScrolled ? "h-14" : "h-16"
+          className={`grid grid-cols-3 items-center transition-all duration-500 ${isScrolled ? "h-14" : "h-16"
             }`}
         >
           {/* Logo */}
@@ -77,7 +77,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-0.5">
+          <div className="hidden md:flex items-center justify-center gap-0.5">
             {NAV_LINKS.map(({ path, key }) => {
               const isActive =
                 location.pathname === path ||
@@ -101,7 +101,7 @@ export default function Header() {
           </div>
 
           {/* Right controls */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-end gap-2">
             {/* Language */}
             <div className="relative" ref={langRef}>
               <button

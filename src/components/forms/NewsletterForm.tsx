@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { supabase } from "../../lib/supabase";
 import { useLocale } from "../../hooks/useLocale";
 
 export default function NewsletterForm() {
@@ -18,18 +17,24 @@ export default function NewsletterForm() {
       return;
     }
     setSending(true);
-    const { error } = await supabase
-      .from("newsletter_subscribers")
-      .insert([{ email }]);
-    if (error) {
-      console.error(error);
-      if (typeof error.message === "string" && error.message.toLowerCase().includes("duplicate")) {
-        setErrorMsg(t("newsletter_error_duplicate"));
+    try {
+      const res = await fetch("/api/newsletter-subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json() as { error?: string };
+      if (!res.ok) {
+        if (data.error === "duplicate_email") {
+          setErrorMsg(t("newsletter_error_duplicate"));
+        } else {
+          setErrorMsg(t("newsletter_error_generic"));
+        }
       } else {
-        setErrorMsg(t("newsletter_error_generic"));
+        setSuccess(true);
       }
-    } else {
-      setSuccess(true);
+    } catch {
+      setErrorMsg(t("newsletter_error_generic"));
     }
     setSending(false);
   };

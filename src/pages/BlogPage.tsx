@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { FiTerminal, FiSearch, FiCode } from "react-icons/fi";
+import { FiTerminal, FiSearch, FiCode, FiFileText } from "react-icons/fi";
 import NewsletterForm from "../components/forms/NewsletterForm";
 import InfiniteCarousel from "../components/layout/InfiniteCarousel";
 import FeaturedPostCard from "../components/posts/FeaturedPostCard";
@@ -181,11 +181,71 @@ export default function BlogPage() {
         {/* FEATURED & GRID */}
         {posts.length > 0 ? (
           <section className="space-y-20">
-            {currentPage === 1 && featuredPost && (
-              <div className="animate-reveal [animation-delay:200ms]">
-                <FeaturedPostCard post={featuredPost} />
+
+            {/* SaaS Banner — destacado antes del featured post */}
+            {currentPage === 1 && (
+              <div className="animate-reveal [animation-delay:150ms]">
+                <Link
+                  to="/arkeonix"
+                  className="group relative flex flex-col md:flex-row items-center gap-8 md:gap-12 tech-card card-accent-border rounded-3xl px-8 md:px-12 py-10 overflow-hidden hover:border-primary/50 transition-all duration-300"
+                  style={{ boxShadow: "0 0 60px -15px color-mix(in oklch, var(--color-primary) 15%, transparent)" }}
+                >
+                  <div className="dot-grid opacity-30" />
+                  <div className="glow-spot top-0 right-0 scale-75 opacity-20" />
+                  <div className="relative flex-1 space-y-3 text-center md:text-left">
+                    <span
+                      className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-bold text-primary"
+                      style={{ fontFamily: "var(--font-mono)" }}
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                      {t("saas_banner_badge")}
+                    </span>
+                    <h2 className="text-3xl md:text-4xl font-bold font-display tracking-tight leading-tight">
+                      {t("saas_banner_title")}
+                    </h2>
+                    <p className="text-muted-foreground text-base max-w-lg">
+                      {t("saas_banner_description")}
+                    </p>
+                  </div>
+                  <span
+                    className="relative flex-shrink-0 inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-primary text-primary-foreground font-bold text-sm uppercase tracking-widest group-hover:opacity-90 group-hover:scale-[1.02] transition-all shadow-lg shadow-primary/25"
+                    style={{ fontFamily: "var(--font-mono)" }}
+                  >
+                    {t("saas_banner_cta")}
+                  </span>
+                </Link>
               </div>
             )}
+
+            {currentPage === 1 && featuredPost && (() => {
+              const cat = (featuredPost.category ?? "").toLowerCase();
+              const isNews = ["news", "noticias"].some(v => cat.includes(v));
+              const isProduct = ["product", "producto"].some(v => cat.includes(v));
+              const viewLink = isNews ? "/news" : isProduct ? "/products" : "/blog";
+              const viewKey = isNews ? "blog_view_news" : isProduct ? "blog_view_products" : "blog_view_blog";
+              return (
+                <div className="animate-reveal [animation-delay:200ms] space-y-8">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 border border-primary/20">
+                        <FiFileText className="w-4 h-4 text-primary" />
+                      </div>
+                      <h2 className="text-2xl md:text-3xl font-bold font-display tracking-tight">
+                        {t("blog_latest")}
+                      </h2>
+                    </div>
+                    <Link
+                      to={viewLink}
+                      className="inline-flex items-center text-xs font-bold text-primary uppercase tracking-[0.15em] hover:opacity-70 transition-colors group"
+                      style={{ fontFamily: "var(--font-mono)" }}
+                    >
+                      {t(viewKey)}
+                    </Link>
+                  </div>
+                  <FeaturedPostCard post={featuredPost} />
+                </div>
+              );
+            })()}
 
             {/* LAB SECTION */}
             {currentPage === 1 && labPosts.length > 0 && (

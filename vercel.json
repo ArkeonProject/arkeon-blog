@@ -13,7 +13,7 @@
       "destination": "/ads.txt"
     },
     {
-      "source": "/((?!.*\\.).*)",
+      "source": "/((?!api/)(?!.*\\.).*)",
       "destination": "/index.html"
     }
   ],
