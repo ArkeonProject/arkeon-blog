@@ -54,11 +54,11 @@ export default function Header() {
     >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div
-          className={`grid grid-cols-3 items-center transition-all duration-500 ${isScrolled ? "h-14" : "h-16"
+          className={`flex items-center justify-between transition-all duration-500 ${isScrolled ? "h-14" : "h-16"
             }`}
         >
           {/* Logo */}
-          <Link to="/blog" className="flex-shrink-0 flex items-center gap-2.5 group">
+          <Link to="/blog" className="flex-shrink-0 flex items-center gap-2.5 group min-w-0">
             <img
               src="/logo.svg"
               alt="Arkeonix Labs Logo"
@@ -69,7 +69,7 @@ export default function Header() {
               }}
             />
             <span
-              className={`font-bold tracking-tight font-display text-foreground group-hover:text-primary transition-all duration-300 uppercase ${isScrolled ? "text-base" : "text-lg"
+              className={`font-bold tracking-tight font-display text-foreground group-hover:text-primary transition-all duration-300 uppercase whitespace-nowrap ${isScrolled ? "text-base" : "text-lg"
                 }`}
             >
               Arkeonix Labs
@@ -77,7 +77,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop nav */}
-          <div className="hidden md:flex items-center justify-center gap-0.5">
+          <div className="hidden md:flex items-center justify-center gap-0.5 mx-auto">
             {NAV_LINKS.map(({ path, key }) => {
               const isActive =
                 location.pathname === path ||
@@ -102,8 +102,8 @@ export default function Header() {
 
           {/* Right controls */}
           <div className="flex items-center justify-end gap-2">
-            {/* Language */}
-            <div className="relative" ref={langRef}>
+            {/* Language — desktop only */}
+            <div className="relative hidden md:block" ref={langRef}>
               <button
                 onClick={() => setIsLangOpen((prev) => !prev)}
                 className="flex items-center gap-1 px-2 py-1.5 text-[11px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground rounded-lg hover:bg-surface transition-all duration-300"
@@ -137,9 +137,12 @@ export default function Header() {
               )}
             </div>
 
-            <div className="h-4 w-px bg-border/40" />
+            <div className="hidden md:block h-4 w-px bg-border/40" />
 
-            <ThemeToggle />
+            {/* ThemeToggle — desktop only */}
+            <div className="hidden md:block">
+              <ThemeToggle />
+            </div>
 
             {/* Mobile toggle */}
             <button
@@ -166,7 +169,7 @@ export default function Header() {
 
       {/* Mobile drawer */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-400 ease-out ${isMobileOpen ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
+        className={`md:hidden overflow-hidden transition-all duration-400 ease-out ${isMobileOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
           }`}
       >
         <div className="border-t border-border/20 bg-surface/95 backdrop-blur-3xl">
@@ -192,6 +195,35 @@ export default function Header() {
                 </Link>
               );
             })}
+          </div>
+
+          {/* Divider */}
+          <div className="mx-4 h-px bg-border/30" />
+
+          {/* Language + Theme */}
+          <div className="px-4 py-3 flex items-center justify-between">
+            {/* Language selector */}
+            <div className="flex items-center gap-2">
+              {(["es", "en"] as Locale[]).map((lang) => (
+                <button
+                  key={lang}
+                  onClick={() => {
+                    setLocale(lang);
+                    setIsMobileOpen(false);
+                  }}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${locale === lang
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-muted-foreground hover:bg-surface-hover hover:text-foreground"
+                    }`}
+                >
+                  <span>{lang === "es" ? "🇪🇸" : "🇬🇧"}</span>
+                  {lang === "es" ? "Español" : "English"}
+                </button>
+              ))}
+            </div>
+
+            {/* Theme toggle */}
+            <ThemeToggle />
           </div>
         </div>
       </div>
