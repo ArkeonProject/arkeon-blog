@@ -54,11 +54,11 @@ export default function Header() {
     >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div
-          className={`grid grid-cols-3 items-center transition-all duration-500 ${isScrolled ? "h-14" : "h-16"
+          className={`flex items-center justify-between transition-all duration-500 ${isScrolled ? "h-14" : "h-16"
             }`}
         >
           {/* Logo */}
-          <Link to="/blog" className="flex-shrink-0 flex items-center gap-2.5 group">
+          <Link to="/blog" className="flex-shrink-0 flex items-center gap-2.5 group min-w-0">
             <img
               src="/logo.svg"
               alt="Arkeonix Labs Logo"
@@ -69,7 +69,7 @@ export default function Header() {
               }}
             />
             <span
-              className={`font-bold tracking-tight font-display text-foreground group-hover:text-primary transition-all duration-300 uppercase ${isScrolled ? "text-base" : "text-lg"
+              className={`font-bold tracking-tight font-display text-foreground group-hover:text-primary transition-all duration-300 uppercase whitespace-nowrap ${isScrolled ? "text-base" : "text-lg"
                 }`}
             >
               Arkeonix Labs
@@ -77,7 +77,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop nav */}
-          <div className="hidden md:flex items-center justify-center gap-0.5">
+          <div className="hidden md:flex items-center justify-center gap-0.5 mx-auto">
             {NAV_LINKS.map(({ path, key }) => {
               const isActive =
                 location.pathname === path ||
