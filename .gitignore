@@ -35,3 +35,6 @@ supabase/.local
 .env
 .env.local
 .vercel
+
+# n8n workflow exports (contain API keys)
+.n8n/
