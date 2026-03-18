@@ -4,6 +4,27 @@
 
 ---
 
+## [v2.3.0] - 2026-03-18
+
+### 🚀 Añadido
+
+#### Affiliate Disclosure Page
+- Nueva página `/affiliate-disclosure` con 5 secciones: qué son los enlaces de afiliado, cómo funcionan, independencia editorial, coste para el usuario y contacto
+- Traducciones completas en ES y EN (13 claves `affiliate_*` + `footer_affiliate`)
+- Enlace añadido en el footer dentro de la sección Legal
+- Ruta registrada en `AppRouter.tsx`
+
+### 🤖 n8n — Mejoras de calidad editorial
+- Modelo LLM actualizado de GPT-4o a GPT-4.1 en los 3 nodos principales (Análisis, Artículo EN, Polish)
+- Voz editorial cambiada de "hands-on reviewer" a "hardware editor basado en specs y feedback de compradores"
+- Limpieza programática post-LLM: reemplazo context-aware de person words + 30+ banned word swaps
+- Nodo Polish con Fix 8 completo: cleanup de palabras prohibidas, patrones "making it [adj]", y meta descriptions
+
+### 🧹 Limpieza
+- `.n8n/` añadido a `.gitignore` (contiene API keys de SerpAPI/OpenAI)
+
+---
+
 ## [v2.2.0] - 2026-03-10
 
 ### 🔐 Seguridad — Admin panel

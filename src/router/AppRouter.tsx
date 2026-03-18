@@ -8,6 +8,7 @@ import AboutPage from "../pages/AboutPage";
 import PrivacyPolicyPage from "../pages/PrivacyPolicyPage";
 import TermsPage from "../pages/TermsPage";
 import CookiesPolicyPage from "../pages/CookiesPolicyPage";
+import AffiliateDisclosurePage from "../pages/AffiliateDisclosurePage";
 import ConfirmPage from "../pages/newsletter/ConfirmPage";
 import NewsPage from "../pages/NewsPage";
 import LabPage from "../pages/LabPage";
@@ -91,6 +92,7 @@ export default function AppRouter() {
           <Route path="/privacy" element={<PrivacyPolicyPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/cookies" element={<CookiesPolicyPage />} />
+          <Route path="/affiliate-disclosure" element={<AffiliateDisclosurePage />} />
           <Route path="/newsletter/confirm" element={<ConfirmPage />} />
           <Route path="/arkeonix" element={<ArkeonixPage />} />
           <Route path="/admin" element={<AdminPage />} />
