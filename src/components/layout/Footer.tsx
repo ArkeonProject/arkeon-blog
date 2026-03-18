@@ -16,6 +16,7 @@ const LEGAL_LINKS = [
   { path: "/privacy", key: "footer_privacy" },
   { path: "/terms", key: "footer_terms" },
   { path: "/cookies", key: "footer_cookies" },
+  { path: "/affiliate-disclosure", key: "footer_affiliate" },
 ];
 
 export default function Footer() {
