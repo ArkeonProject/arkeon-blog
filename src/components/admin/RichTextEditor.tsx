@@ -177,13 +177,14 @@ export default function RichTextEditor({
   });
 
   // Sync external value changes (e.g. when editing a post)
+  // Skip when in source mode — the textarea owns the value directly
   useEffect(() => {
-    if (!editor) return;
+    if (!editor || sourceMode) return;
     const current = editor.getHTML();
     if (value !== current) {
       editor.commands.setContent(value);
     }
-  }, [value, editor]);
+  }, [value, editor, sourceMode]);
 
   const insertLink = useCallback((url: string) => {
     if (!editor || !url) return;

@@ -4,6 +4,16 @@
 
 ---
 
+## [v2.4.3] - 2026-03-19
+
+### 🐛 Corregido
+
+- Logo cambiado de SVG (1.3MB) a PNG en header, footer, favicon, apple-touch-icon y OG/Twitter cards
+- Eliminado `logo.svg` obsoleto
+- Corregido modo HTML source del editor: el contenido del textarea ya no se sobreescribe al editar
+
+---
+
 ## [v2.4.2] - 2026-03-19
 
 ### 🚀 Añadido
