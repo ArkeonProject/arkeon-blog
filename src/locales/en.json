@@ -241,6 +241,12 @@
   "arkeonix_feature_audit_title": "Audit Logs",
   "arkeonix_feature_audit_desc": "Immutable action log: actor, resource, organization, IP, and User-Agent. Compliance-ready. Fire-and-forget with Sentry fallback.",
 
+  "arkeonix_demo_title": "See it in action",
+  "arkeonix_demo_subtitle": "Explore the live demo of the boilerplate. Everything you see is included in the source code.",
+  "arkeonix_demo_tab_landing": "Landing Page",
+  "arkeonix_demo_tab_dashboard": "Dashboard",
+  "arkeonix_demo_fullscreen": "Try live demo",
+
   "arkeonix_included_title": "What's inside the boilerplate",
   "arkeonix_included_subtitle": "Full source code. No subscriptions. No hidden dependencies. Use the project for unlimited commercial projects.",
   "arkeonix_included_note": "Complete source code · No subscriptions · Commercial license included",

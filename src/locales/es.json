@@ -241,6 +241,12 @@
   "arkeonix_feature_audit_title": "Audit Logs",
   "arkeonix_feature_audit_desc": "Registro inmutable de acciones: actor, recurso, organización, IP y User-Agent. Compliance-ready. Fire-and-forget con fallback a Sentry.",
 
+  "arkeonix_demo_title": "Míralo en acción",
+  "arkeonix_demo_subtitle": "Explora la demo en vivo del boilerplate. Todo lo que ves está incluido en el código fuente.",
+  "arkeonix_demo_tab_landing": "Landing Page",
+  "arkeonix_demo_tab_dashboard": "Dashboard",
+  "arkeonix_demo_fullscreen": "Probar demo en vivo",
+
   "arkeonix_included_title": "Qué incluye el boilerplate",
   "arkeonix_included_subtitle": "Todo el código fuente. Sin suscripciones. Sin dependencias ocultas. Usa el proyecto para todos tus proyectos comerciales.",
   "arkeonix_included_note": "Código completo · Sin suscripciones · Licencia comercial incluida",
