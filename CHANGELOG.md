@@ -4,6 +4,21 @@
 
 ---
 
+## [v2.4.0] - 2026-03-19
+
+### 🚀 Añadido
+
+#### Arkeonix SaaS — Live Demo Section
+- Nueva sección "Live Demo" en `/arkeonix` entre Features y What's Included
+- Contenedor estilo browser chrome (traffic light dots + barra URL con candado)
+- Tab switcher para alternar entre capturas Landing Page y Dashboard
+- Hover interactivo con zoom suave + overlay CTA hacia `saas.arkeonixlabs.com`
+- Botón "Live Demo" añadido en el Hero para acceso directo a la sección
+- Capturas del SaaS almacenadas en `/public/` (`saas-landing.png`, `saas-dashboard.png`)
+- Traducciones completas en ES y EN (4 claves `arkeonix_demo_*`)
+
+---
+
 ## [v2.3.0] - 2026-03-18
 
 ### 🚀 Añadido
@@ -22,6 +37,17 @@
 
 ### 🧹 Limpieza
 - `.n8n/` añadido a `.gitignore` (contiene API keys de SerpAPI/OpenAI)
+
+---
+
+## [v2.2.1] - 2026-03-13
+
+### 🐛 Corregido
+
+#### Header Mobile Layout
+- Texto "Arkeonix Labs" se partía en dos líneas en móvil por grid de 3 columnas iguales → cambiado a `flex justify-between` con `whitespace-nowrap`
+- Selector de idioma y toggle de tema movidos al interior del menú hamburguesa en móvil, liberando espacio en la barra superior
+- En desktop no hay cambios visuales
 
 ---
 
