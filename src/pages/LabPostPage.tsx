@@ -8,6 +8,7 @@ import { supabase } from "../lib/supabase";
 import { useLocale } from "../hooks/useLocale";
 import { useSupabaseQuery } from "../hooks/useSupabaseQuery";
 import ReadingProgressBar from "../components/ui/ReadingProgressBar";
+import ScrollReveal from "../components/ui/ScrollReveal";
 import ShareButtons from "../components/ui/ShareButtons";
 import Breadcrumbs from "../components/ui/Breadcrumbs";
 import type { LabPostDetail } from "../types/lab";
@@ -144,6 +145,7 @@ export default function LabPostPage() {
     return (
         <>
             <ReadingProgressBar />
+            <ScrollReveal variant="fade-up" duration={800}>
             <div className="max-w-4xl mx-auto p-8 md:p-12 bg-gradient-to-br from-white to-gray-50 dark:from-[#0b1226] dark:via-[#071622] dark:to-[#0a172b] rounded-3xl shadow-lg dark:shadow-[#007EAD]/20 transition-colors duration-300">
                 <Breadcrumbs />
 
@@ -277,6 +279,7 @@ export default function LabPostPage() {
                     <div dangerouslySetInnerHTML={{ __html: afterBuy }} />
                 </article>
             </div>
+            </ScrollReveal>
         </>
     );
 }
