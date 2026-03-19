@@ -33,7 +33,7 @@ export default function Footer() {
           <div className="md:col-span-5 space-y-4">
             <Link to="/blog" className="inline-flex items-center gap-2.5 group">
               <img
-                src="/logo.svg"
+                src="/arkeonix-logo.png"
                 alt="Arkeonix Labs Logo"
                 className="w-7 h-7 rounded-lg group-hover:scale-105 transition-transform duration-300"
                 style={{

@@ -60,7 +60,7 @@ export default function Header() {
           {/* Logo */}
           <Link to="/blog" className="flex-shrink-0 flex items-center gap-2.5 group min-w-0">
             <img
-              src="/logo.svg"
+              src="/arkeonix-logo.png"
               alt="Arkeonix Labs Logo"
               className={`rounded-xl transition-all duration-300 group-hover:scale-105 ${isScrolled ? "w-7 h-7" : "w-8 h-8"
                 }`}
