@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { FiFilter, FiChevronDown, FiSearch } from "react-icons/fi";
 import PostList from "../components/posts/PostList";
 import Pagination from "../components/ui/Pagination";
+import ScrollReveal from "../components/ui/ScrollReveal";
 import { supabase } from "../lib/supabase";
 import { useLocale } from "../hooks/useLocale";
 import type { PostListItem } from "../types/post";
@@ -145,11 +146,14 @@ export default function ProductsPage() {
         <meta property="og:description" content={t("products_meta_description")} />
       </Helmet>
 
-      <section className="text-center mb-10">
-        <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 dark:text-white mb-4">{t("products_title")}</h1>
-        <p className="text-gray-700 dark:text-white/80 text-lg md:text-xl max-w-3xl mx-auto">{t("products_description")}</p>
-      </section>
+      <ScrollReveal variant="blur" duration={800}>
+        <section className="text-center mb-10">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 dark:text-white mb-4">{t("products_title")}</h1>
+          <p className="text-gray-700 dark:text-white/80 text-lg md:text-xl max-w-3xl mx-auto">{t("products_description")}</p>
+        </section>
+      </ScrollReveal>
 
+      <ScrollReveal variant="fade-left" duration={700}>
       <section className="mb-12">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="relative inline-block w-full md:w-auto md:min-w-[240px]" ref={filterRef}>
@@ -211,23 +215,28 @@ export default function ProductsPage() {
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
       {displayedPosts.length > 0 ? (
-        <PostList posts={displayedPosts} />
+        <ScrollReveal variant="fade-up" duration={800}>
+          <PostList posts={displayedPosts} />
+        </ScrollReveal>
       ) : (
         <p className="text-center text-gray-600 dark:text-white/70 text-lg">{t("products_empty")}</p>
       )}
 
       {totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={(page) => {
-            setCurrentPage(page);
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
-          className="mt-12"
-        />
+        <ScrollReveal variant="scale" duration={600}>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+            className="mt-12"
+          />
+        </ScrollReveal>
       )}
     </div>
   );

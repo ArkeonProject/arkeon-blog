@@ -8,6 +8,7 @@ import FeaturedPostCard from "../components/posts/FeaturedPostCard";
 import PostCard from "../components/posts/PostCard";
 import LabPostCard from "../components/posts/LabPostCard";
 import Pagination from "../components/ui/Pagination";
+import ScrollReveal from "../components/ui/ScrollReveal";
 import { supabase } from "../lib/supabase";
 import { useLocale } from "../hooks/useLocale";
 import type { PostListItem } from "../types/post";
@@ -184,7 +185,7 @@ export default function BlogPage() {
 
             {/* SaaS Banner — destacado antes del featured post */}
             {currentPage === 1 && (
-              <div className="animate-reveal [animation-delay:150ms]">
+              <ScrollReveal variant="blur" duration={900}>
                 <Link
                   to="/arkeonix"
                   className="group relative flex flex-col md:flex-row items-center gap-8 md:gap-12 tech-card card-accent-border rounded-3xl px-8 md:px-12 py-10 overflow-hidden hover:border-primary/50 transition-all duration-300"
@@ -214,7 +215,7 @@ export default function BlogPage() {
                     {t("saas_banner_cta")}
                   </span>
                 </Link>
-              </div>
+              </ScrollReveal>
             )}
 
             {currentPage === 1 && featuredPost && (() => {
@@ -224,7 +225,7 @@ export default function BlogPage() {
               const viewLink = isNews ? "/news" : isProduct ? "/products" : "/blog";
               const viewKey = isNews ? "blog_view_news" : isProduct ? "blog_view_products" : "blog_view_blog";
               return (
-                <div className="animate-reveal [animation-delay:200ms] space-y-8">
+                <ScrollReveal variant="flip-up" duration={800} className="space-y-8">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 border border-primary/20">
@@ -243,88 +244,100 @@ export default function BlogPage() {
                     </Link>
                   </div>
                   <FeaturedPostCard post={featuredPost} />
-                </div>
+                </ScrollReveal>
               );
             })()}
 
             {/* LAB SECTION */}
             {currentPage === 1 && labPosts.length > 0 && (
-              <div className="animate-reveal space-y-8">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                      <FiCode className="w-4 h-4 text-emerald-500" />
+              <div className="space-y-8">
+                <ScrollReveal variant="fade-left" duration={800}>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                        <FiCode className="w-4 h-4 text-emerald-500" />
+                      </div>
+                      <h2 className="text-2xl md:text-3xl font-bold font-display tracking-tight">
+                        {t("lab_latest")}
+                      </h2>
                     </div>
-                    <h2 className="text-2xl md:text-3xl font-bold font-display tracking-tight">
-                      {t("lab_latest")}
-                    </h2>
+                    <Link
+                      to="/lab"
+                      className="inline-flex items-center gap-2 text-xs font-bold text-emerald-500 uppercase tracking-[0.15em] hover:text-emerald-400 transition-colors group"
+                      style={{ fontFamily: "var(--font-mono)" }}
+                    >
+                      {t("lab_view_all")}
+                      <span className="group-hover:translate-x-0.5 transition-transform duration-200">→</span>
+                    </Link>
                   </div>
-                  <Link
-                    to="/lab"
-                    className="inline-flex items-center gap-2 text-xs font-bold text-emerald-500 uppercase tracking-[0.15em] hover:text-emerald-400 transition-colors group"
-                    style={{ fontFamily: "var(--font-mono)" }}
-                  >
-                    {t("lab_view_all")}
-                    <span className="group-hover:translate-x-0.5 transition-transform duration-200">→</span>
-                  </Link>
-                </div>
+                </ScrollReveal>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {labPosts.map((post, idx) => (
-                    <div
-                      key={post.id}
-                      className="animate-reveal"
-                      style={{ animationDelay: `${idx * 100}ms` }}
-                    >
-                      <LabPostCard post={post} />
-                    </div>
-                  ))}
+                  {labPosts.map((post, idx) => {
+                    const variants = ["slide-rotate-left", "fade-up", "slide-rotate-right"] as const;
+                    return (
+                      <ScrollReveal
+                        key={post.id}
+                        variant={variants[idx % 3]}
+                        delay={idx * 150}
+                        duration={800}
+                      >
+                        <LabPostCard post={post} />
+                      </ScrollReveal>
+                    );
+                  })}
                 </div>
               </div>
             )}
 
             {/* Ticker — below lab section */}
             {currentPage === 1 && (
-              <div className="animate-reveal [animation-delay:300ms] -mx-4 sm:-mx-6 lg:-mx-8">
+              <ScrollReveal variant="blur" duration={900} className="-mx-4 sm:-mx-6 lg:-mx-8">
                 <InfiniteCarousel />
-              </div>
+              </ScrollReveal>
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {otherPosts.map((post, idx) => (
-                <div
-                  key={post.id}
-                  className="animate-reveal"
-                  style={{ animationDelay: `${(idx + 1) * 80}ms` }}
-                >
-                  <Link to={`/post/${post.slug}`} className="block h-full">
-                    <PostCard post={post} />
-                  </Link>
-                </div>
-              ))}
+              {otherPosts.map((post, idx) => {
+                const variants = ["fade-left", "fade-up", "fade-right"] as const;
+                return (
+                  <ScrollReveal
+                    key={post.id}
+                    variant={variants[idx % 3]}
+                    delay={(idx % 3) * 120}
+                    duration={800}
+                  >
+                    <Link to={`/post/${post.slug}`} className="block h-full">
+                      <PostCard post={post} />
+                    </Link>
+                  </ScrollReveal>
+                );
+              })}
             </div>
 
             {/* Newsletter */}
             {currentPage === 1 && (
-              <div className="tech-card card-accent-border p-10 md:p-16 rounded-2xl text-center space-y-8 animate-reveal">
-                <div className="dot-grid" />
-                <div className="relative max-w-2xl mx-auto space-y-5">
-                  <h2 className="text-3xl md:text-5xl font-bold font-display leading-[0.95] tracking-tight">
-                    {t("ready_next_era").split(" ").slice(0, -2).join(" ")}{" "}
-                    <span className="text-primary">{t("ready_next_era").split(" ").slice(-2).join(" ")}</span>
-                  </h2>
-                  <p className="text-muted-foreground text-base md:text-lg font-body">
-                    {t("newsletter_description")}
-                  </p>
+              <ScrollReveal variant="zoom-in" duration={900}>
+                <div className="tech-card card-accent-border p-10 md:p-16 rounded-2xl text-center space-y-8">
+                  <div className="dot-grid" />
+                  <div className="relative max-w-2xl mx-auto space-y-5">
+                    <h2 className="text-3xl md:text-5xl font-bold font-display leading-[0.95] tracking-tight">
+                      {t("ready_next_era").split(" ").slice(0, -2).join(" ")}{" "}
+                      <span className="text-primary">{t("ready_next_era").split(" ").slice(-2).join(" ")}</span>
+                    </h2>
+                    <p className="text-muted-foreground text-base md:text-lg font-body">
+                      {t("newsletter_description")}
+                    </p>
+                  </div>
+                  <div className="relative max-w-md mx-auto">
+                    <NewsletterForm />
+                  </div>
                 </div>
-                <div className="relative max-w-md mx-auto">
-                  <NewsletterForm />
-                </div>
-              </div>
+              </ScrollReveal>
             )}
           </section>
         ) : (
-          <section className="py-20 text-center animate-reveal">
+          <section className="py-20 text-center">
             <h2 className="text-3xl font-bold font-display text-muted-foreground/30">
               {locale === "es" ? "No se encontraron artículos" : "No articles found"}
             </h2>
@@ -333,7 +346,7 @@ export default function BlogPage() {
 
         {/* PAGINATION */}
         {totalPages > 1 && (
-          <div className="flex justify-center pb-12 animate-reveal">
+          <ScrollReveal variant="scale" duration={600} className="flex justify-center pb-12">
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
@@ -342,7 +355,7 @@ export default function BlogPage() {
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
             />
-          </div>
+          </ScrollReveal>
         )}
       </div>
     </div>

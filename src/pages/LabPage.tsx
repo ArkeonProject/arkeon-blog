@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { FiTerminal } from "react-icons/fi";
 import LabPostCard from "../components/posts/LabPostCard";
 import Pagination from "../components/ui/Pagination";
+import ScrollReveal from "../components/ui/ScrollReveal";
 import { supabase } from "../lib/supabase";
 import { useLocale } from "../hooks/useLocale";
 import type { LabPostListItem } from "../types/lab";
@@ -95,23 +96,26 @@ export default function LabPage() {
             </Helmet>
 
             {/* Header */}
-            <header className="text-center mb-16">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
-                    <FiTerminal className="w-4 h-4 text-emerald-400" />
-                    <span className="text-emerald-400 text-sm font-semibold tracking-wide uppercase">
-                        Lab
-                    </span>
-                </div>
-                <h1 className="text-5xl md:text-6xl font-black text-gray-900 dark:text-white mb-4">
-                    {t("lab_title")}
-                </h1>
-                <p className="text-gray-600 dark:text-white/70 text-lg md:text-xl max-w-3xl mx-auto">
-                    {t("lab_description")}
-                </p>
-            </header>
+            <ScrollReveal variant="blur" duration={800}>
+                <header className="text-center mb-16">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
+                        <FiTerminal className="w-4 h-4 text-emerald-400" />
+                        <span className="text-emerald-400 text-sm font-semibold tracking-wide uppercase">
+                            Lab
+                        </span>
+                    </div>
+                    <h1 className="text-5xl md:text-6xl font-black text-gray-900 dark:text-white mb-4">
+                        {t("lab_title")}
+                    </h1>
+                    <p className="text-gray-600 dark:text-white/70 text-lg md:text-xl max-w-3xl mx-auto">
+                        {t("lab_description")}
+                    </p>
+                </header>
+            </ScrollReveal>
 
             {/* Tag filters */}
             {allTags.length > 0 && (
+                <ScrollReveal variant="fade-up" delay={100}>
                 <div className="flex flex-wrap justify-center gap-2 mb-12">
                     <button
                         onClick={() => handleTagClick(null)}
@@ -135,6 +139,7 @@ export default function LabPage() {
                         </button>
                     ))}
                 </div>
+                </ScrollReveal>
             )}
 
             {/* Posts grid */}
@@ -159,20 +164,27 @@ export default function LabPage() {
                 </p>
             ) : (
                 <div className="grid md:grid-cols-2 gap-8">
-                    {posts.map((post) => (
-                        <LabPostCard key={post.id} post={post} />
-                    ))}
+                    {posts.map((post, idx) => {
+                        const variants = ["fade-left", "fade-right"] as const;
+                        return (
+                            <ScrollReveal key={post.id} variant={variants[idx % 2]} delay={(idx % 2) * 120} duration={800}>
+                                <LabPostCard post={post} />
+                            </ScrollReveal>
+                        );
+                    })}
                 </div>
             )}
 
             {/* Pagination */}
             {totalPages > 1 && (
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                    className="mt-12"
-                />
+                <ScrollReveal variant="scale" duration={600}>
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                        className="mt-12"
+                    />
+                </ScrollReveal>
             )}
         </div>
     );
