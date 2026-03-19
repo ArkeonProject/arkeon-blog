@@ -1,9 +1,11 @@
 import { useLocale } from "../hooks/useLocale";
+import ScrollReveal from "../components/ui/ScrollReveal";
 
 export default function AffiliateDisclosurePage() {
   const { t } = useLocale();
 
   return (
+    <ScrollReveal variant="fade-up" duration={700}>
     <div className="max-w-3xl mx-auto p-12 bg-gradient-to-br from-white to-gray-50 dark:from-[#0b1226] dark:via-[#071622] dark:to-[#0a172b] rounded-3xl shadow-lg dark:shadow-[#007EAD]/20 text-gray-900 dark:text-white font-sans leading-relaxed transition-colors duration-300">
       <h1 className="text-4xl font-semibold mb-6 text-[#007EAD] dark:text-[#00aaff]">
         {t("affiliate_title")}
@@ -26,5 +28,6 @@ export default function AffiliateDisclosurePage() {
       <h2 className="text-2xl font-semibold mt-8 mb-3 text-[#007EAD]">{t("affiliate_contact_title")}</h2>
       <p>{t("affiliate_contact_text")}</p>
     </div>
+    </ScrollReveal>
   );
 }

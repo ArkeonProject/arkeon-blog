@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { useLocale } from "../hooks/useLocale";
+import ScrollReveal from "../components/ui/ScrollReveal";
 
 const AboutPage = () => {
   const { t } = useLocale();
@@ -13,14 +14,17 @@ const AboutPage = () => {
       </Helmet>
 
       {/* Hero Section */}
+      <ScrollReveal variant="blur" duration={800}>
       <header className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#007EAD] via-[#00aaff] to-[#007EAD] bg-clip-text text-transparent mb-4">
           {t("about_title")}
         </h1>
         <div className="w-24 h-1 bg-gradient-to-r from-transparent via-[#007EAD] to-transparent mx-auto rounded-full"></div>
       </header>
+      </ScrollReveal>
 
       {/* Main Introduction */}
+      <ScrollReveal variant="fade-up">
       <section className="mb-10">
         <p className="text-lg text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
           {t("about_intro")}
@@ -29,12 +33,16 @@ const AboutPage = () => {
           {t("about_mission")}
         </p>
       </section>
+      </ScrollReveal>
 
       {/* What We Cover */}
       <section className="mb-10">
+        <ScrollReveal variant="fade-left">
         <h2 className="text-2xl font-semibold text-[#007EAD] dark:text-[#00aaff] mb-4">
           {t("about_topics_title")}
         </h2>
+        </ScrollReveal>
+        <ScrollReveal variant="fade-up" delay={100}>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="p-4 bg-gray-100 dark:bg-gray-800/50 rounded-xl">
             <h3 className="font-semibold text-gray-900 dark:text-white mb-2">📱 {t("about_topic_products")}</h3>
@@ -53,9 +61,11 @@ const AboutPage = () => {
             <p className="text-gray-600 dark:text-gray-400 text-sm">{t("about_topic_reviews_desc")}</p>
           </div>
         </div>
+        </ScrollReveal>
       </section>
 
       {/* About the Creator */}
+      <ScrollReveal variant="fade-right" duration={800}>
       <section className="mb-10">
         <h2 className="text-2xl font-semibold text-[#007EAD] dark:text-[#00aaff] mb-4">
           {t("about_creator_title")}
@@ -71,8 +81,10 @@ const AboutPage = () => {
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
       {/* Values */}
+      <ScrollReveal variant="fade-up">
       <section className="mb-10">
         <h2 className="text-2xl font-semibold text-[#007EAD] dark:text-[#00aaff] mb-4">
           {t("about_values_title")}
@@ -96,8 +108,10 @@ const AboutPage = () => {
           </li>
         </ul>
       </section>
+      </ScrollReveal>
 
       {/* Contact CTA */}
+      <ScrollReveal variant="zoom-in" duration={800}>
       <section className="text-center p-6 bg-gradient-to-r from-[#007EAD]/10 to-[#00aaff]/10 rounded-2xl">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
           {t("about_contact_cta")}
@@ -112,6 +126,7 @@ const AboutPage = () => {
           {t("about_contact_button")}
         </a>
       </section>
+      </ScrollReveal>
     </div>
   );
 };

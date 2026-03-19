@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLocale } from "../hooks/useLocale";
 import { FiMail, FiUser, FiMessageSquare, FiSend } from "react-icons/fi";
+import ScrollReveal from "../components/ui/ScrollReveal";
 
 export default function ContactPage() {
   const { t } = useLocale();
@@ -40,6 +41,7 @@ export default function ContactPage() {
       </Helmet>
 
       {/* Header */}
+      <ScrollReveal variant="blur" duration={800}>
       <header className="text-center mb-10">
         <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#007EAD] via-[#00aaff] to-[#007EAD] bg-clip-text text-transparent mb-4">
           {t("contact_title")}
@@ -49,9 +51,11 @@ export default function ContactPage() {
           {t("contact_intro")}
         </p>
       </header>
+      </ScrollReveal>
 
       <div className="grid md:grid-cols-2 gap-10">
         {/* Contact Form */}
+        <ScrollReveal variant="fade-left" duration={800}>
         <section>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
             {t("contact_form_title")}
@@ -140,8 +144,10 @@ export default function ContactPage() {
             </button>
           </form>
         </section>
+        </ScrollReveal>
 
         {/* Contact Info */}
+        <ScrollReveal variant="fade-right" duration={800} delay={200}>
         <section className="space-y-8">
           <div>
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
@@ -191,6 +197,7 @@ export default function ContactPage() {
             </a>
           </div>
         </section>
+        </ScrollReveal>
       </div>
     </div>
   );

@@ -1,9 +1,11 @@
 import { useLocale } from "../hooks/useLocale";
+import ScrollReveal from "../components/ui/ScrollReveal";
 
 export default function TermsPage() {
   const { t } = useLocale();
 
   return (
+    <ScrollReveal variant="fade-up" duration={700}>
     <div className="max-w-3xl mx-auto p-12 bg-gradient-to-br from-white to-gray-50 dark:from-[#0b1226] dark:via-[#071622] dark:to-[#0a172b] rounded-3xl shadow-lg dark:shadow-[#007EAD]/20 text-gray-900 dark:text-white font-sans leading-relaxed transition-colors duration-300">
       <h1 className="text-4xl font-semibold mb-6 text-[#007EAD] dark:text-[#00aaff]">
         {t("terms_title")}
@@ -36,5 +38,6 @@ export default function TermsPage() {
       </h2>
       <p>{t("terms_contact_text")}</p>
     </div>
+    </ScrollReveal>
   );
 }

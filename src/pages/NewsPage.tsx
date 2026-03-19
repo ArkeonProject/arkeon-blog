@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { FiRadio } from "react-icons/fi";
 import PostList from "../components/posts/PostList";
 import Pagination from "../components/ui/Pagination";
+import ScrollReveal from "../components/ui/ScrollReveal";
 import { supabase } from "../lib/supabase";
 import { useLocale } from "../hooks/useLocale";
 import type { PostListItem } from "../types/post";
@@ -85,23 +86,25 @@ export default function NewsPage() {
 
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <header className="pt-24 md:pt-32 pb-16 text-center space-y-6 animate-reveal">
-          <div
-            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-surface border border-border/50 text-[10px] uppercase tracking-[0.3em] font-bold text-muted-foreground"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            <FiRadio className="text-primary animate-pulse" />
-            {t("category_news")}
-          </div>
+        <ScrollReveal variant="blur" duration={800}>
+          <header className="pt-24 md:pt-32 pb-16 text-center space-y-6">
+            <div
+              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-surface border border-border/50 text-[10px] uppercase tracking-[0.3em] font-bold text-muted-foreground"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              <FiRadio className="text-primary animate-pulse" />
+              {t("category_news")}
+            </div>
 
-          <h1 className="text-6xl md:text-8xl font-bold font-display uppercase leading-[0.85] tracking-tighter text-glow">
-            {t("news_title")}
-          </h1>
+            <h1 className="text-6xl md:text-8xl font-bold font-display uppercase leading-[0.85] tracking-tighter text-glow">
+              {t("news_title")}
+            </h1>
 
-          <p className="max-w-2xl mx-auto text-base md:text-lg text-muted-foreground font-body leading-relaxed">
-            {t("news_description")}
-          </p>
-        </header>
+            <p className="max-w-2xl mx-auto text-base md:text-lg text-muted-foreground font-body leading-relaxed">
+              {t("news_description")}
+            </p>
+          </header>
+        </ScrollReveal>
 
         {/* Content */}
         {loading ? (
@@ -114,14 +117,18 @@ export default function NewsPage() {
             ))}
           </div>
         ) : errorMsg ? (
-          <div className="tech-card card-accent-border p-10 text-center rounded-2xl max-w-md mx-auto animate-reveal">
-            <div className="text-3xl mb-4">⚠️</div>
-            <p className="text-muted-foreground text-sm">{errorMsg}</p>
-          </div>
+          <ScrollReveal variant="fade-up">
+            <div className="tech-card card-accent-border p-10 text-center rounded-2xl max-w-md mx-auto">
+              <div className="text-3xl mb-4">⚠️</div>
+              <p className="text-muted-foreground text-sm">{errorMsg}</p>
+            </div>
+          </ScrollReveal>
         ) : posts.length > 0 ? (
-          <PostList posts={posts} />
+          <ScrollReveal variant="fade-up" duration={800}>
+            <PostList posts={posts} />
+          </ScrollReveal>
         ) : (
-          <div className="py-20 text-center animate-reveal">
+          <div className="py-20 text-center">
             <h2 className="text-2xl font-bold font-display text-muted-foreground/30">
               {t("news_empty")}
             </h2>
@@ -129,13 +136,15 @@ export default function NewsPage() {
         )}
 
         {totalPages > 1 && (
-          <div className="flex justify-center mt-16 animate-reveal">
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
-          </div>
+          <ScrollReveal variant="scale" duration={600}>
+            <div className="flex justify-center mt-16">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            </div>
+          </ScrollReveal>
         )}
       </div>
     </div>

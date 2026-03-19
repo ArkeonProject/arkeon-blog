@@ -4,14 +4,9 @@ import { FiArrowUp } from "react-icons/fi";
 export default function ScrollToTop() {
     const [isVisible, setIsVisible] = useState(false);
 
-    // Show button when page is scrolled down
     useEffect(() => {
         const toggleVisibility = () => {
-            if (window.scrollY > 300) {
-                setIsVisible(true);
-            } else {
-                setIsVisible(false);
-            }
+            setIsVisible(window.scrollY > 300);
         };
 
         window.addEventListener("scroll", toggleVisibility);
@@ -26,16 +21,16 @@ export default function ScrollToTop() {
     };
 
     return (
-        <>
-            {isVisible && (
-                <button
-                    onClick={scrollToTop}
-                    className="fixed bottom-8 right-8 z-50 p-4 bg-[#007EAD] hover:bg-[#00aaff] text-white rounded-full shadow-2xl shadow-[#007EAD]/50 hover:shadow-[#00aaff]/50 transition-all duration-300 hover:scale-110 active:scale-95 group"
-                    aria-label="Scroll to top"
-                >
-                    <FiArrowUp className="w-6 h-6 group-hover:animate-bounce" />
-                </button>
-            )}
-        </>
+        <button
+            onClick={scrollToTop}
+            className={`fixed bottom-8 right-8 z-50 p-3.5 rounded-2xl bg-primary text-primary-foreground border border-primary/30 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/35 hover:scale-105 active:scale-95 transition-all duration-300 group ${
+                isVisible
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-4 opacity-0 pointer-events-none"
+            }`}
+            aria-label="Scroll to top"
+        >
+            <FiArrowUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+        </button>
     );
 }
