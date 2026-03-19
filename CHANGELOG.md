@@ -4,6 +4,26 @@
 
 ---
 
+## [v2.4.1] - 2026-03-19
+
+### 🚀 Añadido
+
+#### Scroll Reveal Animations
+
+- Nuevo componente `ScrollReveal` con 10 variantes de animación (fade, blur, flip, scale, zoom, slide-rotate)
+- Animaciones de scroll aplicadas a las 13 páginas públicas con variantes específicas por sección
+- Soporte `prefers-reduced-motion`: desactiva todas las animaciones para accesibilidad
+
+### 🧰 Modificado
+
+#### ScrollToTop Button
+
+- Rediseñado con tokens del design system (`primary`) en lugar de colores hardcodeados
+- Transición suave de entrada/salida (fade + slide) en lugar de aparecer/desaparecer abruptamente
+- Se adapta automáticamente a modo claro/oscuro
+
+---
+
 ## [v2.4.0] - 2026-03-19
 
 ### 🚀 Añadido
