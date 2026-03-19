@@ -4,6 +4,24 @@
 
 ---
 
+## [v2.4.2] - 2026-03-19
+
+### 🚀 Añadido
+
+#### Editor HTML Source Mode
+
+- Botón `</>` en la toolbar del RichTextEditor para alternar entre WYSIWYG y modo HTML crudo
+- Permite pegar HTML directamente sin que TipTap escape los tags como texto
+
+### 🧰 Modificado
+
+#### Blog & Branding
+
+- Nuevo logo Arkeonix aplicado en header, footer, favicon y OG/Twitter cards
+- Reducido padding superior del hero del blog para acercar el título al header
+
+---
+
 ## [v2.4.1] - 2026-03-19
 
 ### 🚀 Añadido

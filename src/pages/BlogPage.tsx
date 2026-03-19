@@ -125,7 +125,7 @@ export default function BlogPage() {
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
         {/* HERO SECTION */}
         {currentPage === 1 && (
-          <header className="pt-28 md:pt-40 pb-12 text-center space-y-8 animate-reveal relative">
+          <header className="pt-8 md:pt-14 pb-12 text-center space-y-8 animate-reveal relative">
             <div
               className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-surface border border-border/50 text-[10px] uppercase tracking-[0.3em] font-bold text-muted-foreground animate-float"
               style={{ fontFamily: "var(--font-mono)" }}
