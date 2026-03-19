@@ -149,6 +149,7 @@ export default function RichTextEditor({
 }: RichTextEditorProps) {
   const [linkDialog, setLinkDialog] = useState(false);
   const [imageDialog, setImageDialog] = useState(false);
+  const [sourceMode, setSourceMode] = useState(false);
 
   const editor = useEditor({
     extensions: [
@@ -275,14 +276,40 @@ export default function RichTextEditor({
             <FiRotateCw />
           </ToolBtn>
 
+          <Separator />
+
+          <ToolBtn
+            onClick={() => {
+              if (sourceMode) {
+                // Switching back to WYSIWYG: load HTML from value into editor
+                editor.commands.setContent(value);
+              }
+              setSourceMode(!sourceMode);
+            }}
+            active={sourceMode}
+            title="Toggle HTML source"
+          >
+            <span className="text-xs font-mono leading-none">{"</>"}</span>
+          </ToolBtn>
+
           <div className="ml-auto text-xs text-muted-foreground font-mono">
-            {editor.storage.characterCount?.characters?.() ?? 0} chars
+            {sourceMode ? `${value.length} chars` : (editor.storage.characterCount?.characters?.() ?? 0) + " chars"}
           </div>
         </div>
 
         {/* Editor area */}
         <div style={{ minHeight }}>
-          <EditorContent editor={editor} />
+          {sourceMode ? (
+            <textarea
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+              className="w-full h-full min-h-[inherit] px-5 py-4 bg-background text-foreground font-mono text-sm resize-y outline-none"
+              style={{ minHeight }}
+              placeholder="Paste your HTML here…"
+            />
+          ) : (
+            <EditorContent editor={editor} />
+          )}
         </div>
       </div>
     </>
