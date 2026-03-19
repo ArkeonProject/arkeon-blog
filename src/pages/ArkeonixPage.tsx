@@ -21,6 +21,8 @@ import {
   FiPackage,
   FiGithub,
   FiLinkedin,
+  FiExternalLink,
+  FiMonitor,
 } from "react-icons/fi";
 
 // ─── Data ───────────────────────────────────────────────────────────────────
@@ -138,6 +140,7 @@ export default function ArkeonixPage() {
   const { t } = useLocale();
   const [form, setForm] = useState({ name: "", email: "", plan: "Starter", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
+  const [demoTab, setDemoTab] = useState<"landing" | "dashboard">("landing");
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -199,6 +202,13 @@ export default function ArkeonixPage() {
             >
               {t("arkeonix_cta_secondary")}
             </a>
+            <a
+              href="#demo"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border border-primary/30 bg-primary/5 hover:bg-primary/10 text-primary font-semibold transition-all duration-200"
+            >
+              <FiMonitor className="text-sm" />
+              Live Demo
+            </a>
           </div>
 
           {/* Social proof pills */}
@@ -254,6 +264,90 @@ export default function ArkeonixPage() {
               </p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ── Live Demo ────────────────────────────────────────────────── */}
+      <section id="demo" className="pb-24">
+        <div className="text-center mb-14">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-semibold mb-6 font-display">
+            <FiMonitor className="text-xs" />
+            Live Demo
+          </span>
+          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
+            {t("arkeonix_demo_title")}
+          </h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">
+            {t("arkeonix_demo_subtitle")}
+          </p>
+        </div>
+
+        {/* Screenshot tabs */}
+        <div className="flex justify-center gap-2 mb-6">
+          {(["landing", "dashboard"] as const).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setDemoTab(tab)}
+              className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                demoTab === tab
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
+                  : "bg-muted border border-border text-muted-foreground hover:text-foreground hover:border-primary/40"
+              }`}
+            >
+              {t(`arkeonix_demo_tab_${tab}`)}
+            </button>
+          ))}
+        </div>
+
+        {/* Browser chrome */}
+        <a
+          href="https://saas.arkeonixlabs.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block group rounded-2xl border border-border/60 overflow-hidden shadow-2xl shadow-black/20 bg-surface transition-all duration-300 hover:border-primary/40 hover:shadow-primary/10"
+        >
+          {/* Title bar */}
+          <div className="flex items-center gap-3 px-4 py-3 bg-muted border-b border-border/60">
+            <div className="flex gap-1.5">
+              <span className="w-3 h-3 rounded-full bg-red-400/80" />
+              <span className="w-3 h-3 rounded-full bg-yellow-400/80" />
+              <span className="w-3 h-3 rounded-full bg-green-400/80" />
+            </div>
+            <div className="flex-1 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-background/60 border border-border/40 text-xs font-mono text-muted-foreground">
+              <FiLock className="text-green-500 shrink-0" />
+              saas.arkeonixlabs.com
+            </div>
+            <FiExternalLink className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+          </div>
+
+          {/* Screenshot */}
+          <div className="relative overflow-hidden">
+            <img
+              src={demoTab === "landing" ? "/saas-landing.png" : "/saas-dashboard.png"}
+              alt={`Arkeonix SaaS — ${demoTab}`}
+              className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.02]"
+            />
+            {/* Hover overlay */}
+            <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors duration-300 flex items-center justify-center">
+              <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/25 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                <FiExternalLink className="text-sm" />
+                {t("arkeonix_demo_fullscreen")}
+              </span>
+            </div>
+          </div>
+        </a>
+
+        {/* CTA */}
+        <div className="text-center mt-8">
+          <a
+            href="https://saas.arkeonixlabs.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-all duration-200 shadow-lg shadow-primary/25"
+          >
+            <FiExternalLink className="text-sm" />
+            {t("arkeonix_demo_fullscreen")}
+          </a>
         </div>
       </section>
 
