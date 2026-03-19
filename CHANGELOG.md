@@ -4,6 +4,21 @@
 
 ---
 
+## [v2.4.0] - 2026-03-19
+
+### 🚀 Añadido
+
+#### Arkeonix SaaS — Live Demo Section
+- Nueva sección "Live Demo" en `/arkeonix` entre Features y What's Included
+- Contenedor estilo browser chrome (traffic light dots + barra URL con candado)
+- Tab switcher para alternar entre capturas Landing Page y Dashboard
+- Hover interactivo con zoom suave + overlay CTA hacia `saas.arkeonixlabs.com`
+- Botón "Live Demo" añadido en el Hero para acceso directo a la sección
+- Capturas del SaaS almacenadas en `/public/` (`saas-landing.png`, `saas-dashboard.png`)
+- Traducciones completas en ES y EN (4 claves `arkeonix_demo_*`)
+
+---
+
 ## [v2.3.0] - 2026-03-18
 
 ### 🚀 Añadido
@@ -19,15 +34,6 @@
 - Voz editorial cambiada de "hands-on reviewer" a "hardware editor basado en specs y feedback de compradores"
 - Limpieza programática post-LLM: reemplazo context-aware de person words + 30+ banned word swaps
 - Nodo Polish con Fix 8 completo: cleanup de palabras prohibidas, patrones "making it [adj]", y meta descriptions
-
-#### Arkeonix SaaS — Live Demo Section
-- Nueva sección "Live Demo" en `/arkeonix` entre Features y What's Included
-- Contenedor estilo browser chrome (traffic light dots + barra URL con candado)
-- Tab switcher para alternar entre capturas Landing Page y Dashboard
-- Hover interactivo con zoom suave + overlay CTA hacia `saas.arkeonixlabs.com`
-- Botón "Live Demo" añadido en el Hero para acceso directo a la sección
-- Capturas del SaaS almacenadas en `/public/` (`saas-landing.png`, `saas-dashboard.png`)
-- Traducciones completas en ES y EN (4 claves `arkeonix_demo_*`)
 
 ### 🧹 Limpieza
 - `.n8n/` añadido a `.gitignore` (contiene API keys de SerpAPI/OpenAI)
