@@ -60,17 +60,43 @@ async function generateSitemap(): Promise<void> {
 
     // Fetch all published posts from Supabase (if credentials available)
     let posts: Post[] = [];
+    let labPosts: Post[] = [];
     if (supabase) {
-        const { data, error } = await supabase
+        const { data: postsData, error: postsError } = await supabase
             .from("posts")
             .select("slug, published_at")
             .order("published_at", { ascending: false });
 
-        if (error) {
-            console.error("❌ Error fetching posts:", error.message);
+        if (postsError) {
+            console.error("❌ Error fetching posts:", postsError.message);
             process.exit(1);
         }
-        posts = (data as Post[]) || [];
+
+        // Deduplicate by slug
+        const seen = new Set<string>();
+        for (const post of (postsData as Post[]) || []) {
+            if (!seen.has(post.slug)) {
+                seen.add(post.slug);
+                posts.push(post);
+            }
+        }
+
+        const { data: labData, error: labError } = await supabase
+            .from("lab_posts")
+            .select("slug, published_at")
+            .order("published_at", { ascending: false });
+
+        if (labError) {
+            console.warn("⚠️  Could not fetch lab_posts:", labError.message);
+        } else {
+            const seenLab = new Set<string>();
+            for (const post of (labData as Post[]) || []) {
+                if (!seenLab.has(post.slug)) {
+                    seenLab.add(post.slug);
+                    labPosts.push(post);
+                }
+            }
+        }
     }
 
     const today = new Date().toISOString().split("T")[0];
@@ -92,19 +118,31 @@ async function generateSitemap(): Promise<void> {
     }
 
     // Add dynamic post pages
-    if (posts.length > 0) {
-        for (const post of posts) {
-            const lastmod = post.published_at
-                ? new Date(post.published_at).toISOString().split("T")[0]
-                : today;
-            xml += `  <url>
+    for (const post of posts) {
+        const lastmod = post.published_at
+            ? new Date(post.published_at).toISOString().split("T")[0]
+            : today;
+        xml += `  <url>
     <loc>${SITE_URL}/post/${post.slug}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 `;
-        }
+    }
+
+    // Add lab post pages
+    for (const post of labPosts) {
+        const lastmod = post.published_at
+            ? new Date(post.published_at).toISOString().split("T")[0]
+            : today;
+        xml += `  <url>
+    <loc>${SITE_URL}/lab/${post.slug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+`;
     }
 
     xml += `</urlset>
@@ -114,7 +152,7 @@ async function generateSitemap(): Promise<void> {
     const outputPath = resolve(__dirname, "../dist/sitemap.xml");
     writeFileSync(outputPath, xml, "utf-8");
 
-    console.log(`✅ Sitemap generated with ${staticPages.length + posts.length} URLs`);
+    console.log(`✅ Sitemap generated with ${staticPages.length + posts.length + labPosts.length} URLs`);
     console.log(`   → ${outputPath}`);
 }
 
