@@ -65,6 +65,7 @@ async function generateSitemap(): Promise<void> {
         const { data: postsData, error: postsError } = await supabase
             .from("posts")
             .select("slug, published_at")
+            .eq("status", "published")
             .order("published_at", { ascending: false });
 
         if (postsError) {
@@ -84,6 +85,7 @@ async function generateSitemap(): Promise<void> {
         const { data: labData, error: labError } = await supabase
             .from("lab_posts")
             .select("slug, published_at")
+            .eq("status", "published")
             .order("published_at", { ascending: false });
 
         if (labError) {
@@ -148,12 +150,18 @@ async function generateSitemap(): Promise<void> {
     xml += `</urlset>
 `;
 
-    // Write sitemap to dist folder
-    const outputPath = resolve(__dirname, "../dist/sitemap.xml");
-    writeFileSync(outputPath, xml, "utf-8");
+    // Write sitemap to public folder
+    const publicPath = resolve(__dirname, "../public/sitemap.xml");
+    writeFileSync(publicPath, xml, "utf-8");
+
+    // Also write to dist if it exists
+    const distPath = resolve(__dirname, "../dist/sitemap.xml");
+    if (existsSync(dirname(distPath))) {
+        writeFileSync(distPath, xml, "utf-8");
+    }
 
     console.log(`✅ Sitemap generated with ${staticPages.length + posts.length + labPosts.length} URLs`);
-    console.log(`   → ${outputPath}`);
+    console.log(`   → ${publicPath}`);
 }
 
 generateSitemap().catch((err) => {

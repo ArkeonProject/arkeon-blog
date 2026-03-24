@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"JSON.parse\\(require\\(''fs''\\).readFileSync\\(''/Users/davidlopez/Desktop/Projects/arkeonix-projects/arkeon-blog/.n8n/news.json'', ''utf8''\\)\\); console.log\\(''JSON válido ✓''\\)\")"
+    ]
+  }
+}

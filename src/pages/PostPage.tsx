@@ -27,6 +27,7 @@ export default function PostPage() {
       .select("*")
       .eq("slug", slug)
       .eq("language", languageFilter)
+      .eq("status", "published")
       .maybeSingle();
 
     if (error) console.error(error);

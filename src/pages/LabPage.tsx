@@ -34,7 +34,8 @@ export default function LabPage() {
             let countQuery = supabase
                 .from("lab_posts")
                 .select("id", { count: "exact", head: true })
-                .eq("language", languageFilter);
+                .eq("language", languageFilter)
+                .eq("status", "published");
             if (tag) countQuery = countQuery.contains("tags", [tag]);
             const { count } = await countQuery;
             setTotalCount(count ?? 0);
@@ -44,6 +45,7 @@ export default function LabPage() {
                 .from("lab_posts")
                 .select("id, title, slug, excerpt, cover_image, published_at, language, tags, difficulty")
                 .eq("language", languageFilter)
+                .eq("status", "published")
                 .order("published_at", { ascending: false })
                 .range(from, to);
 
