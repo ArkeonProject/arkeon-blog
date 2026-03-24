@@ -40,6 +40,7 @@ export default function ProductsPage() {
       .from("posts")
       .select("product_category")
       .eq("language", languageFilter)
+      .eq("status", "published")
       .in("category", PRODUCT_CATEGORY_VALUES)
       .not("product_category", "is", null);
 
@@ -64,6 +65,7 @@ export default function ProductsPage() {
       .from("posts")
       .select("id, title, slug, excerpt, cover_image, published_at, language, category, product_category")
       .eq("language", languageFilter)
+      .eq("status", "published")
       .in("category", PRODUCT_CATEGORY_VALUES)
       .order("published_at", { ascending: false });
 

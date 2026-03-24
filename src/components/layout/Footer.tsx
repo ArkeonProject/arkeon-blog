@@ -35,7 +35,7 @@ export default function Footer() {
               <img
                 src="/arkeonix-logo.png"
                 alt="Arkeonix Labs Logo"
-                className="w-7 h-7 rounded-lg group-hover:scale-105 transition-transform duration-300"
+                className="w-7 h-7 rounded-lg object-contain group-hover:scale-105 transition-transform duration-300"
                 style={{
                   boxShadow: "0 2px 6px color-mix(in oklch, var(--color-primary) 15%, transparent)",
                 }}
