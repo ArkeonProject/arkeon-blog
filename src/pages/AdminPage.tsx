@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "../lib/supabase";
 import RichTextEditor from "../components/admin/RichTextEditor";
@@ -441,7 +441,7 @@ function PostsManager({ table }: { table: TableName }) {
   const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft">("all");
   const [page, setPage] = useState(1);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setLoading(true);
     const columns = isLab
       ? "id, title, slug, excerpt, cover_image, published_at, language, content, author, tags, difficulty, status"
@@ -452,9 +452,9 @@ function PostsManager({ table }: { table: TableName }) {
       .order("published_at", { ascending: false });
     if (error) { setErr(error.message); } else { setPosts((data as AdminPost[]) ?? []); }
     setLoading(false);
-  };
+  }, [isLab, table]);
 
-  useEffect(() => { void load(); }, [table]);
+  useEffect(() => { void load(); }, [load]);
 
   const handleDelete = async (id: number) => {
     if (!confirm("Delete this post? This cannot be undone.")) return;

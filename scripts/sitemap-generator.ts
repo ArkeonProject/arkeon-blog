@@ -59,8 +59,8 @@ async function generateSitemap(): Promise<void> {
     ];
 
     // Fetch all published posts from Supabase (if credentials available)
-    let posts: Post[] = [];
-    let labPosts: Post[] = [];
+    const posts: Post[] = [];
+    const labPosts: Post[] = [];
     if (supabase) {
         const { data: postsData, error: postsError } = await supabase
             .from("posts")
