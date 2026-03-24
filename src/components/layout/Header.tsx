@@ -62,7 +62,7 @@ export default function Header() {
             <img
               src="/arkeonix-logo.png"
               alt="Arkeonix Labs Logo"
-              className={`rounded-xl transition-all duration-300 group-hover:scale-105 ${isScrolled ? "w-7 h-7" : "w-8 h-8"
+              className={`rounded-lg object-contain transition-all duration-300 group-hover:scale-105 ${isScrolled ? "w-7 h-7" : "w-8 h-8"
                 }`}
               style={{
                 boxShadow: "0 2px 8px color-mix(in oklch, var(--color-primary) 20%, transparent)",

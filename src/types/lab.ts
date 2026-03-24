@@ -8,6 +8,7 @@ export interface LabPostListItem {
     language?: string;
     tags: string[];
     difficulty?: string | null;
+    status?: 'published' | 'draft';
 }
 
 export interface LabPostDetail {
@@ -19,4 +20,5 @@ export interface LabPostDetail {
     language?: string;
     tags: string[];
     difficulty?: string | null;
+    status?: 'published' | 'draft';
 }

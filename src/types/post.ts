@@ -8,6 +8,7 @@ export interface PostListItem {
   language?: string;
   category?: string;
   product_category?: string | null;
+  status?: 'published' | 'draft';
 }
 
 export interface PostDetail {
@@ -19,4 +20,5 @@ export interface PostDetail {
   language?: string;
   category?: string;
   product_category?: string | null;
+  status?: 'published' | 'draft';
 }

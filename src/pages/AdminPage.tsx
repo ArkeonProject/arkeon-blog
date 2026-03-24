@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
 import { supabase } from "../lib/supabase";
 import RichTextEditor from "../components/admin/RichTextEditor";
@@ -25,7 +25,7 @@ interface AdminPost {
   product_category?: string | null;
   content: string;
   author: string;
-  published?: never;
+  status: 'published' | 'draft';
   tags?: string[];
   difficulty?: string | null;
 }
@@ -223,7 +223,7 @@ const EMPTY_POST: Omit<AdminPost, "id"> = {
   title: "", slug: "", excerpt: "", content: "", author: "David López",
   cover_image: "", published_at: new Date().toISOString().slice(0, 16),
   language: "ES", category: "", product_category: null,
-  tags: [], difficulty: null,
+  status: "published", tags: [], difficulty: null,
 };
 
 function PostEditor({
@@ -264,6 +264,7 @@ function PostEditor({
       cover_image: form.cover_image || null,
       published_at: new Date(form.published_at).toISOString(),
       language: form.language,
+      status: form.status,
     };
 
     if (isLab) {
@@ -340,6 +341,14 @@ function PostEditor({
             <select className={inputClass} value={form.language} onChange={(e) => set("language", e.target.value)}>
               <option value="ES">ES</option>
               <option value="EN">EN</option>
+            </select>
+          </div>
+
+          <div>
+            <label className={labelClass}>Status</label>
+            <select className={inputClass} value={form.status} onChange={(e) => set("status", e.target.value as 'published' | 'draft')}>
+              <option value="published">Published</option>
+              <option value="draft">Draft</option>
             </select>
           </div>
 
@@ -425,25 +434,27 @@ function PostsManager({ table }: { table: TableName }) {
   const [err, setErr] = useState<string | null>(null);
   const [editing, setEditing] = useState<AdminPost | "new" | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [togglingId, setTogglingId] = useState<number | null>(null);
   const [search, setSearch] = useState("");
   const [langFilter, setLangFilter] = useState<"all" | "ES" | "EN">("all");
   const [catFilter, setCatFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft">("all");
   const [page, setPage] = useState(1);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setLoading(true);
     const columns = isLab
-      ? "id, title, slug, excerpt, cover_image, published_at, language, content, author, tags, difficulty"
-      : "id, title, slug, excerpt, cover_image, published_at, language, category, product_category, content, author";
+      ? "id, title, slug, excerpt, cover_image, published_at, language, content, author, tags, difficulty, status"
+      : "id, title, slug, excerpt, cover_image, published_at, language, category, product_category, content, author, status";
     const { data, error } = await supabase
       .from(table)
       .select(columns)
       .order("published_at", { ascending: false });
     if (error) { setErr(error.message); } else { setPosts((data as AdminPost[]) ?? []); }
     setLoading(false);
-  };
+  }, [isLab, table]);
 
-  useEffect(() => { void load(); }, [table]);
+  useEffect(() => { void load(); }, [load]);
 
   const handleDelete = async (id: number) => {
     if (!confirm("Delete this post? This cannot be undone.")) return;
@@ -454,6 +465,15 @@ function PostsManager({ table }: { table: TableName }) {
     setDeletingId(null);
   };
 
+  const handleToggleStatus = async (post: AdminPost) => {
+    const next = post.status === "published" ? "draft" : "published";
+    setTogglingId(post.id);
+    const { error } = await supabase.from(table).update({ status: next }).eq("id", post.id);
+    if (error) { alert(`Error: ${error.message}`); }
+    else { setPosts((prev) => prev.map((p) => p.id === post.id ? { ...p, status: next } : p)); }
+    setTogglingId(null);
+  };
+
   // Categorías únicas para el filtro
   const categories = [...new Set(posts.map((p) => p.category).filter(Boolean))] as string[];
 
@@ -462,14 +482,15 @@ function PostsManager({ table }: { table: TableName }) {
     const matchSearch = !q || p.title.toLowerCase().includes(q) || (p.slug ?? "").toLowerCase().includes(q);
     const matchLang = langFilter === "all" || p.language === langFilter;
     const matchCat = catFilter === "all" || p.category === catFilter;
-    return matchSearch && matchLang && matchCat;
+    const matchStatus = statusFilter === "all" || p.status === statusFilter;
+    return matchSearch && matchLang && matchCat && matchStatus;
   });
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   // Reset página al cambiar filtros
-  useEffect(() => { setPage(1); }, [search, langFilter, catFilter]);
+  useEffect(() => { setPage(1); }, [search, langFilter, catFilter, statusFilter]);
 
   if (editing !== null) {
     return (
@@ -498,6 +519,11 @@ function PostsManager({ table }: { table: TableName }) {
           <option value="all">All languages</option>
           <option value="ES">ES</option>
           <option value="EN">EN</option>
+        </select>
+        <select className={selectClass} value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as "all"|"published"|"draft")}>
+          <option value="all">All statuses</option>
+          <option value="published">Published</option>
+          <option value="draft">Draft</option>
         </select>
         {!isLab && (
           <select className={selectClass} value={catFilter} onChange={(e) => setCatFilter(e.target.value)}>
@@ -534,6 +560,7 @@ function PostsManager({ table }: { table: TableName }) {
                   {isLab ? "Difficulty" : "Category"}
                 </th>
                 <th className="text-left px-3 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider hidden md:table-cell">Date</th>
+                <th className="text-left px-3 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
                 <th className="px-5 py-3" />
               </tr>
             </thead>
@@ -552,6 +579,20 @@ function PostsManager({ table }: { table: TableName }) {
                   </td>
                   <td className="px-3 py-3 text-muted-foreground hidden md:table-cell text-xs">
                     {new Date(post.published_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "2-digit" })}
+                  </td>
+                  <td className="px-3 py-3">
+                    <button
+                      onClick={() => { void handleToggleStatus(post); }}
+                      disabled={togglingId === post.id}
+                      title={`Click to set ${post.status === "published" ? "draft" : "published"}`}
+                      className={`text-xs px-2.5 py-1 rounded-full font-medium transition-all disabled:opacity-50 ${
+                        post.status === "published"
+                          ? "bg-green-500/15 text-green-400 hover:bg-green-500/25"
+                          : "bg-yellow-500/15 text-yellow-400 hover:bg-yellow-500/25"
+                      }`}
+                    >
+                      {togglingId === post.id ? "…" : post.status === "published" ? "Published" : "Draft"}
+                    </button>
                   </td>
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-2 justify-end">

@@ -38,6 +38,7 @@ export default function BlogPage() {
         .from("posts")
         .select("*", { count: "exact" })
         .eq("language", languageFilter)
+        .eq("status", "published")
         .order("published_at", { ascending: false });
 
       if (searchQuery) {
@@ -70,6 +71,7 @@ export default function BlogPage() {
           .from("lab_posts")
           .select("*")
           .eq("language", languageFilter)
+          .eq("status", "published")
           .order("published_at", { ascending: false })
           .limit(3);
         setLabPosts(data || []);

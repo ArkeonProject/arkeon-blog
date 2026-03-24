@@ -34,6 +34,7 @@ export default function LabPostPage() {
             .select("*")
             .eq("slug", slug)
             .eq("language", languageFilter)
+            .eq("status", "published")
             .maybeSingle();
 
         if (error) console.error(error);

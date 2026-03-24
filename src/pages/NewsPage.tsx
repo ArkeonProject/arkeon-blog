@@ -34,6 +34,7 @@ export default function NewsPage() {
         .from("posts")
         .select("id", { count: "exact", head: true })
         .eq("language", languageFilter)
+        .eq("status", "published")
         .in("category", NEWS_CATEGORY_VALUES);
 
       setTotalCount(count ?? 0);
@@ -42,6 +43,7 @@ export default function NewsPage() {
         .from("posts")
         .select("id, title, slug, excerpt, cover_image, published_at, language, category")
         .eq("language", languageFilter)
+        .eq("status", "published")
         .in("category", NEWS_CATEGORY_VALUES)
         .order("published_at", { ascending: false })
         .range(from, to);

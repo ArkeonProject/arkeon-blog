@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mv -f \"/Users/davidlopez/Desktop/Projects/arkeonix-projects/arkeon-blog/Captura de pantalla 2026-03-19 a las 10.58.27.png\" \"/Users/davidlopez/Desktop/Projects/arkeonix-projects/arkeon-blog/public/saas-dashboard.png\")",
+      "Bash(mv -f \"/Users/davidlopez/Desktop/Projects/arkeonix-projects/arkeon-blog/Captura de pantalla 2026-03-19 a las 10.58.36.png\" \"/Users/davidlopez/Desktop/Projects/arkeonix-projects/arkeon-blog/public/saas-landing.png\")",
+      "Bash(gh release:*)",
+      "Bash(git fetch:*)",
+      "Bash(sips -s format png --resampleWidth 64 --resampleHeight 64 \"/Users/davidlopez/Desktop/Projects/arkeonix-projects/arkeon-blog/public/logo.svg\" --out /tmp/favicon-64.png)"
+    ]
+  }
+}
