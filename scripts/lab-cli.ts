@@ -22,13 +22,16 @@ if (existsSync(envPath)) {
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-    console.error("❌ Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY in .env.local");
+if (!supabaseUrl || (!supabaseAnonKey && !supabaseServiceKey)) {
+    console.error(
+        "❌ Missing Supabase environment variables. Please check .env.local"
+    );
     process.exit(1);
 }
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const supabase = createClient(supabaseUrl, supabaseServiceKey || supabaseAnonKey!);
 
 // ─── Frontmatter parser ─────────────────────────────────────────────
 interface Frontmatter {
@@ -134,6 +137,7 @@ async function publish(filePath: string, isDryRun: boolean) {
         cover_image: meta.cover_image ?? null,
         author: meta.author ?? "David López",
         published_at: meta.published_at ?? new Date().toISOString(),
+        status: "published",
     };
 
     const { data, error } = await supabase
@@ -202,7 +206,7 @@ async function update(filePath: string) {
 async function list() {
     const { data, error } = await supabase
         .from("lab_posts")
-        .select("id, title, slug, language, tags, difficulty, published_at")
+        .select("id, title, slug, language, tags, difficulty, published_at, status, content")
         .order("published_at", { ascending: false });
 
     if (error) {
@@ -216,16 +220,17 @@ async function list() {
     }
 
     console.log(`\n📋 Lab posts (${data.length}):\n`);
-    console.log("  ID  │ Lang │ Difficulty   │ Tags                    │ Title");
-    console.log("──────┼──────┼──────────────┼─────────────────────────┼────────────────────────");
+    console.log("  ID  │ Lang │ Status    │ Date                     │ Len   │ Title");
+    console.log("──────┼──────┼───────────┼──────────────────────────┼───────┼────────────────────────");
 
     for (const post of data) {
         const id = String(post.id).padStart(4);
         const lang = (post.language ?? "??").padEnd(2);
-        const diff = (post.difficulty ?? "—").padEnd(12);
-        const tags = (post.tags?.join(", ") ?? "").slice(0, 23).padEnd(23);
+        const status = (post.status ?? "draft").padEnd(9);
+        const date = (post.published_at ?? "").slice(0, 19).padEnd(24);
+        const len = String(post.content?.length ?? 0).padStart(5);
         const title = post.title.slice(0, 40);
-        console.log(`  ${id} │  ${lang}  │ ${diff} │ ${tags} │ ${title}`);
+        console.log(`  ${id} │  ${lang}  │ ${status} │ ${date} │ ${len} │ ${title}`);
     }
     console.log("");
 }
@@ -304,13 +309,31 @@ switch (command) {
         await update(file);
         break;
     }
-    case "list":
+    case "dump": {
+        const id = parseInt(args[1]);
+        if (isNaN(id)) { console.error("❌ Provide an ID"); process.exit(1); }
+        const { data } = await supabase.from("lab_posts").select("content").eq("id", id).single();
+        console.log(`\n📄 Content for ID ${id}:`);
+        console.log(data?.content);
+        break;
+    }
+    case "inspect": {
+        const { data: lpData } = await supabase.from("lab_posts").select("*");
+        console.log("\n🧪 ALL Lab Posts raw data:");
+        console.log(JSON.stringify(lpData, null, 2));
+        break;
+    }
+    case "list": {
         await list();
         break;
-    case "delete": {
+    }
+    case "remove": {
         const slug = args[1];
-        const lang = args[2] ?? "ES";
-        if (!slug) { console.error("❌ Provide a slug to delete."); process.exit(1); }
+        const lang = args[2];
+        if (!slug || !lang) {
+            console.error("❌ Usage: lab:remove <slug> <language>");
+            process.exit(1);
+        }
         await remove(slug, lang);
         break;
     }
