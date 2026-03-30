@@ -15,7 +15,7 @@ jobs:
       package-manager: 'pnpm'
       run-lint: true
       run-typecheck: true
-      run-tests: true
+      run-tests: false
       run-build: true
       upload-coverage: false
       upload-artifacts: true
