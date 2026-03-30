@@ -3,16 +3,16 @@ name: CD
 on:
   push:
     branches: [main]
+    paths:
+      - '.github/workflows/cd.yml'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+  workflow_dispatch:
 
 jobs:
   deploy:
     name: Deploy to Production
-    uses: ArkeonProject/organization-tools/.github/workflows/cd-node-vercel.yml@v1.1.4
+    uses: ArkeonProject/organization-tools/.github/workflows/cd-node-vercel.yml@v1.1.5
     with:
       node-version: '20'
       package-manager: 'pnpm'
-      environment: 'production'
-    secrets:
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
