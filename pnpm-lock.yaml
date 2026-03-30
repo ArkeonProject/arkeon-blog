@@ -54,8 +54,8 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0
       marked:
-        specifier: ^16.4.1
-        version: 16.4.2
+        specifier: ^17.0.5
+        version: 17.0.5
       react:
         specifier: ^19.1.2
         version: 19.1.2
@@ -2132,8 +2132,8 @@ packages:
     engines: {node: '>= 18'}
     hasBin: true
 
-  marked@16.4.2:
-    resolution: {integrity: sha512-TI3V8YYWvkVf3KJe1dRkpnjs68JUPyEa5vjKrp1XEEJUAOaQc+Qj+L1qWbPd0SJuAdQkFU0h73sXXqwDYxsiDA==}
+  marked@17.0.5:
+    resolution: {integrity: sha512-6hLvc0/JEbRjRgzI6wnT2P1XuM1/RrrDEX0kPt0N7jGm1133g6X7DlxFasUIx+72aKAr904GTxhSLDrd5DIlZg==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -4864,7 +4864,7 @@ snapshots:
 
   marked@15.0.12: {}
 
-  marked@16.4.2: {}
+  marked@17.0.5: {}
 
   mdast-util-find-and-replace@3.0.2:
     dependencies:
