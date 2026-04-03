@@ -18,6 +18,10 @@ export async function POST(req: Request) {
     const body = await req.text();
     const sig = req.headers.get('stripe-signature')!;
 
+    if (body.includes('"v2.core.event"')) {
+      return new Response('OK', { status: 200 });
+    }
+
     let event: Stripe.Event;
     try {
       event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
