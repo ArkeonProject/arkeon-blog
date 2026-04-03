@@ -72,6 +72,16 @@ export default function GuiaLandingPage() {
         <title>{t('guia_landing_meta_title')} | Arkeonix Labs</title>
         <meta name="description" content={t('guia_landing_meta_desc')} />
         <link rel="canonical" href="https://www.arkeonixlabs.com/guia-junior" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={`${t('guia_landing_meta_title')} | Arkeonix Labs`} />
+        <meta property="og:description" content={t('guia_landing_meta_desc')} />
+        <meta property="og:url" content="https://www.arkeonixlabs.com/guia-junior" />
+        <meta property="og:site_name" content="Arkeonix Labs" />
+        <meta property="og:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${t('guia_landing_meta_title')} | Arkeonix Labs`} />
+        <meta name="twitter:description" content={t('guia_landing_meta_desc')} />
+        <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
       </Helmet>
 
       {/* Hero */}

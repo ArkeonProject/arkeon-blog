@@ -159,6 +159,16 @@ export default function ArkeonixPage() {
         <title>Arkeonix SaaS — {t("arkeonix_meta_title")}</title>
         <meta name="description" content={t("arkeonix_meta_description")} />
         <link rel="canonical" href="https://www.arkeonixlabs.com/arkeonix" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Arkeonix SaaS — Arkeonix Labs" />
+        <meta property="og:description" content={t("arkeonix_meta_description")} />
+        <meta property="og:url" content="https://www.arkeonixlabs.com/arkeonix" />
+        <meta property="og:site_name" content="Arkeonix Labs" />
+        <meta property="og:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Arkeonix SaaS — Arkeonix Labs" />
+        <meta name="twitter:description" content={t("arkeonix_meta_description")} />
+        <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
       </Helmet>
 
       {/* ── Hero ───────────────────────────────────────────────────────── */}

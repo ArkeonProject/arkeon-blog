@@ -179,6 +179,33 @@ export default function LabPostPage() {
                                 : `/api/og?title=${encodeURIComponent(post.title)}&category=Lab&author=Arkeonix Labs`
                         }
                     />
+                    <script type="application/ld+json">
+                        {JSON.stringify({
+                            "@context": "https://schema.org",
+                            "@type": "Article",
+                            "headline": post.title,
+                            "description": description,
+                            "author": {
+                                "@type": "Organization",
+                                "name": "Arkeonix Labs",
+                            },
+                            "datePublished": post.published_at,
+                            "dateModified": post.published_at,
+                            "publisher": {
+                                "@type": "Organization",
+                                "name": "Arkeonix Labs",
+                                "logo": {
+                                    "@type": "ImageObject",
+                                    "url": "https://www.arkeonixlabs.com/arkeonix-logo.png",
+                                },
+                            },
+                            "mainEntityOfPage": {
+                                "@type": "WebPage",
+                                "@id": `https://www.arkeonixlabs.com/lab/${slug}`,
+                            },
+                            ...(post.cover_image && { image: post.cover_image }),
+                        })}
+                    </script>
                 </Helmet>
 
                 <Link

@@ -11,6 +11,16 @@ const AboutPage = () => {
         <title>{t("about_title")} | Arkeonix Labs</title>
         <meta name="description" content={t("about_meta_description")} />
         <link rel="canonical" href="https://www.arkeonixlabs.com/about" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={`${t("about_title")} | Arkeonix Labs`} />
+        <meta property="og:description" content={t("about_meta_description")} />
+        <meta property="og:url" content="https://www.arkeonixlabs.com/about" />
+        <meta property="og:site_name" content="Arkeonix Labs" />
+        <meta property="og:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${t("about_title")} | Arkeonix Labs`} />
+        <meta name="twitter:description" content={t("about_meta_description")} />
+        <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
       </Helmet>
 
       {/* Hero Section */}

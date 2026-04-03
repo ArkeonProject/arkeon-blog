@@ -1,5 +1,6 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useLocale } from '@/hooks/useLocale';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
@@ -124,8 +125,29 @@ export default function GuiaChapterPage() {
     );
   }
 
+  const chapterTitle = chapterData?.title || (chapter ? t(chapter.titleKey) : '');
+  const chapterDesc = isFree
+    ? 'Capítulo gratuito de la Guía para Juniors: qué hacer después de tu curso de programación en España.'
+    : `Capítulo ${chapter?.index || ''} de la Guía para Juniors.`;
+  const canonicalUrl = `https://www.arkeonixlabs.com/guia-junior/capitulo/${slug}`;
+
   return (
     <div className="py-10 max-w-4xl mx-auto px-4">
+      <Helmet>
+        <title>{chapterTitle ? `${chapterTitle} | Guía Junior | Arkeonix Labs` : 'Guía Junior | Arkeonix Labs'}</title>
+        <meta name="description" content={chapterDesc} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={chapterTitle || 'Guía Junior | Arkeonix Labs'} />
+        <meta property="og:description" content={chapterDesc} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:site_name" content="Arkeonix Labs" />
+        <meta property="og:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={chapterTitle || 'Guía Junior | Arkeonix Labs'} />
+        <meta name="twitter:description" content={chapterDesc} />
+        <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+      </Helmet>
       <div className="mb-10">
         <Link to="/guia-junior/dashboard" className="text-base text-muted-foreground hover:text-primary transition-colors">
           {t('guia_chapter_back_index')}

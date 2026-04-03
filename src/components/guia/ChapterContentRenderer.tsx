@@ -13,7 +13,7 @@ export default function ChapterContentRenderer({ content }: { content: ChapterCo
   if (!content?.sections) return null;
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-12">
       {content.sections.map((section, i) => (
         <SectionRenderer key={i} section={section} />
       ))}
@@ -56,9 +56,9 @@ function s(v: unknown): string {
 function HeaderSection({ section }: { section: Section }) {
   return (
     <section className="space-y-4">
-      {section.label && <p className="text-xs font-bold tracking-widest uppercase text-accent">{s(section.label)}</p>}
-      {section.title && <h2 className="text-2xl font-display font-bold text-foreground">{s(section.title)}</h2>}
-      {section.intro && <p className="text-sm text-muted-foreground">{s(section.intro)}</p>}
+      {section.label && <p className="text-sm font-bold tracking-widest uppercase text-accent">{s(section.label)}</p>}
+      {section.title && <h2 className="text-3xl font-display font-bold text-foreground">{s(section.title)}</h2>}
+      {section.intro && <p className="text-base text-muted-foreground leading-relaxed">{s(section.intro)}</p>}
     </section>
   );
 }
@@ -69,14 +69,14 @@ function QuizSection({ section }: { section: Section }) {
   return (
     <div className="space-y-4">
       {questions.map((q) => (
-        <div key={q.num} className="bg-surface border border-border rounded-xl p-5">
-          <p className="text-xs font-bold text-accent tracking-wider mb-2">Pregunta {q.num}</p>
+        <div key={q.num} className="bg-surface border border-border rounded-xl p-6">
+          <p className="text-sm font-bold text-accent tracking-wider mb-2">Pregunta {q.num}</p>
           <h3 className="text-base font-semibold text-foreground mb-1">{q.title}</h3>
-          <p className="text-sm text-muted-foreground mb-3">{q.subtitle}</p>
-          <ul className="space-y-2">
+          <p className="text-base text-muted-foreground mb-3">{q.subtitle}</p>
+          <ul className="space-y-3">
             {q.options.map((opt) => (
-              <li key={opt.letter} className="text-sm text-muted-foreground leading-relaxed">
-                <span className="font-semibold text-foreground">{opt.letter}.</span> {opt.text} <em className="text-accent text-xs">{'\u2192'} {opt.profile}</em>
+              <li key={opt.letter} className="text-base text-muted-foreground leading-relaxed">
+                <span className="font-semibold text-foreground">{opt.letter}.</span> {opt.text} <em className="text-accent text-sm">{'\u2192'} {opt.profile}</em>
               </li>
             ))}
           </ul>
@@ -91,16 +91,16 @@ function ResultsSection({ section }: { section: Section }) {
   if (!profiles) return null;
   return (
     <div className="mt-8">
-      {section.title && <p className="text-xs font-bold tracking-widest uppercase text-accent mb-4">{s(section.title)}</p>}
+      {section.title && <p className="text-sm font-bold tracking-widest uppercase text-accent mb-4">{s(section.title)}</p>}
       <div className="grid gap-3 md:grid-cols-2">
         {profiles.map((p) => (
-          <div key={p.profile} className="bg-surface border border-border rounded-xl p-4 pl-5 relative before:content-[''] before:absolute before:top-0 before:left-0 before:w-1 before:h-full before:bg-accent before:rounded-l-xl">
-            <h4 className="text-sm font-bold text-foreground mb-1">{p.profile}</h4>
-            <p className="text-xs text-muted-foreground">{p.desc}</p>
+          <div key={p.profile} className="bg-surface border border-border rounded-xl p-5 pl-5 relative before:content-[''] before:absolute before:top-0 before:left-0 before:w-1 before:h-full before:bg-accent before:rounded-l-xl">
+            <h4 className="text-xl font-bold text-foreground mb-1">{p.profile}</h4>
+            <p className="text-sm text-muted-foreground">{p.desc}</p>
           </div>
         ))}
       </div>
-      {section.note && <p className="text-xs text-muted-foreground italic mt-3">{s(section.note)}</p>}
+      {section.note && <p className="text-sm text-muted-foreground italic mt-3">{s(section.note)}</p>}
     </div>
   );
 }
@@ -111,17 +111,17 @@ function RoadmapsSection({ section }: { section: Section }) {
   return (
     <div className="space-y-4">
       {items.map((roadmap) => (
-        <div key={roadmap.role} className="bg-surface border border-border rounded-xl p-5">
-          <h3 className="text-base font-bold text-foreground mb-3">{roadmap.role}</h3>
+        <div key={roadmap.role} className="bg-surface border border-border rounded-xl p-6">
+          <h3 className="text-xl font-bold text-foreground mb-3">{roadmap.role}</h3>
           <ul className="space-y-3">
             {roadmap.months.map((m) => (
-              <li key={m.month} className="text-sm text-muted-foreground leading-relaxed">
+              <li key={m.month} className="text-base text-muted-foreground leading-relaxed">
                 <span className="font-semibold text-foreground">{m.month} - {m.title}:</span> {m.desc}
               </li>
             ))}
           </ul>
-          <div className="bg-accent/10 border-l-4 border-accent rounded-r-lg p-3 mt-4">
-            <p className="text-sm text-foreground"><strong>Proyecto:</strong> {roadmap.project}</p>
+          <div className="bg-accent/10 border-l-4 border-accent rounded-r-lg p-4 mt-4">
+            <p className="text-base text-foreground"><strong>Proyecto:</strong> {roadmap.project}</p>
           </div>
         </div>
       ))}
@@ -133,11 +133,11 @@ function ListBlockSection({ section }: { section: Section }) {
   const items = section.items as Array<[string, string]>;
   if (!items) return null;
   return (
-    <div className="bg-surface border border-border rounded-xl p-5">
-      {section.title && <h3 className="text-sm font-bold text-foreground mb-3">{s(section.title)}</h3>}
-      <ul className="space-y-2">
+    <div className="bg-surface border border-border rounded-xl p-6">
+      {section.title && <h3 className="text-xl font-bold text-foreground mb-3">{s(section.title)}</h3>}
+      <ul className="space-y-3">
         {items.map(([title, desc], i) => (
-          <li key={i} className="text-sm text-muted-foreground leading-relaxed">
+          <li key={i} className="text-base text-muted-foreground leading-relaxed">
             <span className="font-semibold text-foreground">{title}:</span> {desc}
           </li>
         ))}
@@ -151,7 +151,7 @@ function CalloutSection({ section }: { section: Section }) {
     <div className="bg-accent/10 border-l-4 border-accent rounded-r-xl p-4">
       {section.title && <p className="text-sm text-foreground mb-1"><strong>{s(section.title)}</strong></p>}
       {section.text && <p className="text-sm text-foreground">{s(section.text)}</p>}
-      {section.note && <p className="text-xs text-muted-foreground mt-2">{s(section.note)}</p>}
+      {section.note && <p className="text-sm text-muted-foreground mt-2">{s(section.note)}</p>}
     </div>
   );
 }
@@ -159,10 +159,10 @@ function CalloutSection({ section }: { section: Section }) {
 function CalloutDarkSection({ section }: { section: Section }) {
   const paragraphs = section.paragraphs as string[];
   return (
-    <div className="bg-foreground text-background rounded-xl p-5">
-      {section.title && <h3 className="text-sm font-bold text-background mb-3">{s(section.title)}</h3>}
+    <div className="bg-foreground text-background rounded-xl p-6">
+      {section.title && <h3 className="text-base font-bold text-background mb-3">{s(section.title)}</h3>}
       {paragraphs?.map((p, i) => (
-        <p key={i} className="text-sm text-background/70 leading-relaxed mb-2 last:mb-0">{p}</p>
+        <p key={i} className="text-base text-background/70 leading-relaxed mb-2 last:mb-0">{p}</p>
       ))}
     </div>
   );
@@ -172,17 +172,17 @@ function SalaryTableSection({ section }: { section: Section }) {
   const rows = section.rows as Array<[string, string]>;
   if (!rows) return null;
   return (
-    <div className="bg-surface border border-border rounded-xl p-5">
-      {section.title && <h3 className="text-sm font-bold text-foreground mb-3">{s(section.title)}</h3>}
-      <div className="space-y-2">
+    <div className="bg-surface border border-border rounded-xl p-6">
+      {section.title && <h3 className="text-xl font-bold text-foreground mb-3">{s(section.title)}</h3>}
+      <div className="space-y-3">
         {rows.map(([role, salary]) => (
-          <div key={role} className="flex items-center justify-between py-2 border-b border-border last:border-b-0">
-            <span className="text-sm font-semibold text-foreground">{role}</span>
-            <span className="text-sm font-bold text-foreground">{salary}</span>
+          <div key={role} className="flex items-center justify-between py-2.5 border-b border-border last:border-b-0">
+            <span className="text-base font-semibold text-foreground">{role}</span>
+            <span className="text-xl font-bold text-foreground">{salary}</span>
           </div>
         ))}
       </div>
-      {section.note && <p className="text-xs text-muted-foreground mt-3 italic">{s(section.note)}</p>}
+      {section.note && <p className="text-sm text-muted-foreground mt-3 italic">{s(section.note)}</p>}
     </div>
   );
 }
@@ -193,12 +193,12 @@ function CareerLevelsSection({ section }: { section: Section }) {
   return (
     <div className="space-y-4">
       {levels.map((level) => (
-        <div key={level.level} className="bg-surface border border-border rounded-xl p-5">
-          <h3 className="text-base font-bold text-foreground mb-3">{level.level}</h3>
-          <p className="text-sm text-muted-foreground leading-relaxed mb-2"><span className="font-semibold text-foreground">Que se espera de ti:</span> {level.expects}</p>
-          {level.wrong && <p className="text-sm text-muted-foreground leading-relaxed mb-2"><span className="font-semibold text-foreground">Lo que muchos hacen mal:</span> {level.wrong}</p>}
-          <div className="bg-accent/10 border-l-4 border-accent rounded-r-lg p-3 mt-3">
-            <p className="text-sm text-foreground"><span className="font-semibold">Senal de que estas listo:</span> {level.signal}</p>
+        <div key={level.level} className="bg-surface border border-border rounded-xl p-6">
+          <h3 className="text-xl font-bold text-foreground mb-3">{level.level}</h3>
+          <p className="text-base text-muted-foreground leading-relaxed mb-2"><span className="font-semibold text-foreground">Que se espera de ti:</span> {level.expects}</p>
+          {level.wrong && <p className="text-base text-muted-foreground leading-relaxed mb-2"><span className="font-semibold text-foreground">Lo que muchos hacen mal:</span> {level.wrong}</p>}
+          <div className="bg-accent/10 border-l-4 border-accent rounded-r-lg p-4 mt-3">
+            <p className="text-base text-foreground"><span className="font-semibold">Senal de que estas listo:</span> {level.signal}</p>
           </div>
         </div>
       ))}
@@ -212,9 +212,9 @@ function AdvancedRolesSection({ section }: { section: Section }) {
   return (
     <div className="grid gap-3 md:grid-cols-2">
       {roles.map((r) => (
-        <div key={r.role} className="bg-surface border border-border rounded-xl p-4">
-          <h4 className="text-sm font-bold text-foreground mb-1">{r.role}</h4>
-          <p className="text-xs text-muted-foreground">{r.desc}</p>
+        <div key={r.role} className="bg-surface border border-border rounded-xl p-6">
+          <h4 className="text-xl font-bold text-foreground mb-1">{r.role}</h4>
+          <p className="text-sm text-muted-foreground leading-relaxed">{r.desc}</p>
         </div>
       ))}
     </div>
@@ -229,9 +229,9 @@ function Plan90Section({ section }: { section: Section }) {
       {weeks.map((w) => (
         <div key={w.week} className="relative border-2 border-border rounded-xl p-5 pt-6 break-inside-avoid">
           <span className="absolute -top-3 left-4 bg-accent text-white text-xs font-bold tracking-wider uppercase px-3 py-0.5 rounded-full">{w.week}</span>
-          <h3 className="text-lg font-bold text-foreground mb-1 mt-1">{w.title}</h3>
-          <p className="text-sm text-muted-foreground leading-relaxed">{w.desc}</p>
-          <span className="inline-block mt-2 bg-accent/10 text-accent text-xs font-bold px-3 py-1 rounded">Entregable: {w.deliverable}</span>
+          <h3 className="text-xl font-bold text-foreground mb-1 mt-1">{w.title}</h3>
+          <p className="text-base text-muted-foreground leading-relaxed">{w.desc}</p>
+          <span className="inline-block mt-2 bg-accent/10 text-accent text-sm font-bold px-3 py-1 rounded">Entregable: {w.deliverable}</span>
         </div>
       ))}
     </div>
@@ -243,21 +243,21 @@ function CvTableSection({ section }: { section: Section }) {
   if (!rows) return null;
   return (
     <div className="bg-surface border border-border rounded-xl p-5 overflow-x-auto">
-      {section.title && <h3 className="text-sm font-bold text-foreground mb-3">{s(section.title)}</h3>}
-      <table className="w-full text-sm">
+      {section.title && <h3 className="text-xl font-bold text-foreground mb-3">{s(section.title)}</h3>}
+      <table className="w-full text-base">
         <thead>
           <tr className="bg-foreground text-background">
-            <th className="text-left px-3 py-2 text-xs font-bold uppercase tracking-wider">Seccion</th>
-            <th className="text-left px-3 py-2 text-xs font-bold uppercase tracking-wider">Que poner</th>
-            <th className="text-left px-3 py-2 text-xs font-bold uppercase tracking-wider">Que NO poner</th>
+            <th className="text-left px-4 py-3 text-xs font-bold uppercase tracking-wider">Seccion</th>
+            <th className="text-left px-4 py-3 text-xs font-bold uppercase tracking-wider">Que poner</th>
+            <th className="text-left px-4 py-3 text-xs font-bold uppercase tracking-wider">Que NO poner</th>
           </tr>
         </thead>
         <tbody>
           {rows.map(([sec, yes, no], i) => (
             <tr key={sec} className={i % 2 === 1 ? 'bg-surface' : ''}>
-              <td className="px-3 py-2 border-b border-border font-semibold text-foreground">{sec}</td>
-              <td className="px-3 py-2 border-b border-border text-muted-foreground">{yes}</td>
-              <td className="px-3 py-2 border-b border-border text-muted-foreground">{no}</td>
+              <td className="px-4 py-3.5 border-b border-border font-semibold text-foreground">{sec}</td>
+              <td className="px-4 py-3.5 border-b border-border text-muted-foreground">{yes}</td>
+              <td className="px-4 py-3.5 border-b border-border text-muted-foreground">{no}</td>
             </tr>
           ))}
         </tbody>
@@ -272,8 +272,8 @@ function CvExamplesSection({ section }: { section: Section }) {
   return (
     <div className="space-y-4">
       {examples.map((ex) => (
-        <div key={ex.role} className="bg-surface border border-border rounded-xl p-5">
-          <h3 className="text-sm font-bold text-foreground mb-3">CV {ex.role} - Titular y textos especificos</h3>
+        <div key={ex.role} className="bg-surface border border-border rounded-xl p-6">
+          <h3 className="text-xl font-bold text-foreground mb-3">CV {ex.role} - Titular y textos especificos</h3>
           <p className="text-sm text-foreground mb-2"><strong>Titular:</strong> {ex.title}</p>
           <p className="text-sm text-muted-foreground mb-2"><strong>Resumen:</strong> {ex.summary}</p>
           <p className="text-sm text-muted-foreground"><strong>Proyecto:</strong> {ex.project}</p>
@@ -286,13 +286,13 @@ function CvExamplesSection({ section }: { section: Section }) {
 function GoodBadSection({ section }: { section: Section }) {
   return (
     <div className="grid gap-3 md:grid-cols-2">
-      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4">
-        <p className="text-xs font-bold text-red-600 dark:text-red-400 tracking-wider uppercase mb-2">Error clasico</p>
-        <p className="text-sm text-red-700 dark:text-red-300">{s(section.bad)}</p>
+      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6">
+        <p className="text-sm font-bold text-red-600 dark:text-red-400 tracking-wider uppercase mb-2">Error clasico</p>
+        <p className="text-base text-red-700 dark:text-red-300">{s(section.bad)}</p>
       </div>
-      <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4">
-        <p className="text-xs font-bold text-green-600 dark:text-green-400 tracking-wider uppercase mb-2">Lo que funciona</p>
-        <p className="text-sm text-green-700 dark:text-green-300">{s(section.good)}</p>
+      <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-6">
+        <p className="text-sm font-bold text-green-600 dark:text-green-400 tracking-wider uppercase mb-2">Lo que funciona</p>
+        <p className="text-base text-green-700 dark:text-green-300">{s(section.good)}</p>
       </div>
     </div>
   );
@@ -302,11 +302,11 @@ function ChecklistSection({ section }: { section: Section }) {
   const items = section.items as string[];
   if (!items) return null;
   return (
-    <div className="bg-surface border border-border rounded-xl p-5">
-      {section.title && <h3 className="text-sm font-bold text-foreground mb-3">{s(section.title)}</h3>}
-      <ul className="space-y-2">
+    <div className="bg-surface border border-border rounded-xl p-6">
+      {section.title && <h3 className="text-xl font-bold text-foreground mb-3">{s(section.title)}</h3>}
+      <ul className="space-y-3">
         {items.map((item, i) => (
-          <li key={i} className="text-sm text-muted-foreground leading-relaxed relative pl-4 before:content-['✓'] before:absolute before:left-0 before:text-accent before:font-bold">{item}</li>
+          <li key={i} className="text-base text-muted-foreground leading-relaxed relative pl-4 before:content-['✓'] before:absolute before:left-0 before:text-accent before:font-bold">{item}</li>
         ))}
       </ul>
     </div>
@@ -319,11 +319,11 @@ function InterviewQuestionsSection({ section }: { section: Section }) {
   return (
     <div className="space-y-4">
       {sections.map((s) => (
-        <div key={s.role} className="bg-surface border border-border rounded-xl p-5">
-          <h3 className="text-sm font-bold text-foreground mb-3">Preguntas tecnicas - {s.role}</h3>
-          <ul className="space-y-2">
+        <div key={s.role} className="bg-surface border border-border rounded-xl p-6">
+          <h3 className="text-xl font-bold text-foreground mb-3">Preguntas tecnicas - {s.role}</h3>
+          <ul className="space-y-3">
             {s.questions.map((q, i) => (
-              <li key={i} className="text-sm text-muted-foreground leading-relaxed relative pl-4 before:content-['—'] before:absolute before:left-0 before:text-accent before:font-bold">{q}</li>
+              <li key={i} className="text-base text-muted-foreground leading-relaxed relative pl-4 before:content-['—'] before:absolute before:left-0 before:text-accent before:font-bold">{q}</li>
             ))}
           </ul>
         </div>
@@ -338,11 +338,11 @@ function ResourcesSection({ section }: { section: Section }) {
   return (
     <div className="space-y-4">
       {categories.map((cat) => (
-        <div key={cat.category} className="bg-surface border border-border rounded-xl p-5">
-          <h3 className="text-base font-bold text-foreground mb-3">{cat.category}</h3>
-          <ul className="space-y-2">
+        <div key={cat.category} className="bg-surface border border-border rounded-xl p-6">
+          <h3 className="text-xl font-bold text-foreground mb-3">{cat.category}</h3>
+          <ul className="space-y-3">
             {cat.resources.map(([name, desc]) => (
-              <li key={name} className="text-sm text-muted-foreground leading-relaxed">
+              <li key={name} className="text-base text-muted-foreground leading-relaxed">
                 <span className="font-semibold text-foreground">{name}:</span> {desc}
               </li>
             ))}
@@ -359,9 +359,9 @@ function YoutubersSection({ section }: { section: Section }) {
   return (
     <div className="grid gap-3 md:grid-cols-2">
       {channels.map((ch) => (
-        <div key={ch.name} className="bg-surface border border-border rounded-xl p-4">
-          <h4 className="text-sm font-bold text-foreground mb-1">{ch.name}</h4>
-          <p className="text-xs text-muted-foreground">{ch.desc}</p>
+        <div key={ch.name} className="bg-surface border border-border rounded-xl p-6">
+          <h4 className="text-xl font-bold text-foreground mb-1">{ch.name}</h4>
+          <p className="text-sm text-muted-foreground">{ch.desc}</p>
         </div>
       ))}
     </div>
@@ -374,9 +374,9 @@ function FaqSection({ section }: { section: Section }) {
   return (
     <div className="space-y-4">
       {items.map((faq) => (
-        <div key={faq.q} className="bg-surface border border-border rounded-xl p-5">
-          <h3 className="text-base font-bold text-foreground mb-2">{faq.q}</h3>
-          <p className="text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
+        <div key={faq.q} className="bg-surface border border-border rounded-xl p-6">
+          <h3 className="text-xl font-bold text-foreground mb-2">{faq.q}</h3>
+          <p className="text-base text-muted-foreground leading-relaxed">{faq.a}</p>
         </div>
       ))}
     </div>
@@ -386,10 +386,10 @@ function FaqSection({ section }: { section: Section }) {
 function TextBlockSection({ section }: { section: Section }) {
   const paragraphs = section.paragraphs as string[];
   return (
-    <div className="bg-surface border border-border rounded-xl p-5">
-      {section.title && <h3 className="text-sm font-bold text-foreground mb-3">{s(section.title)}</h3>}
+    <div className="bg-surface border border-border rounded-xl p-6">
+      {section.title && <h3 className="text-xl font-bold text-foreground mb-3">{s(section.title)}</h3>}
       {paragraphs?.map((p, i) => (
-        <p key={i} className="text-sm text-muted-foreground leading-relaxed mb-2 last:mb-0">{p}</p>
+        <p key={i} className="text-base text-muted-foreground leading-relaxed mb-2 last:mb-0">{p}</p>
       ))}
     </div>
   );
@@ -398,12 +398,12 @@ function TextBlockSection({ section }: { section: Section }) {
 function GitFlowSection({ section }: { section: Section }) {
   const steps = section.steps as string[];
   return (
-    <div className="bg-surface border border-border rounded-xl p-5">
-      {section.title && <h3 className="text-sm font-bold text-foreground mb-3">{s(section.title)}</h3>}
-      {section.flow && <p className="text-sm text-muted-foreground mb-3">{s(section.flow)}</p>}
-      <ol className="space-y-2">
+    <div className="bg-surface border border-border rounded-xl p-6">
+      {section.title && <h3 className="text-xl font-bold text-foreground mb-3">{s(section.title)}</h3>}
+      {section.flow && <p className="text-base text-muted-foreground mb-3">{s(section.flow)}</p>}
+      <ol className="space-y-3">
         {steps?.map((step, i) => (
-          <li key={i} className="text-sm text-muted-foreground leading-relaxed">
+          <li key={i} className="text-base text-muted-foreground leading-relaxed">
             <span className="font-semibold text-foreground">{i + 1}.</span> {step}
           </li>
         ))}
@@ -418,9 +418,9 @@ function EmailScriptsSection({ section }: { section: Section }) {
   return (
     <div className="space-y-4">
       {scripts.map((script) => (
-        <div key={script.label} className="bg-gray-50 dark:bg-gray-800/50 border border-border rounded-r-xl p-4 border-l-4 border-l-accent">
-          <p className="text-xs font-bold text-accent tracking-wider mb-2">{script.label}</p>
-          <p className="text-sm text-foreground whitespace-pre-line leading-relaxed">{script.text}</p>
+        <div key={script.label} className="bg-gray-50 dark:bg-gray-800/50 border border-border rounded-r-xl p-5 border-l-4 border-l-accent">
+          <p className="text-sm font-bold text-accent tracking-wider mb-2">{script.label}</p>
+          <p className="text-base text-foreground whitespace-pre-line leading-relaxed">{script.text}</p>
         </div>
       ))}
     </div>

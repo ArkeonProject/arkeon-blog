@@ -38,6 +38,16 @@ export default function ContactPage() {
         <title>{t("contact_title")} | Arkeonix Labs</title>
         <meta name="description" content={t("contact_meta_description")} />
         <link rel="canonical" href="https://www.arkeonixlabs.com/contact" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={`${t("contact_title")} | Arkeonix Labs`} />
+        <meta property="og:description" content={t("contact_meta_description")} />
+        <meta property="og:url" content="https://www.arkeonixlabs.com/contact" />
+        <meta property="og:site_name" content="Arkeonix Labs" />
+        <meta property="og:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${t("contact_title")} | Arkeonix Labs`} />
+        <meta name="twitter:description" content={t("contact_meta_description")} />
+        <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
       </Helmet>
 
       {/* Header */}
