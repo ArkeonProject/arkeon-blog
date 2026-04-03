@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 import { createClient } from "@supabase/supabase-js";
-import { renderWelcomeEmail } from "../src/emails/welcome-email-html";
+import { renderWelcomeEmail } from "../src/emails/welcome-email-html.js";
 
 // Serverless (sin Edge) — @react-email usa tailwindcss, no soportado en Edge runtime
 
