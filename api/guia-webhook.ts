@@ -72,7 +72,10 @@ export async function POST(req: Request) {
 
       if (error) {
         console.error('Error inserting user_access:', error);
-        return new Response('Database error', { status: 500 });
+        return new Response(JSON.stringify({ error: error.message, code: error.code, details: error.details }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+        });
       }
     }
 
