@@ -1,11 +1,14 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
+export const config = {
+  runtime: 'nodejs',
+};
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-01-27.acacia' as Stripe.LatestApiVersion,
 });
 
-// Service role key para poder insertar en user_access
 const supabaseAdmin = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -13,15 +16,12 @@ const supabaseAdmin = createClient(
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
-export default async function handler(req: Request) {
-  if (req.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 });
-  }
-
+export async function POST(req: Request) {
   try {
     const body = await req.text();
     const sig = req.headers.get('stripe-signature')!;
 
+    // Handle v2 events (pings, etc.) — just acknowledge them
     if (body.includes('"v2.core.event"')) {
       return new Response('OK', { status: 200 });
     }
@@ -38,12 +38,10 @@ export default async function handler(req: Request) {
       const session = event.data.object as Stripe.Checkout.Session;
       const { userId, product: metadataProduct, b2bType } = session.metadata as { userId: string; product: string; b2bType: string };
 
-      // Determine product and plan from metadata or price ID
       const priceId = session.line_items?.data[0]?.price?.id;
       let productId = metadataProduct;
       let plan = 'lifetime';
 
-      // Check if it's a B2B purchase
       if (metadataProduct === 'guia_junior_b2b') {
         productId = 'guia_junior_b2b';
         if (b2bType === 'annual') {
@@ -52,13 +50,11 @@ export default async function handler(req: Request) {
           plan = 'b2b_lifetime';
         }
       } else {
-        // Individual purchase - determine plan from price ID
         if (priceId === process.env.STRIPE_PRICE_GUIA_MONTHLY) plan = 'monthly';
         else if (priceId === process.env.STRIPE_PRICE_GUIA_ANNUAL) plan = 'annual';
         else if (priceId === process.env.STRIPE_PRICE_GUIA_LIFETIME_NORMAL) plan = 'lifetime_normal';
       }
 
-      // Calcular expires_at para planes recurrentes
       let expiresAt: string | null = null;
       if (plan === 'monthly') {
         expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
@@ -67,7 +63,6 @@ export default async function handler(req: Request) {
       } else if (plan === 'b2b_annual') {
         expiresAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
       }
-      // b2b_lifetime y lifetime no tienen expires_at
 
       const { error } = await supabaseAdmin.from('user_access').insert({
         user_id: userId,
