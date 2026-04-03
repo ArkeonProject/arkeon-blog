@@ -1,8 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { Helmet } from "react-helmet-async";
-import { useLocale } from "../hooks/useLocale";
+import { useLocale } from "@/hooks/useLocale";
 import { FiMail, FiUser, FiMessageSquare, FiSend } from "react-icons/fi";
-import ScrollReveal from "../components/ui/ScrollReveal";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 
 export default function ContactPage() {
   const { t } = useLocale();

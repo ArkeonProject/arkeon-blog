@@ -1,5 +1,5 @@
-import { useLocale } from "../hooks/useLocale";
-import ScrollReveal from "../components/ui/ScrollReveal";
+import { useLocale } from "@/hooks/useLocale";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 
 export default function TermsPage() {
   const { t } = useLocale();

@@ -1,12 +1,12 @@
 import { useEffect, useState, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
 import { FiRadio } from "react-icons/fi";
-import PostList from "../components/posts/PostList";
-import Pagination from "../components/ui/Pagination";
-import ScrollReveal from "../components/ui/ScrollReveal";
-import { supabase } from "../lib/supabase";
-import { useLocale } from "../hooks/useLocale";
-import type { PostListItem } from "../types/post";
+import PostList from "@/components/posts/PostList";
+import Pagination from "@/components/ui/Pagination";
+import ScrollReveal from "@/components/ui/ScrollReveal";
+import { supabase } from "@/lib/supabase";
+import { useLocale } from "@/hooks/useLocale";
+import type { PostListItem } from "@/types/post";
 
 const NEWS_CATEGORY_VALUES = ["news", "News", "noticias", "Noticias", "NOTICIAS", "NEWS"];
 const PAGE_SIZE = 6;

@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Helmet } from "react-helmet-async";
-import { useLocale } from "../hooks/useLocale";
+import { useLocale } from "@/hooks/useLocale";
 import {
   FiShield,
   FiCreditCard,
@@ -24,7 +24,7 @@ import {
   FiExternalLink,
   FiMonitor,
 } from "react-icons/fi";
-import ScrollReveal from "../components/ui/ScrollReveal";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 
 // ─── Data ───────────────────────────────────────────────────────────────────
 

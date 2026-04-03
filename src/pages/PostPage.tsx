@@ -3,14 +3,14 @@ import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
-import { supabase } from "../lib/supabase";
-import { useLocale } from "../hooks/useLocale";
-import { useSupabaseQuery } from "../hooks/useSupabaseQuery";
-import ReadingProgressBar from "../components/ui/ReadingProgressBar";
-import ScrollReveal from "../components/ui/ScrollReveal";
-import ShareButtons from "../components/ui/ShareButtons";
-import Breadcrumbs from "../components/ui/Breadcrumbs";
-import type { PostDetail } from "../types/post";
+import { supabase } from "@/lib/supabase";
+import { useLocale } from "@/hooks/useLocale";
+import { useSupabaseQuery } from "@/hooks/useSupabaseQuery";
+import ReadingProgressBar from "@/components/ui/ReadingProgressBar";
+import ScrollReveal from "@/components/ui/ScrollReveal";
+import ShareButtons from "@/components/ui/ShareButtons";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import type { PostDetail } from "@/types/post";
 
 marked.setOptions({ async: false });
 

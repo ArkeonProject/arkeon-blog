@@ -42,7 +42,8 @@
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.9.4",
     "remark-gfm": "^4.0.1",
-    "resend": "^6.9.3"
+    "resend": "^6.9.3",
+    "stripe": "^21.0.1"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",

@@ -4,14 +4,14 @@ import { Helmet } from "react-helmet-async";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 import { FiTerminal, FiCode, FiShoppingCart } from "react-icons/fi";
-import { supabase } from "../lib/supabase";
-import { useLocale } from "../hooks/useLocale";
-import { useSupabaseQuery } from "../hooks/useSupabaseQuery";
-import ReadingProgressBar from "../components/ui/ReadingProgressBar";
-import ScrollReveal from "../components/ui/ScrollReveal";
-import ShareButtons from "../components/ui/ShareButtons";
-import Breadcrumbs from "../components/ui/Breadcrumbs";
-import type { LabPostDetail } from "../types/lab";
+import { supabase } from "@/lib/supabase";
+import { useLocale } from "@/hooks/useLocale";
+import { useSupabaseQuery } from "@/hooks/useSupabaseQuery";
+import ReadingProgressBar from "@/components/ui/ReadingProgressBar";
+import ScrollReveal from "@/components/ui/ScrollReveal";
+import ShareButtons from "@/components/ui/ShareButtons";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import type { LabPostDetail } from "@/types/lab";
 
 marked.setOptions({ async: false });
 

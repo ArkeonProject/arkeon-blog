@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
-import { useLocale } from "../hooks/useLocale";
-import ScrollReveal from "../components/ui/ScrollReveal";
+import { useLocale } from "@/hooks/useLocale";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 
 const AboutPage = () => {
   const { t } = useLocale();
