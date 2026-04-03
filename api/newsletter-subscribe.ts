@@ -1,7 +1,6 @@
 import { Resend } from "resend";
 import { createClient } from "@supabase/supabase-js";
-import { render } from "@react-email/render";
-import WelcomeNewsletter from "../src/emails/WelcomeNewsletter";
+import { renderWelcomeEmail } from "../src/emails/welcome-email-html";
 
 // Serverless (sin Edge) — @react-email usa tailwindcss, no soportado en Edge runtime
 
@@ -72,7 +71,7 @@ export default async function handler(request: Request): Promise<Response> {
   if (resendApiKey) {
     try {
       const resend = new Resend(resendApiKey);
-      const html = await render(WelcomeNewsletter({ email }));
+      const html = renderWelcomeEmail(email);
       await resend.emails.send({
         from: "Arkeonix Labs <newsletter@arkeonixlabs.com>",
         to: email,
