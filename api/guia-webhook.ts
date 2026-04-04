@@ -12,6 +12,12 @@ const supabaseAdmin = createClient(
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
+function getSubscriptionId(invoice: Stripe.Invoice): string | null {
+  const sub = invoice.parent?.subscription_details?.subscription ?? null;
+  if (!sub) return null;
+  return typeof sub === 'string' ? sub : sub.id;
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.text();
@@ -34,7 +40,12 @@ export async function POST(req: Request) {
       const session = event.data.object as Stripe.Checkout.Session;
       const { userId, product: metadataProduct, b2bType } = session.metadata as { userId: string; product: string; b2bType: string };
 
-      const priceId = session.line_items?.data[0]?.price?.id;
+      // line_items is not expanded in webhook events — retrieve with expand
+      const fullSession = await stripe.checkout.sessions.retrieve(session.id, {
+        expand: ['line_items'],
+      });
+      const priceId = fullSession.line_items?.data[0]?.price?.id;
+
       let productId = metadataProduct;
       let plan = 'lifetime';
 
@@ -48,15 +59,14 @@ export async function POST(req: Request) {
       } else {
         if (priceId === process.env.STRIPE_PRICE_GUIA_MONTHLY) plan = 'monthly';
         else if (priceId === process.env.STRIPE_PRICE_GUIA_ANNUAL) plan = 'annual';
+        else if (priceId === process.env.STRIPE_PRICE_GUIA_LIFETIME) plan = 'lifetime';
         else if (priceId === process.env.STRIPE_PRICE_GUIA_LIFETIME_NORMAL) plan = 'lifetime_normal';
       }
 
       let expiresAt: string | null = null;
       if (plan === 'monthly') {
         expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
-      } else if (plan === 'annual') {
-        expiresAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
-      } else if (plan === 'b2b_annual') {
+      } else if (plan === 'annual' || plan === 'b2b_annual') {
         expiresAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
       }
 
@@ -76,6 +86,31 @@ export async function POST(req: Request) {
           status: 500,
           headers: { 'Content-Type': 'application/json' },
         });
+      }
+    } else if (event.type === 'invoice.payment_failed') {
+      // Handle subscription payment failures
+      const invoice = event.data.object as Stripe.Invoice;
+      const subscriptionId = getSubscriptionId(invoice);
+      if (subscriptionId) {
+        await supabaseAdmin.from('user_access')
+          .update({ status: 'past_due' })
+          .eq('stripe_subscription_id', subscriptionId);
+      }
+    } else if (event.type === 'customer.subscription.deleted') {
+      // Handle subscription cancellations
+      const subscription = event.data.object as Stripe.Subscription;
+      await supabaseAdmin.from('user_access')
+        .update({ status: 'cancelled', expires_at: new Date().toISOString() })
+        .eq('stripe_subscription_id', subscription.id);
+    } else if (event.type === 'invoice.payment_succeeded') {
+      // Handle subscription renewals — extend expires_at
+      const invoice = event.data.object as Stripe.Invoice;
+      const subscriptionId = getSubscriptionId(invoice);
+      if (subscriptionId && invoice.billing_reason === 'subscription_cycle') {
+        const nextBilling = new Date(invoice.lines.data[0]?.period.end * 1000);
+        await supabaseAdmin.from('user_access')
+          .update({ expires_at: nextBilling.toISOString(), status: 'active' })
+          .eq('stripe_subscription_id', subscriptionId);
       }
     }
 
