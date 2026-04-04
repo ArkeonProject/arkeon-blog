@@ -123,7 +123,6 @@ export default function AppRouter() {
               </ProtectedRoute>
             } />
             <Route path="/guia-junior/capitulo/:slug" element={<GuiaChapterPage />} />
-            <Route path="/guia-junior/capitulo/:slug" element={<GuiaChapterPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
