@@ -16,3 +16,4 @@ jobs:
     with:
       node-version: '20'
       package-manager: 'pnpm'
+    secrets: inherit
