@@ -12,9 +12,9 @@ export async function POST(req: Request) {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
     }
 
-    // Determine mode based on price type
-    const isB2BAnnual = isB2B && b2bType === 'annual';
-    const mode = isB2BAnnual ? 'subscription' : 'payment';
+    // Determine mode from the price object itself to avoid env var mismatch
+    const price = await stripe.prices.retrieve(priceId);
+    const mode = price.type === 'recurring' ? 'subscription' : 'payment';
 
     const session = await stripe.checkout.sessions.create({
       mode,
@@ -31,7 +31,8 @@ export async function POST(req: Request) {
 
     return new Response(JSON.stringify({ url: session.url }), { status: 200 });
   } catch (error) {
-    console.error('Stripe checkout error:', error);
-    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Stripe checkout error:', message);
+    return new Response(JSON.stringify({ error: message }), { status: 500 });
   }
 }
