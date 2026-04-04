@@ -79,7 +79,7 @@ export default function GuiaChapterPage() {
     fetchChapter();
 
     return () => { cancelled = true; };
-  }, [slug, isFree, user, navigate]);
+  }, [slug, isFree, user, navigate, hasAccess]);
 
   if (loading) {
     return (
