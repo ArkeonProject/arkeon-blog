@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { FiCode } from "react-icons/fi";
-import { useLocale } from "../../hooks/useLocale";
-import type { LabPostListItem } from "../../types/lab";
+import { useLocale } from "@/hooks/useLocale";
+import type { LabPostListItem } from "@/types/lab";
 
 interface LabPostCardProps {
     readonly post: LabPostListItem;

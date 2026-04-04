@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { FiHeart } from "react-icons/fi";
-import { useLocale } from "../../hooks/useLocale";
+import { useLocale } from "@/hooks/useLocale";
 
 const QUICK_LINKS = [
   { path: "/blog", key: "nav_blog" },
   { path: "/news", key: "category_news" },
   { path: "/products", key: "category_products" },
   { path: "/lab", key: "category_lab" },
+  { path: "/guia-junior", key: "nav_guide" },
+  { path: "/arkeonix", key: "nav_saas" },
   { path: "/about", key: "footer_about" },
   { path: "/contact", key: "nav_contact" },
 ];

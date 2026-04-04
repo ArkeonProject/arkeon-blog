@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { FiHome, FiChevronRight } from "react-icons/fi";
-import { useLocale } from "../../hooks/useLocale";
+import { useLocale } from "@/hooks/useLocale";
 
 interface BreadcrumbItem {
   label: string;

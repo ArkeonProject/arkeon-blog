@@ -39,3 +39,9 @@ supabase/.local
 
 # n8n workflow exports (contain API keys)
 .n8n/
+.claude/
+.claude-*
+.claude-*/**
+.kilo/
+.agents/
+guias/

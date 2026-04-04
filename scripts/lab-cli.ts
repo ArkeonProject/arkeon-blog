@@ -159,7 +159,7 @@ async function publish(filePath: string, isDryRun: boolean) {
     console.log(`   🔗 https://www.arkeonixlabs.com/lab/${data.slug}\n`);
 
     // Move file to published/
-    const publishedDir = resolve(dirname(absPath), "../published");
+    const publishedDir = resolve(dirname(absPath), "@/published");
     if (!existsSync(publishedDir)) mkdirSync(publishedDir, { recursive: true });
     const destPath = resolve(publishedDir, basename(absPath));
     renameSync(absPath, destPath);

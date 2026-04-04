@@ -1,7 +1,7 @@
 {
   "name": "arkeonix-labs",
   "private": true,
-  "version": "2.5.2",
+  "version": "2.6.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -20,6 +20,7 @@
   "dependencies": {
     "@react-email/components": "^1.0.8",
     "@react-email/render": "^2.0.4",
+    "@supabase/auth-js": "2.76.1",
     "@supabase/supabase-js": "^2.76.1",
     "@tiptap/extension-color": "^3.20.1",
     "@tiptap/extension-image": "^3.20.1",
@@ -42,7 +43,8 @@
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.9.4",
     "remark-gfm": "^4.0.1",
-    "resend": "^6.9.3"
+    "resend": "^6.9.3",
+    "stripe": "^21.0.1"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
