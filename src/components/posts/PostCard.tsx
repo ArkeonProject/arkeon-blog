@@ -1,5 +1,5 @@
-import { useLocale } from "../../hooks/useLocale";
-import type { PostListItem } from "../../types/post";
+import { useLocale } from "@/hooks/useLocale";
+import type { PostListItem } from "@/types/post";
 
 interface PostCardProps {
   readonly post: PostListItem;

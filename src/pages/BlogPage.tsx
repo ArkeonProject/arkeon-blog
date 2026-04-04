@@ -2,17 +2,17 @@ import { useEffect, useState, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { FiTerminal, FiSearch, FiCode, FiFileText } from "react-icons/fi";
-import NewsletterForm from "../components/forms/NewsletterForm";
-import InfiniteCarousel from "../components/layout/InfiniteCarousel";
-import FeaturedPostCard from "../components/posts/FeaturedPostCard";
-import PostCard from "../components/posts/PostCard";
-import LabPostCard from "../components/posts/LabPostCard";
-import Pagination from "../components/ui/Pagination";
-import ScrollReveal from "../components/ui/ScrollReveal";
-import { supabase } from "../lib/supabase";
-import { useLocale } from "../hooks/useLocale";
-import type { PostListItem } from "../types/post";
-import type { LabPostListItem } from "../types/lab";
+import NewsletterForm from "@/components/forms/NewsletterForm";
+import InfiniteCarousel from "@/components/layout/InfiniteCarousel";
+import FeaturedPostCard from "@/components/posts/FeaturedPostCard";
+import PostCard from "@/components/posts/PostCard";
+import LabPostCard from "@/components/posts/LabPostCard";
+import Pagination from "@/components/ui/Pagination";
+import ScrollReveal from "@/components/ui/ScrollReveal";
+import { supabase } from "@/lib/supabase";
+import { useLocale } from "@/hooks/useLocale";
+import type { PostListItem } from "@/types/post";
+import type { LabPostListItem } from "@/types/lab";
 
 const PAGE_SIZE = 7;
 
@@ -116,6 +116,16 @@ export default function BlogPage() {
         <title>{t("blog_title")} — Precisión Técnica</title>
         <meta name="description" content={t("blog_meta_description")} />
         <link rel="canonical" href="https://www.arkeonixlabs.com/blog" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={`${t("blog_title")} — Arkeonix Labs`} />
+        <meta property="og:description" content={t("blog_meta_description")} />
+        <meta property="og:url" content="https://www.arkeonixlabs.com/blog" />
+        <meta property="og:site_name" content="Arkeonix Labs" />
+        <meta property="og:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${t("blog_title")} — Arkeonix Labs`} />
+        <meta name="twitter:description" content={t("blog_meta_description")} />
+        <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
       </Helmet>
 
       {/* Atmospheric Background */}
@@ -215,6 +225,41 @@ export default function BlogPage() {
                     style={{ fontFamily: "var(--font-mono)" }}
                   >
                     {t("saas_banner_cta")}
+                  </span>
+                </Link>
+              </ScrollReveal>
+            )}
+
+            {/* Guia Junior Banner */}
+            {currentPage === 1 && (
+              <ScrollReveal variant="blur" duration={900}>
+                <Link
+                  to="/guia-junior"
+                  className="group relative flex flex-col md:flex-row items-center gap-8 md:gap-12 tech-card card-accent-border rounded-3xl px-8 md:px-12 py-10 overflow-hidden hover:border-emerald-500/50 transition-all duration-300"
+                  style={{ boxShadow: "0 0 60px -15px color-mix(in oklch, var(--color-emerald-500) 15%, transparent)" }}
+                >
+                  <div className="dot-grid opacity-30" />
+                  <div className="glow-spot top-0 right-0 scale-75 opacity-20" />
+                  <div className="relative flex-1 space-y-3 text-center md:text-left">
+                    <span
+                      className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-bold text-emerald-500"
+                      style={{ fontFamily: "var(--font-mono)" }}
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      {t("blog_guia_badge")}
+                    </span>
+                    <h2 className="text-3xl md:text-4xl font-bold font-display tracking-tight leading-tight">
+                      {t("blog_guia_title")}
+                    </h2>
+                    <p className="text-muted-foreground text-base max-w-lg">
+                      {t("blog_guia_description")}
+                    </p>
+                  </div>
+                  <span
+                    className="relative flex-shrink-0 inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-emerald-500 text-white font-bold text-sm uppercase tracking-widest group-hover:opacity-90 group-hover:scale-[1.02] transition-all shadow-lg shadow-emerald-500/25"
+                    style={{ fontFamily: "var(--font-mono)" }}
+                  >
+                    {t("blog_guia_cta")}
                   </span>
                 </Link>
               </ScrollReveal>

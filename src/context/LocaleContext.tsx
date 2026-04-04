@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import esMessages from "../locales/es.json";
-import enMessages from "../locales/en.json";
+import esMessages from "@/locales/es.json";
+import enMessages from "@/locales/en.json";
 import { LocaleContext } from "./LocaleContextObject";
 
 export type Locale = "es" | "en";

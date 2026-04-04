@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
-import { supabase } from "../lib/supabase";
-import RichTextEditor from "../components/admin/RichTextEditor";
+import { supabase } from "@/lib/supabase";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import {
   FiUsers, FiFileText, FiMail, FiLock, FiBarChart2,
   FiPlus, FiEdit2, FiTrash2,
   FiCheck, FiX, FiLayout,
 } from "react-icons/fi";
-import type { PostListItem } from "../types/post";
+import type { PostListItem } from "@/types/post";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

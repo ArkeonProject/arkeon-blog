@@ -1,12 +1,12 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { FiTerminal } from "react-icons/fi";
-import LabPostCard from "../components/posts/LabPostCard";
-import Pagination from "../components/ui/Pagination";
-import ScrollReveal from "../components/ui/ScrollReveal";
-import { supabase } from "../lib/supabase";
-import { useLocale } from "../hooks/useLocale";
-import type { LabPostListItem } from "../types/lab";
+import LabPostCard from "@/components/posts/LabPostCard";
+import Pagination from "@/components/ui/Pagination";
+import ScrollReveal from "@/components/ui/ScrollReveal";
+import { supabase } from "@/lib/supabase";
+import { useLocale } from "@/hooks/useLocale";
+import type { LabPostListItem } from "@/types/lab";
 
 const PAGE_SIZE = 6;
 

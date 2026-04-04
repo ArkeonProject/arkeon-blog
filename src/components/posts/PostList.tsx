@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { PostListItem } from "../../types/post";
+import type { PostListItem } from "@/types/post";
 import PostCard from "./PostCard";
 
 interface PostListProps {

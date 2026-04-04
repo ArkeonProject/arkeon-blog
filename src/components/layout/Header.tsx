@@ -1,30 +1,40 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
-import { FiChevronDown } from "react-icons/fi";
-import { useLocale } from "../../hooks/useLocale";
-import ThemeToggle from "../ui/ThemeToggle";
-import type { Locale } from "../../context/LocaleContext";
+import { FiChevronDown, FiUser, FiLogOut, FiSettings } from "react-icons/fi";
+import { useLocale } from "@/hooks/useLocale";
+import { useAuth } from "@/context/AuthContext";
+import ThemeToggle from "@/components/ui/ThemeToggle";
+import type { Locale } from "@/context/LocaleContext";
 
 const NAV_LINKS = [
   { path: "/blog", key: "blog" },
   { path: "/news", key: "news" },
   { path: "/products", key: "products" },
   { path: "/lab", key: "lab" },
+  { path: "/guia-junior", key: "guide" },
+  { path: "/arkeonix", key: "saas" },
   { path: "/contact", key: "contact" },
 ];
 
 export default function Header() {
   const { locale, setLocale, t } = useLocale();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const [isLangOpen, setIsLangOpen] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isUserOpen, setIsUserOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
+  const userRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (langRef.current && !langRef.current.contains(event.target as Node)) {
         setIsLangOpen(false);
+      }
+      if (userRef.current && !userRef.current.contains(event.target as Node)) {
+        setIsUserOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -43,6 +53,8 @@ export default function Header() {
 
   const navLinkLabel = (key: string) => {
     if (key === "blog") return t("nav_blog");
+    if (key === "guide") return t("nav_guide");
+    if (key === "saas") return t("nav_saas");
     if (key === "contact") return t("nav_contact");
     return t(`category_${key}`);
   };
@@ -144,6 +156,47 @@ export default function Header() {
               <ThemeToggle />
             </div>
 
+            {/* User menu — desktop only */}
+            {user ? (
+              <div className="relative hidden md:block" ref={userRef}>
+                <button
+                  onClick={() => setIsUserOpen((prev) => !prev)}
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-surface transition-all duration-300"
+                >
+                  <FiUser className="w-4 h-4" />
+                  <span className="text-xs font-medium max-w-24 truncate">{user.email}</span>
+                  <FiChevronDown className={`w-3 h-3 transition-transform duration-200 ${isUserOpen ? "rotate-180" : ""}`} />
+                </button>
+                {isUserOpen && (
+                  <div className="absolute right-0 mt-2 w-48 surface-elevated rounded-xl overflow-hidden animate-reveal p-1.5 border border-border/60">
+                    <Link
+                      to="/guia-junior/dashboard"
+                      onClick={() => setIsUserOpen(false)}
+                      className="flex items-center gap-2.5 w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-200 text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                    >
+                      <FiSettings className="w-3.5 h-3.5" />
+                      {t("guia_dashboard_title")}
+                    </Link>
+                    <button
+                      onClick={() => { signOut(); setIsUserOpen(false); navigate("/"); }}
+                      className="flex items-center gap-2.5 w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-200 text-red-500 hover:bg-red-500/10"
+                    >
+                      <FiLogOut className="w-3.5 h-3.5" />
+                      {t("auth_signout")}
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-primary border border-primary/30 rounded-lg hover:bg-primary/10 transition-all"
+              >
+                <FiUser className="w-3.5 h-3.5" />
+                {t("auth_login_title")}
+              </Link>
+            )}
+
             {/* Mobile toggle */}
             <button
               onClick={() => setIsMobileOpen(!isMobileOpen)}
@@ -225,6 +278,44 @@ export default function Header() {
             {/* Theme toggle */}
             <ThemeToggle />
           </div>
+
+          {/* Auth — mobile */}
+          {user ? (
+            <div className="mx-4 h-px bg-border/30" />
+          ) : null}
+          {user ? (
+            <div className="px-4 py-3 space-y-2">
+              <Link
+                to="/guia-junior/dashboard"
+                onClick={() => setIsMobileOpen(false)}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:bg-surface-hover hover:text-foreground transition-all"
+              >
+                <FiSettings className="w-4 h-4" />
+                {t("guia_dashboard_title")}
+              </Link>
+              <button
+                onClick={() => { signOut(); setIsMobileOpen(false); navigate("/"); }}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-500/10 transition-all w-full"
+              >
+                <FiLogOut className="w-4 h-4" />
+                {t("auth_signout")}
+              </button>
+            </div>
+          ) : (
+            <div className="mx-4 h-px bg-border/30" />
+          )}
+          {!user ? (
+            <div className="px-4 pb-4">
+              <Link
+                to="/login"
+                onClick={() => setIsMobileOpen(false)}
+                className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90 transition-all w-full"
+              >
+                <FiUser className="w-4 h-4" />
+                {t("auth_login_title")}
+              </Link>
+            </div>
+          ) : null}
         </div>
       </div>
     </nav>
