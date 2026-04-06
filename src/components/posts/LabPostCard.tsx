@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { FiCode } from "react-icons/fi";
 import { useLocale } from "@/hooks/useLocale";
 import type { LabPostListItem } from "@/types/lab";

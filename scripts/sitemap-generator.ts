@@ -49,8 +49,7 @@ async function generateSitemap(): Promise<void> {
     // Static pages with their priorities and change frequencies
     const staticPages = [
         { url: "/blog", priority: "1.0", changefreq: "daily" },
-        { url: "/news", priority: "0.9", changefreq: "daily" },
-        { url: "/products", priority: "0.9", changefreq: "weekly" },
+        { url: "/recursos", priority: "0.9", changefreq: "weekly" },
         { url: "/lab", priority: "0.8", changefreq: "weekly" },
         { url: "/guia-junior", priority: "0.8", changefreq: "weekly" },
         { url: "/guia-junior/capitulo/antes-de-empezar", priority: "0.7", changefreq: "monthly" },

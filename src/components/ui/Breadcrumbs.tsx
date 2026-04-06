@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router";
 import { FiHome, FiChevronRight } from "react-icons/fi";
 import { useLocale } from "@/hooks/useLocale";
 

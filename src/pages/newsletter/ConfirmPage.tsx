@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router";
 import { Helmet } from "react-helmet-async";
 import { useLocale } from "@/hooks/useLocale";
 

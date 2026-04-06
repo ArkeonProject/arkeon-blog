@@ -1,6 +1,6 @@
 import { useAuth } from '@/context/AuthContext';
 import { useLocale } from '@/hooks/useLocale';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { chapters } from '@/data/guia/chapters';
 
 export default function GuiaDashboardPage() {
