@@ -24,8 +24,11 @@ interface LocaleProviderProps {
 
 export function LocaleProvider({ children }: LocaleProviderProps) {
   const [locale, setLocale] = useState<Locale>(() => {
-    const saved = localStorage.getItem(LOCALE_KEY) as Locale | null;
-    return saved ?? "es";
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem(LOCALE_KEY) as Locale | null;
+      if (saved) return saved;
+    }
+    return "es";
   });
 
   useEffect(() => {

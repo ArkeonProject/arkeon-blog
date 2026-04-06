@@ -29,7 +29,7 @@
   "blog_title": "Arkeonix Labs",
   "blog_intro_title": "Welcome to Arkeonix Labs",
   "blog_intro_subtitle": "The science of technical precision",
-  "blog_intro_description": "In-depth technical analysis, up-to-date products news, and infrastructure guides under the Arkeonix Labs precision standard. An integral part of the Arkeonix ecosystem.",
+  "blog_intro_description": "In-depth technical analysis, expert resource recommendations, and infrastructure guides under the Arkeonix Labs precision standard. An integral part of the Arkeonix ecosystem.",
   "blog_loading": "Loading labs...",
   "blog_error": "Could not load data. Please try again later.",
   "blog_load_more": "View more analysis",
@@ -62,15 +62,6 @@
   "news_description": "Summary of news and launches in the products and technology ecosystem.",
   "news_error": "News sync error.",
   "news_empty": "No recent news on the radar.",
-  "products_title": "Analyzed Products",
-  "products_meta_description": "Technical reviews of products and components by Arkeonix Labs.",
-  "products_description": "Evaluative components and tech devices.",
-  "products_filter_label": "Filter by technical category",
-  "products_filter_all": "All products",
-  "products_search_label": "Search",
-  "products_search_placeholder": "Search by component or model",
-  "products_error": "Error loading reviews.",
-  "products_empty": "No analyzed products in this section yet.",
   "post_loading": "Analyzing...",
   "post_error": "Content loading error.",
   "post_not_found": "Analysis not found",
@@ -203,14 +194,11 @@
   "footer_tagline": "The excellence standard in technical precision.",
   "footer_legal": "Legal Aspects",
   "nav_blog": "Blog",
+  "nav_recursos": "Resources",
   "nav_guide": "Junior Guide",
   "nav_saas": "SaaS Boilerplate",
-  "nav_guide": "Junior Guide",
-  "nav_saas": "SaaS Boilerplate",
-
   "arkeonix_meta_title": "Enterprise SaaS Boilerplate with Next.js 15",
   "arkeonix_meta_description": "Arkeonix SaaS is a production-ready boilerplate with authentication, Stripe payments, multi-tenancy, RBAC, audit logs and much more. Launch your SaaS in days, not months.",
-
   "arkeonix_badge": "Arkeonix SaaS — Production-Ready Boilerplate",
   "arkeonix_hero_headline_1": "Ship your SaaS",
   "arkeonix_hero_headline_highlight": "faster",
@@ -218,12 +206,9 @@
   "arkeonix_hero_subheading": "Enterprise-grade boilerplate with Next.js 15, Prisma, Auth.js, Stripe, and Resend. Authentication, payments, and emails — ready in minutes. No lock-in. Full source code.",
   "arkeonix_cta_primary": "Get in touch to buy",
   "arkeonix_cta_secondary": "See all features",
-
   "arkeonix_stack_label": "Built with production-grade technology",
-
   "arkeonix_features_title": "Everything you need to launch",
   "arkeonix_features_subtitle": "12 critical modules already built and tested, so you can focus on your product.",
-
   "arkeonix_feature_auth_title": "Complete Authentication",
   "arkeonix_feature_auth_desc": "OAuth with GitHub and Google, passwordless magic links, JWT sessions in HttpOnly cookies. Edge-compatible and secure.",
   "arkeonix_feature_rbac_title": "RBAC + Middleware",
@@ -248,13 +233,11 @@
   "arkeonix_feature_ratelimit_desc": "4 Upstash Redis limiters: auth, API, strict mode, and webhooks. Per-IP or user-ID. Returns 429 with Retry-After.",
   "arkeonix_feature_audit_title": "Audit Logs",
   "arkeonix_feature_audit_desc": "Immutable action log: actor, resource, organization, IP, and User-Agent. Compliance-ready. Fire-and-forget with Sentry fallback.",
-
   "arkeonix_demo_title": "See it in action",
   "arkeonix_demo_subtitle": "Explore the live demo of the boilerplate. Everything you see is included in the source code.",
   "arkeonix_demo_tab_landing": "Landing Page",
   "arkeonix_demo_tab_dashboard": "Dashboard",
   "arkeonix_demo_fullscreen": "Try live demo",
-
   "arkeonix_included_title": "What's inside the boilerplate",
   "arkeonix_included_subtitle": "Full source code. No subscriptions. No hidden dependencies. Use the project for unlimited commercial projects.",
   "arkeonix_included_note": "Complete source code · No subscriptions · Commercial license included",
@@ -276,13 +259,11 @@
   "arkeonix_included_typescript": "TypeScript strict mode with zero `any`",
   "arkeonix_included_license": "Commercial license for unlimited projects",
   "arkeonix_included_updates": "Future boilerplate updates included",
-
   "arkeonix_pricing_title": "Simple, transparent pricing",
   "arkeonix_pricing_subtitle": "Choose the plan that best fits your project. Pay once, use forever.",
   "arkeonix_pricing_note": "One-time purchase · No subscriptions · Commercial license · Updates included",
   "arkeonix_plan_popular": "Most popular",
   "arkeonix_plan_period": "one-time",
-
   "arkeonix_plan_starter": "Starter",
   "arkeonix_plan_starter_desc": "Launch your first SaaS with everything you need from day 1.",
   "arkeonix_plan_starter_f1": "1 commercial project",
@@ -291,7 +272,6 @@
   "arkeonix_plan_starter_f4": "Commercial license included",
   "arkeonix_plan_starter_f5": "Community support",
   "arkeonix_plan_cta_starter": "Buy Starter →",
-
   "arkeonix_plan_pro": "Pro",
   "arkeonix_plan_pro_desc": "For agencies and teams shipping multiple products. Best value on the market.",
   "arkeonix_plan_pro_f1": "Unlimited commercial projects",
@@ -301,7 +281,6 @@
   "arkeonix_plan_pro_f5": "Priority email support (6 months)",
   "arkeonix_plan_pro_f6": "1:1 onboarding session included",
   "arkeonix_plan_cta_pro": "Buy Pro →",
-
   "arkeonix_contact_title": "Get started now",
   "arkeonix_contact_subtitle": "Fill out the form and we'll get back to you within 24 hours.",
   "arkeonix_contact_plan_label": "Plan of interest",
@@ -322,7 +301,6 @@
   "arkeonix_contact_body_name": "Name",
   "arkeonix_contact_body_email": "Email",
   "arkeonix_contact_body_plan": "Plan of interest",
-
   "arkeonix_author_badge": "The creator",
   "arkeonix_author_title": "Built by someone who uses it every day",
   "arkeonix_author_bio1": "I'm David, a QA Automation Engineer focused on infrastructure and DevOps tooling. By day I automate tests with Java and Selenium — but when I close my work laptop, I open it again to manage my private server with Docker, explore new dev tools, and ship personal projects from scratch.",
@@ -343,13 +321,10 @@
   "arkeonix_arch_item4_desc": "Auth.js, Stripe, Resend and Prisma configured and ready to use from day 1.",
   "arkeonix_arch_item5_title": "prisma/ — Database",
   "arkeonix_arch_item5_desc": "Schema with User, Organization, Membership, AuditLog and ApiKey. Migrations included.",
-
   "arkeonix_footer_cta_title": "Ready to ship faster?",
   "arkeonix_footer_cta_subtitle": "Join teams building enterprise SaaS with Arkeonix.",
   "arkeonix_footer_note": "One-time purchase · Unlimited projects · Commercial license included",
-
   "auth_login_title": "Sign in",
-  "auth_signout": "Sign out",
   "auth_signout": "Sign out",
   "auth_login_subtitle": "Access your account to continue",
   "auth_login_email": "Email",
@@ -363,7 +338,6 @@
   "auth_login_register_link": "Sign up here",
   "auth_login_error_invalid": "Invalid email or password",
   "auth_login_error_not_confirmed": "You must confirm your email before signing in",
-
   "auth_register_title": "Create account",
   "auth_register_subtitle": "Sign up to access the complete guide",
   "auth_register_email": "Email",
@@ -381,7 +355,6 @@
   "auth_register_success_title": "Account created!",
   "auth_register_success_message": "We've sent you a confirmation email. Check your inbox and confirm your account to sign in.",
   "auth_register_success_link": "Go to login →",
-
   "auth_reset_title": "Reset password",
   "auth_reset_subtitle": "Enter your email and we'll send you a link",
   "auth_reset_submit": "Send link",
@@ -390,7 +363,6 @@
   "auth_reset_success_title": "Email sent",
   "auth_reset_success_message": "Check your inbox. We've sent you a link to reset your password.",
   "auth_reset_success_link": "Back to login →",
-
   "guia_landing_title": "Junior Developer Guide Spain",
   "guia_landing_subtitle": "Everything you need to know to start your tech career: roles, salaries, what to learn, how to prepare your CV and what to expect from your first job. No fluff. Real data from the Spanish market.",
   "guia_landing_meta_title": "Junior Developer Guide Spain — Tech Career",
@@ -428,7 +400,6 @@
   "guia_landing_plan_cta": "Get access →",
   "guia_landing_plan_login_required": "Sign in to buy",
   "guia_landing_checkout_error": "Error starting checkout. Please try again.",
-
   "guia_landing_b2b_title": "Plans for Companies and Education Centers",
   "guia_landing_b2b_subtitle": "Training juniors at your company or school? Give them direct access to the full guide without individual payments.",
   "guia_landing_b2b_plan_annual": "Company Annual",
@@ -447,23 +418,19 @@
   "guia_landing_b2b_how_3_desc": "No need to buy licenses one by one. One plan covers your entire organization.",
   "guia_landing_bottom_cta_title": "Ready to start?",
   "guia_landing_bottom_cta_desc": "Read chapter 0 for free and decide if this guide is for you. No commitment.",
-
   "guia_thanks_title": "Thank you for your purchase!",
   "guia_thanks_message": "Your access is being activated. You'll receive a confirmation email.",
   "guia_thanks_cta": "Go to dashboard →",
-
   "guia_dashboard_title": "Junior Developer Guide",
   "guia_dashboard_welcome": "Welcome",
   "guia_dashboard_select_chapter": "Select a chapter to start",
   "guia_dashboard_free": "Free",
   "guia_dashboard_premium": "Premium",
-
   "guia_chapter_not_found_title": "Chapter not found",
   "guia_chapter_back_index": "← Back to index",
   "guia_chapter_loading": "Loading content...",
   "guia_chapter_prev": "← Previous",
   "guia_chapter_next": "Next →",
-
   "guia_chapter_0_title": "Chapter 0 — Before you start",
   "guia_chapter_0_desc": "Who this is for, the questions everyone asks and why I wrote it.",
   "guia_chapter_1_title": "Chapter 1 — The industry: what jobs really exist",
@@ -477,5 +444,18 @@
   "guia_chapter_5_title": "Chapter 5 — Best practices nobody teaches",
   "guia_chapter_5_desc": "Git, clean code, communication, code review.",
   "guia_chapter_6_title": "Chapter 6 — The first job: survive and grow",
-  "guia_chapter_6_desc": "First 3 months, when to ask for a raise, grow from junior to mid."
+  "guia_chapter_6_desc": "First 3 months, when to ask for a raise, grow from junior to mid.",
+  "recursos_title": "Selected Resources",
+  "recursos_meta_description": "Expert recommendations and technical analysis of tools, hardware, and software by Arkeonix Labs.",
+  "recursos_description": "A curated selection of technological tools and resources analyzed under our technical rigor standard.",
+  "recursos_filter_label": "Filter by technical category",
+  "recursos_filter_all": "All resources",
+  "recursos_search_label": "Search",
+  "recursos_search_placeholder": "Search by component or model",
+  "recursos_error": "Error loading reviews.",
+  "recursos_empty": "No analyzed resources in this section yet.",
+  "not_found_error_code": "Error Code: 404",
+  "not_found_message": "It seems the page you're looking for has moved or no longer exists in our system. Don't worry, the rest of Arkeonix is still operational.",
+  "not_found_page_lost": "Page Lost in Space",
+  "not_found_back_to_home": "Back to Home"
 }

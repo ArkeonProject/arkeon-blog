@@ -4,13 +4,14 @@ import { FiFilter, FiChevronDown, FiSearch } from "react-icons/fi";
 import PostList from "@/components/posts/PostList";
 import Pagination from "@/components/ui/Pagination";
 import ScrollReveal from "@/components/ui/ScrollReveal";
+import PostSkeleton from "@/components/ui/PostSkeleton";
 import { supabase } from "@/lib/supabase";
 import { useLocale } from "@/hooks/useLocale";
 import type { PostListItem } from "@/types/post";
 
-const PRODUCTS_PAGE_SIZE = 6;
+const RECURSOS_PAGE_SIZE = 6;
 
-const PRODUCT_CATEGORY_VALUES = [
+const RECURSOS_CATEGORY_VALUES = [
   "product",
   "Product",
   "products",
@@ -21,10 +22,10 @@ const PRODUCT_CATEGORY_VALUES = [
   "Productos",
 ];
 
-export default function ProductsPage() {
+export default function RecursosPage() {
   const { locale, t } = useLocale();
   const [posts, setPosts] = useState<PostListItem[]>([]);
-  const [productCategories, setProductCategories] = useState<string[]>([]);
+  const [resourceCategories, setResourceCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -35,13 +36,13 @@ export default function ProductsPage() {
 
   const languageFilter = locale.toUpperCase();
 
-  const fetchProductCategories = useCallback(async () => {
+  const fetchResourceCategories = useCallback(async () => {
     const { data, error } = await supabase
       .from("posts")
       .select("product_category")
       .eq("language", languageFilter)
       .eq("status", "published")
-      .in("category", PRODUCT_CATEGORY_VALUES)
+      .in("category", RECURSOS_CATEGORY_VALUES)
       .not("product_category", "is", null);
 
     if (error) {
@@ -56,17 +57,17 @@ export default function ProductsPage() {
           .filter((value): value is string => Boolean(value))
       )
     ).sort((a, b) => a.localeCompare(b));
-    setProductCategories(categories);
+    setResourceCategories(categories);
   }, [languageFilter]);
 
-  const fetchProductPosts = useCallback(async () => {
+  const fetchResourcePosts = useCallback(async () => {
     setLoading(true);
     let query = supabase
       .from("posts")
       .select("id, title, slug, excerpt, cover_image, published_at, language, category, product_category")
       .eq("language", languageFilter)
       .eq("status", "published")
-      .in("category", PRODUCT_CATEGORY_VALUES)
+      .in("category", RECURSOS_CATEGORY_VALUES)
       .order("published_at", { ascending: false });
 
     if (selectedCategory !== "all") {
@@ -76,7 +77,7 @@ export default function ProductsPage() {
     const { data, error } = await query;
     if (error) {
       console.error(error);
-      setErrorMsg(t("products_error"));
+      setErrorMsg(t("recursos_error"));
       setPosts([]);
     } else {
       setErrorMsg(null);
@@ -87,12 +88,12 @@ export default function ProductsPage() {
 
   useEffect(() => {
     setSelectedCategory("all");
-    void fetchProductCategories();
-  }, [fetchProductCategories]);
+    void fetchResourceCategories();
+  }, [fetchResourceCategories]);
 
   useEffect(() => {
-    void fetchProductPosts();
-  }, [fetchProductPosts]);
+    void fetchResourcePosts();
+  }, [fetchResourcePosts]);
 
   useEffect(() => {
     if (!isFilterOpen) return;
@@ -114,10 +115,10 @@ export default function ProductsPage() {
     });
   }, [posts, searchTerm]);
 
-  const totalPages = Math.ceil(filteredPosts.length / PRODUCTS_PAGE_SIZE);
+  const totalPages = Math.ceil(filteredPosts.length / RECURSOS_PAGE_SIZE);
   const displayedPosts = useMemo(() => {
-    const start = (currentPage - 1) * PRODUCTS_PAGE_SIZE;
-    return filteredPosts.slice(start, start + PRODUCTS_PAGE_SIZE);
+    const start = (currentPage - 1) * RECURSOS_PAGE_SIZE;
+    return filteredPosts.slice(start, start + RECURSOS_PAGE_SIZE);
   }, [filteredPosts, currentPage]);
 
   // Reset page when filters change
@@ -131,7 +132,19 @@ export default function ProductsPage() {
   };
 
   if (loading) {
-    return <p className="text-center mt-20 text-gray-600 dark:text-white/70 tracking-wide font-semibold text-lg">{t("category_loading")}</p>;
+    return (
+      <div className="max-w-5xl mx-auto px-6 py-10 md:py-16 space-y-12">
+        <div className="text-center space-y-4">
+          <div className="w-64 h-12 bg-muted/40 rounded-2xl mx-auto animate-pulse" />
+          <div className="w-full max-w-2xl h-6 bg-muted/20 rounded-lg mx-auto animate-pulse" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(6)].map((_, i) => (
+            <PostSkeleton key={i} />
+          ))}
+        </div>
+      </div>
+    );
   }
 
   if (errorMsg) {
@@ -141,17 +154,17 @@ export default function ProductsPage() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-10 md:py-16">
       <Helmet>
-        <title>{t("products_title")} | Arkeonix Labs</title>
-        <meta name="description" content={t("products_meta_description")} />
-        <link rel="canonical" href="https://www.arkeonixlabs.com/products" />
-        <meta property="og:title" content={`${t("products_title")} | Arkeonix Labs`} />
-        <meta property="og:description" content={t("products_meta_description")} />
+        <title>{t("recursos_title")} | Arkeonix Labs</title>
+        <meta name="description" content={t("recursos_meta_description")} />
+        <link rel="canonical" href={`https://www.arkeonixlabs.com/${locale}/recursos`} />
+        <meta property="og:title" content={`${t("recursos_title")} | Arkeonix Labs`} />
+        <meta property="og:description" content={t("recursos_meta_description")} />
       </Helmet>
 
       <ScrollReveal variant="blur" duration={800}>
         <section className="text-center mb-10">
-          <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 dark:text-white mb-4">{t("products_title")}</h1>
-          <p className="text-gray-700 dark:text-white/80 text-lg md:text-xl max-w-3xl mx-auto">{t("products_description")}</p>
+          <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 dark:text-white mb-4">{t("recursos_title")}</h1>
+          <p className="text-gray-700 dark:text-white/80 text-lg md:text-xl max-w-3xl mx-auto">{t("recursos_description")}</p>
         </section>
       </ScrollReveal>
 
@@ -166,7 +179,7 @@ export default function ProductsPage() {
             >
               <span className="flex items-center gap-3">
                 <FiFilter className="w-4 h-4 text-[#00aaff]" />
-                {selectedCategory === "all" ? t("products_filter_all") : selectedCategory}
+                {selectedCategory === "all" ? t("recursos_filter_all") : selectedCategory}
               </span>
               <FiChevronDown
                 className={`w-4 h-4 text-[#00aaff] transition-transform duration-300 ${isFilterOpen ? "rotate-180" : ""
@@ -185,9 +198,9 @@ export default function ProductsPage() {
                       : "text-gray-700 dark:text-white/80 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
                       }`}
                   >
-                    {t("products_filter_all")}
+                    {t("recursos_filter_all")}
                   </button>
-                  {productCategories.map((category) => (
+                  {resourceCategories.map((category) => (
                     <button
                       type="button"
                       key={category}
@@ -211,7 +224,7 @@ export default function ProductsPage() {
               type="text"
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
-              placeholder={t("products_search_placeholder")}
+              placeholder={t("recursos_search_placeholder")}
               className="w-full bg-gray-100 dark:bg-[#0f1f38]/60 border border-gray-300 dark:border-white/10 rounded-2xl py-3 pl-11 pr-4 text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#00aaff]/40 focus:border-transparent transition-all duration-300 shadow-lg dark:shadow-[#007EAD]/20"
             />
           </div>
@@ -224,7 +237,7 @@ export default function ProductsPage() {
           <PostList posts={displayedPosts} />
         </ScrollReveal>
       ) : (
-        <p className="text-center text-gray-600 dark:text-white/70 text-lg">{t("products_empty")}</p>
+        <p className="text-center text-gray-600 dark:text-white/70 text-lg">{t("recursos_empty")}</p>
       )}
 
       {totalPages > 1 && (
