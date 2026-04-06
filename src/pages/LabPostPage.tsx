@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router";
 import { Helmet } from "react-helmet-async";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
@@ -86,7 +86,7 @@ export default function LabPostPage() {
     }, [rawHtml]);
 
     const safeHtml = useMemo(
-        () => DOMPurify.sanitize(cleanedHtml),
+        () => typeof window !== "undefined" && DOMPurify.sanitize ? DOMPurify.sanitize(cleanedHtml) : cleanedHtml,
         [cleanedHtml]
     );
 
@@ -269,7 +269,7 @@ export default function LabPostPage() {
                 <div className="border-t border-gray-300 dark:border-[#007EAD]/20 mt-4 mb-8" />
 
                 <div className="mb-8">
-                    <ShareButtons url={window.location.href} title={post.title} />
+                    <ShareButtons url={typeof window !== "undefined" ? window.location.href : `https://www.arkeonixlabs.com/lab/${slug}`} title={post.title} />
                 </div>
 
                 <div className="border-t border-gray-300 dark:border-[#007EAD]/20 mb-8" />

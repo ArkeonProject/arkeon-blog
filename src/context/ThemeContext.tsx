@@ -9,8 +9,11 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
-    const saved = localStorage.getItem(THEME_KEY) as Theme | null;
-    return saved ?? "dark";
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem(THEME_KEY) as Theme | null;
+      if (saved) return saved;
+    }
+    return "dark";
   });
 
   useEffect(() => {

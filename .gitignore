@@ -45,3 +45,8 @@ supabase/.local
 .kilo/
 .agents/
 guias/
+.react-router/
+build/
+dist/
+dist-ssr/
+.vercel/

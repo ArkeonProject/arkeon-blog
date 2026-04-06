@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useState, useRef, useEffect } from "react";
 import { FiChevronDown, FiUser, FiLogOut, FiSettings } from "react-icons/fi";
 import { useLocale } from "@/hooks/useLocale";
@@ -8,13 +8,12 @@ import type { Locale } from "@/context/LocaleContext";
 
 const NAV_LINKS = [
   { path: "/blog", key: "blog" },
-  { path: "/news", key: "news" },
-  { path: "/products", key: "products" },
+  { path: "/recursos", key: "recursos" },
   { path: "/lab", key: "lab" },
   { path: "/guia-junior", key: "guide" },
   { path: "/arkeonix", key: "saas" },
-  { path: "/contact", key: "contact" },
 ];
+
 
 export default function Header() {
   const { locale, setLocale, t } = useLocale();
@@ -53,6 +52,7 @@ export default function Header() {
 
   const navLinkLabel = (key: string) => {
     if (key === "blog") return t("nav_blog");
+    if (key === "recursos") return t("nav_recursos");
     if (key === "guide") return t("nav_guide");
     if (key === "saas") return t("nav_saas");
     if (key === "contact") return t("nav_contact");
@@ -66,7 +66,7 @@ export default function Header() {
     >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div
-          className={`flex items-center justify-between transition-all duration-500 ${isScrolled ? "h-14" : "h-16"
+          className={`flex items-center justify-between transition-all duration-500 ease-in-out ${isScrolled ? "h-12" : "h-16"
             }`}
         >
           {/* Logo */}
@@ -217,7 +217,7 @@ export default function Header() {
 
       {/* Scrolled gradient line */}
       {isScrolled && (
-        <div className="footer-gradient-border w-full opacity-40" />
+        <div className="footer-gradient-border w-full opacity-20" />
       )}
 
       {/* Mobile drawer */}

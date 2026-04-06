@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router";
 import { Helmet } from "react-helmet-async";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
@@ -10,7 +10,42 @@ import ReadingProgressBar from "@/components/ui/ReadingProgressBar";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import ShareButtons from "@/components/ui/ShareButtons";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import TableOfContents from "@/components/ui/TableOfContents";
+import SmartImage from "@/components/ui/SmartImage";
 import type { PostDetail } from "@/types/post";
+import { useLoaderData } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+
+const RECURSOS_CATEGORY_VALUES = [
+  "product",
+  "Product",
+  "products",
+  "Products",
+  "producto",
+  "Producto",
+  "productos",
+  "Productos",
+];
+
+// eslint-disable-next-line react-refresh/only-export-components
+export async function loader({ params, request }: LoaderFunctionArgs) {
+  // Try to determine locale from Cookie, default "ES"
+  const cookieHeader = request.headers.get("Cookie") || "";
+  const isEn = cookieHeader.includes("arkeonix_locale=en");
+  const languageFilter = isEn ? "EN" : "ES";
+
+  if (!params.slug) return { post: null, error: "Not found" };
+
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("slug", params.slug)
+    .eq("language", languageFilter)
+    .eq("status", "published")
+    .maybeSingle();
+
+  return { post: (data as PostDetail) || null, error: error?.message || null };
+}
 
 marked.setOptions({ async: false });
 
@@ -34,8 +69,12 @@ export default function PostPage() {
     return { data: (data as PostDetail | null) ?? null, error };
   }, [languageFilter, slug]);
 
-  const { data: post, loading, error } = useSupabaseQuery<PostDetail | null>(queryPost);
-  const errorMsg = error ? t("post_error") : null;
+  const { data: clientPost, loading: clientLoading, error } = useSupabaseQuery<PostDetail | null>(queryPost);
+  const loaderData = useLoaderData() as { post: PostDetail | null; error: string | null } | undefined;
+  
+  const post = clientPost || loaderData?.post;
+  const loading = !post && clientLoading;
+  const errorMsg = error ? t("post_error") : loaderData?.error ? t("post_error") : null;
 
   const affiliateUrl = useMemo(() => {
     if (!post?.content) return null;
@@ -49,10 +88,43 @@ export default function PostPage() {
     [post?.content]
   );
 
+  // Extract headings for TOC
+  const tocItems = useMemo(() => {
+    if (!post?.content || isHtmlContent) return [];
+    
+    // Simple regex to find markdown headings
+    const headingRegex = /^(#{2,3})\s+(.+)$/gm;
+    const items = [];
+    let match;
+
+    while ((match = headingRegex.exec(post.content)) !== null) {
+      const level = match[1].length;
+      const text = match[2].trim();
+      const id = text
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-");
+      
+      items.push({ id, text, level });
+    }
+    return items;
+  }, [post?.content, isHtmlContent]);
+
   const rawHtml = useMemo(() => {
     if (!post?.content) return "";
     if (isHtmlContent) return post.content;
-    return marked.parse(post.content) as string;
+
+    // Custom renderer to add IDs to headings
+    const renderer = new marked.Renderer();
+    renderer.heading = ({ text, depth }) => {
+      const id = text
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-");
+      return `<h${depth} id="${id}">${text}</h${depth}>`;
+    };
+
+    return marked.parse(post.content, { renderer }) as string;
   }, [post?.content, isHtmlContent]);
 
   const cleanedHtml = useMemo(() => {
@@ -61,7 +133,7 @@ export default function PostPage() {
   }, [rawHtml]);
 
   const safeHtml = useMemo(
-    () => DOMPurify.sanitize(cleanedHtml),
+    () => typeof window !== "undefined" && DOMPurify.sanitize ? DOMPurify.sanitize(cleanedHtml) : cleanedHtml,
     [cleanedHtml]
   );
 
@@ -96,7 +168,7 @@ export default function PostPage() {
     <>
       <ReadingProgressBar />
       <ScrollReveal variant="fade-up" duration={800}>
-      <div className="max-w-4xl mx-auto p-8 md:p-12 bg-gradient-to-br from-white to-gray-50 dark:from-[#0b1226] dark:via-[#071622] dark:to-[#0a172b] rounded-3xl shadow-lg dark:shadow-[#007EAD]/20 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto p-8 md:p-12 bg-gradient-to-br from-white to-gray-50 dark:from-[#0b1226] dark:via-[#071622] dark:to-[#0a172b] rounded-3xl shadow-lg dark:shadow-[#007EAD]/20 transition-colors duration-300">
         <Breadcrumbs />
 
         <Helmet>
@@ -150,6 +222,31 @@ export default function PostPage() {
                 "@id": `https://www.arkeonixlabs.com/post/${slug}`,
               },
               ...(post.cover_image && { image: post.cover_image }),
+              // Enhanced schema for Reviews/Products in Recursos
+              ...(post.category && RECURSOS_CATEGORY_VALUES.includes(post.category) && {
+                "review": {
+                  "@type": "Review",
+                  "reviewRating": {
+                    "@type": "Rating",
+                    "ratingValue": "5",
+                    "bestRating": "5"
+                  },
+                  "author": {
+                    "@type": "Person",
+                    "name": post.author
+                  }
+                },
+                "mainEntity": {
+                  "@type": "Product",
+                  "name": post.title,
+                  "image": post.cover_image,
+                  "description": description,
+                  "brand": {
+                    "@type": "Brand",
+                    "name": "Arkeonix Recommended"
+                  }
+                }
+              })
             })}
           </script>
         </Helmet>
@@ -161,14 +258,16 @@ export default function PostPage() {
           <span>←</span> {t("post_back_to_blog")}
         </Link>
 
-        {post.cover_image && (
-          <img
-            src={post.cover_image}
-            alt={post.title}
-            className="rounded-xl my-6 w-full object-cover aspect-auto border border-gray-300 dark:border-[#007EAD]/20 shadow-lg dark:shadow-[#007EAD]/10"
-            loading="lazy"
-          />
-        )}
+        {/* Dynamic Grid Layout for TOC */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12 items-start">
+          <div className="min-w-0">
+            {post.cover_image && (
+              <SmartImage
+                src={post.cover_image}
+                alt={post.title}
+                className="my-6"
+              />
+            )}
 
         <h1 className="text-4xl font-bold mb-2 text-[#007EAD] dark:text-[#00aaff]">{post.title}</h1>
 
@@ -184,7 +283,7 @@ export default function PostPage() {
 
         <div className="mb-8">
           <ShareButtons
-            url={window.location.href}
+            url={typeof window !== "undefined" ? window.location.href : `https://www.arkeonixlabs.com/post/${slug}`}
             title={post.title}
           />
         </div>
@@ -228,11 +327,19 @@ export default function PostPage() {
               </a>
             </div>
           )}
-
           <div dangerouslySetInnerHTML={{ __html: afterBuy }} />
         </article>
       </div>
-      </ScrollReveal>
+
+      {/* Table of Contents Sidebar */}
+      {tocItems.length > 0 && (
+        <aside className="hidden lg:block">
+          <TableOfContents items={tocItems} />
+        </aside>
+      )}
+    </div>
+  </div>
+</ScrollReveal>
     </>
   );
 }

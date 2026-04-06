@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { FiTerminal, FiSearch, FiCode, FiFileText } from "react-icons/fi";
 import NewsletterForm from "@/components/forms/NewsletterForm";
 import InfiniteCarousel from "@/components/layout/InfiniteCarousel";
@@ -9,6 +9,7 @@ import PostCard from "@/components/posts/PostCard";
 import LabPostCard from "@/components/posts/LabPostCard";
 import Pagination from "@/components/ui/Pagination";
 import ScrollReveal from "@/components/ui/ScrollReveal";
+import PostSkeleton from "@/components/ui/PostSkeleton";
 import { supabase } from "@/lib/supabase";
 import { useLocale } from "@/hooks/useLocale";
 import type { PostListItem } from "@/types/post";
@@ -91,8 +92,20 @@ export default function BlogPage() {
 
   if (loading && currentPage === 1 && posts.length === 0) {
     return (
-      <div className="min-h-screen pt-32 px-4 text-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary border-t-transparent mx-auto" />
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
+        <div className="space-y-12">
+          {/* Hero space skeleton */}
+          <div className="space-y-4 text-center">
+            <div className="w-48 h-8 bg-muted/40 rounded-full mx-auto animate-pulse" />
+            <div className="w-full max-w-2xl h-24 bg-muted/20 rounded-3xl mx-auto animate-pulse" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(6)].map((_, i) => (
+              <PostSkeleton key={i} />
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
@@ -266,11 +279,8 @@ export default function BlogPage() {
             )}
 
             {currentPage === 1 && featuredPost && (() => {
-              const cat = (featuredPost.category ?? "").toLowerCase();
-              const isNews = ["news", "noticias"].some(v => cat.includes(v));
-              const isProduct = ["product", "producto"].some(v => cat.includes(v));
-              const viewLink = isNews ? "/news" : isProduct ? "/products" : "/blog";
-              const viewKey = isNews ? "blog_view_news" : isProduct ? "blog_view_products" : "blog_view_blog";
+              const viewLink = "/blog";
+              const viewKey = "blog_view_blog";
               return (
                 <ScrollReveal variant="flip-up" duration={800} className="space-y-8">
                   <div className="flex items-center justify-between">
