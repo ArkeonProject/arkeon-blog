@@ -27,6 +27,7 @@ const RECURSOS_CATEGORY_VALUES = [
   "Productos",
 ];
 
+// eslint-disable-next-line react-refresh/only-export-components
 export async function loader({ params, request }: LoaderFunctionArgs) {
   // Try to determine locale from Cookie, default "ES"
   const cookieHeader = request.headers.get("Cookie") || "";

@@ -16,6 +16,7 @@
       "permanent": true
     }
   ],
+  "outputDirectory": "build/client",
   "headers": [
     {
       "source": "/(.*)",

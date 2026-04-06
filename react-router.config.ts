@@ -49,8 +49,8 @@ export default {
       const { data: posts } = await supabase.from("posts").select("slug").eq("status", "published");
       const { data: labs } = await supabase.from("lab_posts").select("slug").eq("status", "published");
       
-      const postRoutes = (posts || []).map((p: any) => `/post/${p.slug}`);
-      const labRoutes = (labs || []).map((l: any) => `/lab/${l.slug}`);
+      const postRoutes = (posts || []).map((p: { slug: string }) => `/post/${p.slug}`);
+      const labRoutes = (labs || []).map((l: { slug: string }) => `/lab/${l.slug}`);
       
       dynamicRoutes = [...postRoutes, ...labRoutes];
     }
