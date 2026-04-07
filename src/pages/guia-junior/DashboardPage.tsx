@@ -1,11 +1,38 @@
+import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useLocale } from '@/hooks/useLocale';
 import { Link } from 'react-router';
 import { chapters } from '@/data/guia/chapters';
 
 export default function GuiaDashboardPage() {
-  const { user } = useAuth();
+  const { user, access } = useAuth();
   const { t } = useLocale();
+  const [portalLoading, setPortalLoading] = useState(false);
+  const [portalError, setPortalError] = useState<string | null>(null);
+
+  const isSubscriber = access.some(
+    (a) => a.product_id === 'guia_junior' && (a.plan === 'monthly' || a.plan === 'annual')
+  );
+
+  const handleManageSubscription = async () => {
+    if (!user) return;
+    setPortalLoading(true);
+    setPortalError(null);
+    try {
+      const res = await fetch('/api/customer-portal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id }),
+      });
+      if (!res.ok) throw new Error();
+      const { url } = await res.json();
+      if (url) window.location.href = url;
+    } catch {
+      setPortalError(t('guia_dashboard_manage_sub_error'));
+    } finally {
+      setPortalLoading(false);
+    }
+  };
 
   return (
     <div className="py-8">
@@ -35,6 +62,25 @@ export default function GuiaDashboardPage() {
           </Link>
         ))}
       </div>
+
+      {isSubscriber && (
+        <div className="mt-10 p-5 rounded-xl border border-border bg-surface flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <p className="font-semibold text-foreground">{t('guia_dashboard_manage_sub')}</p>
+            <p className="text-sm text-muted-foreground">{t('guia_dashboard_manage_sub_desc')}</p>
+            {portalError && (
+              <p className="text-sm text-red-500 mt-1">{portalError}</p>
+            )}
+          </div>
+          <button
+            onClick={handleManageSubscription}
+            disabled={portalLoading}
+            className="shrink-0 px-5 py-2.5 text-sm font-semibold rounded-xl border border-border bg-surface hover:bg-surface-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {portalLoading ? t('guia_dashboard_manage_sub_loading') : t('guia_dashboard_manage_sub')}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
