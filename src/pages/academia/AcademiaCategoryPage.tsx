@@ -177,7 +177,7 @@ interface ExamCardProps {
 
 function ExamCard({ exam, categorySlug, bestScore, locked, t }: ExamCardProps) {
   const content = (
-    <div className={`p-6 rounded-xl border transition-all duration-200 ${
+    <div className={`flex flex-col h-full p-6 rounded-xl border transition-all duration-200 ${
       locked
         ? 'border-border bg-surface opacity-60 cursor-not-allowed'
         : 'border-border bg-surface hover:bg-surface-hover hover:border-primary/30 cursor-pointer'
@@ -186,7 +186,7 @@ function ExamCard({ exam, categorySlug, bestScore, locked, t }: ExamCardProps) {
         <h3 className="font-semibold text-foreground">{exam.title}</h3>
         {locked && <span className="text-lg">🔒</span>}
       </div>
-      <p className="text-sm text-muted-foreground mb-4">{exam.description}</p>
+      <p className="text-sm text-muted-foreground mb-4 flex-1">{exam.description}</p>
       <div className="flex items-center justify-between text-xs text-muted-foreground">
         <span>⏱ {exam.time_limit_minutes} min</span>
         {bestScore !== null ? (
@@ -203,7 +203,7 @@ function ExamCard({ exam, categorySlug, bestScore, locked, t }: ExamCardProps) {
   if (locked) return content;
 
   return (
-    <Link to={`/academia/${categorySlug}/${exam.slug}`}>
+    <Link to={`/academia/${categorySlug}/${exam.slug}`} className="h-full">
       {content}
     </Link>
   );
