@@ -10,7 +10,11 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" -X POST https://arkeon-blog-a0dtlrbrn-daviilpzdevs-projects.vercel.app/api/guia-webhook -H \"Content-Type: application/json\" -d '{\"test\": true}')",
       "Bash(curl -s -w \"\\\\nHTTP Status: %{http_code}\" -X POST https://arkeon-blog-git-feat-guia-junior-premium-daviilpzdevs-projects.vercel.app/api/guia-webhook -H \"Content-Type: application/json\" -d '{\"test\": true}')",
       "Bash(find /Users/davidlopez/Desktop/Projects/arkeonix-projects/arkeon-blog/node_modules/@supabase -name \"*.d.ts\" -exec grep -l \"getUser\" {} \\\\;)",
-      "Bash(echo \"EXIT: $?\")"
+      "Bash(echo \"EXIT: $?\")",
+      "Skill(humanizer)",
+      "Skill(humanizer:*)",
+      "Bash(pnpm lab:publish lab/drafts/capa-api-blog-vercel-functions-supabase-stripe-vite-es.md)",
+      "Bash(pnpm lab:publish lab/drafts/api-layer-blog-vercel-functions-supabase-stripe-vite-en.md)"
     ]
   }
 }
