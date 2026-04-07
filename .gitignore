@@ -39,3 +39,14 @@ supabase/.local
 .agents
 .kilo
 labs
+
+# Build output y artefactos locales
+build/
+.react-router/
+.vercel/
+.kilocode/
+.n8n/
+guias/
+skills-lock.json
+lab/drafts/
+sql/

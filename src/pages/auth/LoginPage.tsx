@@ -8,7 +8,7 @@ export default function LoginPage() {
   const { t } = useLocale();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/guia-junior/dashboard';
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/blog';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

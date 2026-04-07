@@ -35,6 +35,11 @@ export default [
   route("guia-junior/dashboard", "pages/guia-junior/DashboardPage.tsx"),
   route("guia-junior/capitulo/:slug", "pages/guia-junior/ChapterPage.tsx"),
 
+  // Academia
+  route("academia", "pages/academia/AcademiaPage.tsx"),
+  route("academia/:category", "pages/academia/AcademiaCategoryPage.tsx"),
+  route("academia/:category/:slug", "pages/academia/AcademiaExamPage.tsx"),
+
   // Fallback 404
   route("*", "pages/NotFoundPage.tsx"),
 ] satisfies RouteConfig;

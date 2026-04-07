@@ -7,10 +7,6 @@ import { useSupabaseQuery } from '@/hooks/useSupabaseQuery';
 import { supabase } from '@/lib/supabase';
 import type { AcademiaCategory, AcademiaExam, AcademiaAttempt } from '@/types/academia';
 
-interface CategoryWithExams extends AcademiaCategory {
-  exams: AcademiaExam[];
-}
-
 export default function AcademiaCategoryPage() {
   const { t } = useLocale();
   const { category: categorySlug } = useParams<{ category: string }>();
@@ -21,17 +17,29 @@ export default function AcademiaCategoryPage() {
   const categoryFetcher = useCallback(async () => {
     const { data, error } = await supabase
       .from('academia_categories')
-      .select('*, academia_exams(*)')
+      .select('*')
       .eq('slug', categorySlug ?? '')
       .single();
-    return { data: data as CategoryWithExams | null, error: error as Error | null };
+    return { data: data as AcademiaCategory | null, error: error as Error | null };
   }, [categorySlug]);
 
   const { data: category, loading: categoryLoading } = useSupabaseQuery(categoryFetcher);
 
+  const examsFetcher = useCallback(async () => {
+    if (!category?.id) return { data: null, error: null };
+    const { data, error } = await supabase
+      .from('academia_exams')
+      .select('*')
+      .eq('category_id', category.id)
+      .order('id', { ascending: true });
+    return { data: data as AcademiaExam[] | null, error: error as Error | null };
+  }, [category?.id]);
+
+  const { data: exams } = useSupabaseQuery(examsFetcher);
+
   const attemptsFetcher = useCallback(async () => {
-    if (!user || !category?.exams?.length) return { data: null, error: null };
-    const examIds = category.exams.map((e) => e.id);
+    if (!user || !exams?.length) return { data: null, error: null };
+    const examIds = exams.map((e) => e.id);
     const { data, error } = await supabase
       .from('academia_attempts')
       .select('id, exam_id, score, completed_at')
@@ -40,7 +48,7 @@ export default function AcademiaCategoryPage() {
       .not('completed_at', 'is', null)
       .order('completed_at', { ascending: false });
     return { data: data as Pick<AcademiaAttempt, 'id' | 'exam_id' | 'score' | 'completed_at'>[] | null, error: error as Error | null };
-  }, [user, category]);
+  }, [user, exams]);
 
   const { data: attempts } = useSupabaseQuery(attemptsFetcher);
 
@@ -72,8 +80,8 @@ export default function AcademiaCategoryPage() {
     );
   }
 
-  const freeExams = category.exams?.filter((e) => !e.is_premium) ?? [];
-  const premiumExams = category.exams?.filter((e) => e.is_premium) ?? [];
+  const freeExams = exams?.filter((e) => !e.is_premium) ?? [];
+  const premiumExams = exams?.filter((e) => e.is_premium) ?? [];
 
   return (
     <div className="max-w-4xl mx-auto py-12">
