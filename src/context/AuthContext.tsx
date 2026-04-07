@@ -89,13 +89,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   function hasAccess(productId: string): boolean {
-    // For guia_junior, also check B2B access
+    const isActive = (a: UserAccess) =>
+      a.status === 'active' && (a.expires_at === null || new Date(a.expires_at) > new Date());
+
     if (productId === 'guia_junior') {
-      return access.some(a => 
-        (a.product_id === 'guia_junior' || a.product_id === 'guia_junior_b2b') && a.status === 'active'
+      return access.some(a =>
+        (a.product_id === 'guia_junior' || a.product_id === 'guia_junior_b2b') && isActive(a)
       );
     }
-    return access.some(a => a.product_id === productId && a.status === 'active');
+    return access.some(a => a.product_id === productId && isActive(a));
   }
 
   // Check if user's email domain is authorized for B2B access
