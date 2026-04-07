@@ -11,7 +11,6 @@ node_modules
 dist
 dist-ssr
 *.local
-lab
 
 # Editor directories and files
 .vscode/*
@@ -35,18 +34,8 @@ supabase/.local
 # Variables privadas locales
 .env
 .env.local
-.vercel
 
-# n8n workflow exports (contain API keys)
-.n8n/
-.claude/
-.claude-*
-.claude-*/**
-.kilo/
-.agents/
-guias/
-.react-router/
-build/
-dist/
-dist-ssr/
-.vercel/
+.claude
+.agents
+.kilo
+labs

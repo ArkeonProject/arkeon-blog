@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { path: "/recursos", key: "recursos" },
   { path: "/lab", key: "lab" },
   { path: "/guia-junior", key: "guide" },
+  { path: "/academia", key: "academia" },
   { path: "/arkeonix", key: "saas" },
 ];
 
@@ -54,6 +55,7 @@ export default function Header() {
     if (key === "blog") return t("nav_blog");
     if (key === "recursos") return t("nav_recursos");
     if (key === "guide") return t("nav_guide");
+    if (key === "academia") return t("nav_academia");
     if (key === "saas") return t("nav_saas");
     if (key === "contact") return t("nav_contact");
     return t(`category_${key}`);
