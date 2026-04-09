@@ -233,7 +233,8 @@ export default function GuiaLandingPage() {
                 {t('guia_landing_plan_popular')}
               </span>
               <h3 className="font-semibold text-foreground mb-1">{t('guia_landing_plan_lifetime')}</h3>
-              <p className="text-3xl font-bold text-foreground mb-1">9&euro;</p>
+              <p className="text-3xl font-bold text-foreground mb-1">19&euro;</p>
+              <p className="text-xs font-semibold text-amber-500 dark:text-amber-400 mb-1">{t('guia_landing_plan_lifetime_launch_badge')}</p>
               <p className="text-sm text-muted-foreground mb-4">{t('guia_landing_plan_lifetime_period')}</p>
               <p className="text-sm text-muted-foreground mb-6">{t('guia_landing_plan_lifetime_desc')}</p>
               <button
