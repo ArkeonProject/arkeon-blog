@@ -38,7 +38,33 @@ export async function POST(req: Request) {
 
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session;
-      const { userId, product: metadataProduct, b2bType } = session.metadata as { userId: string; product: string; b2bType: string };
+      const { userId: rawUserId, product: metadataProduct, b2bType } = session.metadata as { userId: string; product: string; b2bType: string };
+
+      // Resolve userId — for guest checkouts it may be empty
+      let userId = rawUserId;
+      if (!userId) {
+        const customerEmail = session.customer_details?.email;
+        if (customerEmail) {
+          // Try to find existing user, otherwise invite (creates account + sends email)
+          const { data: inviteData, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(customerEmail);
+          if (inviteData?.user) {
+            userId = inviteData.user.id;
+          } else if (inviteError?.message?.toLowerCase().includes('already been registered') || inviteError?.message?.toLowerCase().includes('already registered')) {
+            // User exists — find by listing (acceptable for early-stage user base)
+            const { data: listData } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 });
+            const existing = listData?.users.find(u => u.email === customerEmail);
+            if (existing) {
+              userId = existing.id;
+              // Send magic link so they get notified of their new purchase
+              await supabaseAdmin.auth.admin.generateLink({ type: 'magiclink', email: customerEmail });
+            }
+          }
+        }
+        if (!userId) {
+          console.error('Could not resolve userId for guest checkout session:', session.id);
+          return new Response('Could not resolve user', { status: 500 });
+        }
+      }
 
       // line_items is not expanded in webhook events — retrieve with expand
       const fullSession = await stripe.checkout.sessions.retrieve(session.id, {
@@ -49,7 +75,13 @@ export async function POST(req: Request) {
       let productId = metadataProduct;
       let plan = 'lifetime';
 
-      if (metadataProduct === 'guia_junior_b2b') {
+      if (metadataProduct === 'boilerplate') {
+        if (priceId === process.env.STRIPE_PRICE_BOILERPLATE_PRO) {
+          plan = 'pro';
+        } else {
+          plan = 'starter';
+        }
+      } else if (metadataProduct === 'guia_junior_b2b') {
         productId = 'guia_junior_b2b';
         if (b2bType === 'annual') {
           plan = 'b2b_annual';
