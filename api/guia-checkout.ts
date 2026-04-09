@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   try {
     const { priceId, userId, email, isB2B, b2bType } = await req.json();
 
-    if (!priceId || !userId || !email) {
+    if (!priceId) {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
     }
 
@@ -21,9 +21,11 @@ export async function POST(req: Request) {
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${process.env.BASE_URL || 'http://localhost:5173'}/guia-junior/gracias?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.BASE_URL || 'http://localhost:5173'}/guia-junior`,
-      customer_email: email,
-      metadata: { 
-        userId, 
+      ...(email ? { customer_email: email } : {}),
+      customer_creation: mode === 'payment' ? 'always' : undefined,
+      allow_promotion_codes: true,
+      metadata: {
+        userId: userId ?? '',
         product: isB2B ? 'guia_junior_b2b' : 'guia_junior',
         b2bType: isB2B ? b2bType : '',
       },

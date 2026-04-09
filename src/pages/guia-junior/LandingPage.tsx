@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import { useLocale } from '@/hooks/useLocale';
 import { useAuth } from '@/context/AuthContext';
 import { chapters } from '@/data/guia/chapters';
@@ -12,18 +12,12 @@ const PRICE_B2B_LIFETIME = import.meta.env.VITE_STRIPE_PRICE_GUIA_B2B_LIFETIME;
 export default function GuiaLandingPage() {
   const { t } = useLocale();
   const { user, hasAccess } = useAuth();
-  const navigate = useNavigate();
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
   const alreadyHasAccess = user && hasAccess('guia_junior');
 
   const handleCheckout = async (priceId: string, plan: string) => {
-    if (!user) {
-      navigate('/login', { state: { returnTo: '/guia-junior' } });
-      return;
-    }
-
     if (!priceId) {
       setCheckoutError('Error de configuración: priceId no definido. Contacta con soporte.');
       return;
@@ -32,15 +26,12 @@ export default function GuiaLandingPage() {
     setCheckoutLoading(plan);
     setCheckoutError(null);
     try {
-      console.log('Checkout start:', { priceId, userId: user.id, email: user.email });
-
       const res = await fetch('/api/guia-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           priceId,
-          userId: user.id,
-          email: user.email,
+          ...(user ? { userId: user.id, email: user.email } : {}),
         }),
       });
 
@@ -222,9 +213,7 @@ export default function GuiaLandingPage() {
                   ? '...'
                   : alreadyHasAccess
                     ? t('guia_landing_cta_dashboard')
-                    : user
-                      ? t('guia_landing_plan_cta')
-                      : t('guia_landing_plan_login_required')}
+                    : t('guia_landing_plan_cta')}
               </button>
             </div>
           </div>
@@ -261,9 +250,7 @@ export default function GuiaLandingPage() {
               >
                 {checkoutLoading === 'b2b_lifetime'
                   ? '...'
-                  : user
-                    ? t('guia_landing_b2b_cta')
-                    : t('guia_landing_plan_login_required')}
+                  : t('guia_landing_b2b_cta')}
               </button>
             </div>
           </div>

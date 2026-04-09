@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import { useLocale } from '@/hooks/useLocale';
 import { useAuth } from '@/context/AuthContext';
 import { useSupabaseQuery } from '@/hooks/useSupabaseQuery';
@@ -12,7 +12,6 @@ const PRICE_ACADEMIA_LIFETIME = import.meta.env.VITE_STRIPE_PRICE_ACADEMIA_LIFET
 export default function AcademiaPage() {
   const { t } = useLocale();
   const { user, hasAccess } = useAuth();
-  const navigate = useNavigate();
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
@@ -29,10 +28,6 @@ export default function AcademiaPage() {
   const { data: categories, loading } = useSupabaseQuery(fetcher);
 
   const handleCheckout = async () => {
-    if (!user) {
-      navigate('/login', { state: { returnTo: '/academia' } });
-      return;
-    }
     if (!PRICE_ACADEMIA_LIFETIME) {
       setCheckoutError(t('academia_checkout_error_config'));
       return;
@@ -43,7 +38,10 @@ export default function AcademiaPage() {
       const res = await fetch('/api/academia-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ priceId: PRICE_ACADEMIA_LIFETIME, userId: user.id, email: user.email }),
+        body: JSON.stringify({
+          priceId: PRICE_ACADEMIA_LIFETIME,
+          ...(user ? { userId: user.id, email: user.email } : {}),
+        }),
       });
       if (!res.ok) throw new Error();
       const { url } = await res.json();
@@ -137,7 +135,7 @@ export default function AcademiaPage() {
             disabled={checkoutLoading}
             className="px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed text-lg"
           >
-            {checkoutLoading ? '...' : user ? t('academia_cta_buy') : t('academia_cta_login')}
+            {checkoutLoading ? '...' : t('academia_cta_buy')}
           </button>
           {checkoutError && (
             <p className="mt-4 text-sm text-red-500">{checkoutError}</p>
