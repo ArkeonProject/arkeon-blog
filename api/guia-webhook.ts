@@ -49,7 +49,13 @@ export async function POST(req: Request) {
       let productId = metadataProduct;
       let plan = 'lifetime';
 
-      if (metadataProduct === 'guia_junior_b2b') {
+      if (metadataProduct === 'boilerplate') {
+        if (priceId === process.env.STRIPE_PRICE_BOILERPLATE_PRO) {
+          plan = 'pro';
+        } else {
+          plan = 'starter';
+        }
+      } else if (metadataProduct === 'guia_junior_b2b') {
         productId = 'guia_junior_b2b';
         if (b2bType === 'annual') {
           plan = 'b2b_annual';
