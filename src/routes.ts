@@ -20,6 +20,7 @@ export default [
   
   route("newsletter/confirm", "pages/newsletter/ConfirmPage.tsx"),
   route("arkeonix", "pages/ArkeonixPage.tsx"),
+  route("arkeonix/gracias", "pages/arkeonix/ThanksPage.tsx"),
   route("admin", "pages/AdminPage.tsx"),
   
   // Auth routes

@@ -1,6 +1,8 @@
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import { Helmet } from "react-helmet-async";
 import { useLocale } from "@/hooks/useLocale";
+import { useAuth } from "@/context/AuthContext";
 import {
   FiShield,
   FiCreditCard,
@@ -15,16 +17,17 @@ import {
   FiAlertCircle,
   FiLock,
   FiCheckCircle,
-  FiSend,
-  FiUser,
-  FiMessageSquare,
   FiPackage,
   FiGithub,
   FiLinkedin,
   FiExternalLink,
   FiMonitor,
+  FiLoader,
 } from "react-icons/fi";
 import ScrollReveal from "@/components/ui/ScrollReveal";
+
+const PRICE_BOILERPLATE_STARTER = import.meta.env.VITE_STRIPE_PRICE_BOILERPLATE_STARTER as string | undefined;
+const PRICE_BOILERPLATE_PRO = import.meta.env.VITE_STRIPE_PRICE_BOILERPLATE_PRO as string | undefined;
 
 // ─── Data ───────────────────────────────────────────────────────────────────
 
@@ -122,6 +125,7 @@ const PLANS = [
   {
     key: "plan_starter",
     price: "€149",
+    priceId: PRICE_BOILERPLATE_STARTER,
     popular: false,
     features: ["plan_starter_f1", "plan_starter_f2", "plan_starter_f3", "plan_starter_f4", "plan_starter_f5"],
     ctaKey: "plan_cta_starter",
@@ -129,6 +133,7 @@ const PLANS = [
   {
     key: "plan_pro",
     price: "€299",
+    priceId: PRICE_BOILERPLATE_PRO,
     popular: true,
     features: ["plan_pro_f1", "plan_pro_f2", "plan_pro_f3", "plan_pro_f4", "plan_pro_f5", "plan_pro_f6"],
     ctaKey: "plan_cta_pro",
@@ -139,18 +144,37 @@ const PLANS = [
 
 export default function ArkeonixPage() {
   const { t } = useLocale();
-  const [form, setForm] = useState({ name: "", email: "", plan: "Starter", message: "" });
-  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [demoTab, setDemoTab] = useState<"landing" | "dashboard">("landing");
+  const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    setStatus("sending");
-    const subject = `[Arkeonix SaaS] ${t("arkeonix_contact_subject_prefix")} – ${form.plan}`;
-    const body = `${t("arkeonix_contact_body_name")}: ${form.name}\n${t("arkeonix_contact_body_email")}: ${form.email}\n${t("arkeonix_contact_body_plan")}: ${form.plan}\n\n${form.message}`;
-    window.location.href = `mailto:davidlopez00@proton.me?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setStatus("sent");
-    setTimeout(() => setStatus("idle"), 3000);
+  const handleCheckout = async (priceId: string | undefined, planKey: string) => {
+    if (!user) {
+      navigate('/login', { state: { returnTo: '/arkeonix' } });
+      return;
+    }
+    if (!priceId) {
+      setCheckoutError(t('arkeonix_checkout_error_config'));
+      return;
+    }
+    setCheckoutLoading(planKey);
+    setCheckoutError(null);
+    try {
+      const res = await fetch('/api/boilerplate-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ priceId, userId: user.id, email: user.email }),
+      });
+      if (!res.ok) throw new Error();
+      const { url } = await res.json() as { url: string };
+      if (url) window.location.href = url;
+    } catch {
+      setCheckoutError(t('arkeonix_checkout_error'));
+    } finally {
+      setCheckoutLoading(null);
+    }
   };
 
   return (
@@ -202,7 +226,7 @@ export default function ArkeonixPage() {
           {/* CTAs */}
           <div className="flex flex-wrap items-center justify-center gap-4 mb-14">
             <a
-              href="#contact"
+              href="#pricing"
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-all duration-200 shadow-lg shadow-primary/25"
             >
               {t("arkeonix_cta_primary")} →
@@ -445,16 +469,21 @@ export default function ArkeonixPage() {
                     </li>
                   ))}
                 </ul>
-                <a
-                  href="#contact"
-                  className={`block text-center px-5 py-3 rounded-xl font-semibold text-sm transition-all duration-200 ${
+                <button
+                  onClick={() => handleCheckout(plan.priceId, plan.key)}
+                  disabled={checkoutLoading === plan.key}
+                  className={`w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all duration-200 disabled:opacity-60 ${
                     plan.popular
                       ? "bg-primary text-primary-foreground hover:opacity-90 shadow-lg shadow-primary/25"
                       : "border border-border bg-surface hover:bg-surface-hover"
                   }`}
                 >
-                  {t(`arkeonix_${plan.ctaKey}`)}
-                </a>
+                  {checkoutLoading === plan.key ? (
+                    <FiLoader className="animate-spin" />
+                  ) : (
+                    t(`arkeonix_${plan.ctaKey}`)
+                  )}
+                </button>
               </div>
             </ScrollReveal>
           ))}
@@ -627,108 +656,14 @@ export default function ArkeonixPage() {
         </div>
       </section>
 
-      {/* ── Contact / Purchase Form ─────────────────────────────────────── */}
-      <section id="contact" className="pb-24">
-        <ScrollReveal variant="zoom-in" duration={900}>
-        <div className="glass-card card-accent-border rounded-3xl p-8 md:p-12 max-w-2xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-display font-bold mb-3">
-              {t("arkeonix_contact_title")}
-            </h2>
-            <p className="text-muted-foreground">
-              {t("arkeonix_contact_subtitle")}
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Name */}
-            <div>
-              <label className="block text-sm font-medium mb-2 text-muted-foreground">
-                {t("contact_name_label")}
-              </label>
-              <div className="relative">
-                <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm" />
-                <input
-                  type="text"
-                  required
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-muted border border-border focus:ring-2 focus:ring-primary/40 focus:border-primary/60 outline-none transition-all text-sm"
-                  placeholder={t("contact_name_placeholder")}
-                />
-              </div>
-            </div>
-
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium mb-2 text-muted-foreground">
-                {t("contact_email_label")}
-              </label>
-              <div className="relative">
-                <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm" />
-                <input
-                  type="email"
-                  required
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-muted border border-border focus:ring-2 focus:ring-primary/40 focus:border-primary/60 outline-none transition-all text-sm"
-                  placeholder={t("contact_email_placeholder")}
-                />
-              </div>
-            </div>
-
-            {/* Plan selector */}
-            <div>
-              <label className="block text-sm font-medium mb-2 text-muted-foreground">
-                {t("arkeonix_contact_plan_label")}
-              </label>
-              <div className="relative">
-                <FiPackage className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm" />
-                <select
-                  value={form.plan}
-                  onChange={(e) => setForm({ ...form, plan: e.target.value })}
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-muted border border-border focus:ring-2 focus:ring-primary/40 focus:border-primary/60 outline-none transition-all text-sm appearance-none"
-                >
-                  <option value="Starter">Starter — €149 pago único</option>
-                  <option value="Pro">Pro — €299 pago único</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Message */}
-            <div>
-              <label className="block text-sm font-medium mb-2 text-muted-foreground">
-                {t("contact_message_label")}
-              </label>
-              <div className="relative">
-                <FiMessageSquare className="absolute left-3 top-3 text-muted-foreground text-sm" />
-                <textarea
-                  required
-                  rows={4}
-                  value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-muted border border-border focus:ring-2 focus:ring-primary/40 focus:border-primary/60 outline-none transition-all text-sm resize-none"
-                  placeholder={t("arkeonix_contact_message_placeholder")}
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={status === "sending"}
-              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 disabled:opacity-50 transition-all shadow-lg shadow-primary/25"
-            >
-              <FiSend className="text-sm" />
-              {status === "sending"
-                ? t("contact_sending")
-                : status === "sent"
-                ? t("contact_sent")
-                : t("arkeonix_contact_submit")}
-            </button>
-          </form>
+      {/* ── Checkout error ──────────────────────────────────────────────── */}
+      {checkoutError && (
+        <div className="pb-6 max-w-3xl mx-auto">
+          <p className="text-center text-sm text-red-500 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
+            {checkoutError}
+          </p>
         </div>
-        </ScrollReveal>
-      </section>
+      )}
 
       {/* ── Footer CTA ─────────────────────────────────────────────────── */}
       <section className="pb-16 text-center">
@@ -743,7 +678,7 @@ export default function ArkeonixPage() {
                 {t("arkeonix_footer_cta_subtitle")}
               </p>
               <a
-                href="#contact"
+                href="#pricing"
                 className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-all shadow-lg shadow-primary/25"
               >
                 {t("arkeonix_cta_primary")} →
