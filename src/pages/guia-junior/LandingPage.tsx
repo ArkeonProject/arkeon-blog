@@ -6,10 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { chapters } from '@/data/guia/chapters';
 import ScrollReveal from '@/components/ui/ScrollReveal';
 
-const PRICE_MONTHLY = import.meta.env.VITE_STRIPE_PRICE_GUIA_MONTHLY;
-const PRICE_ANNUAL = import.meta.env.VITE_STRIPE_PRICE_GUIA_ANNUAL;
 const PRICE_LIFETIME = import.meta.env.VITE_STRIPE_PRICE_GUIA_LIFETIME;
-const PRICE_B2B_ANNUAL = import.meta.env.VITE_STRIPE_PRICE_GUIA_B2B_ANNUAL;
 const PRICE_B2B_LIFETIME = import.meta.env.VITE_STRIPE_PRICE_GUIA_B2B_LIFETIME;
 
 export default function GuiaLandingPage() {
@@ -206,34 +203,14 @@ export default function GuiaLandingPage() {
           <h2 className="text-2xl font-semibold text-[#007EAD] dark:text-[#00aaff] mb-6 text-center">
             {t('guia_landing_pricing_title')}
           </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {/* Monthly */}
-            <div className="p-6 rounded-xl border border-border bg-surface text-center flex flex-col">
-              <h3 className="font-semibold text-foreground mb-1">{t('guia_landing_plan_monthly')}</h3>
-              <p className="text-3xl font-bold text-foreground mb-1">2,99&euro;</p>
-              <p className="text-sm text-muted-foreground mb-4">{t('guia_landing_plan_monthly_period')}</p>
-              <p className="text-sm text-muted-foreground mb-6">{t('guia_landing_plan_monthly_desc')}</p>
-              <button
-                onClick={() => handleCheckout(PRICE_MONTHLY, 'monthly')}
-                disabled={checkoutLoading !== null}
-                className="mt-auto w-full px-6 py-3 bg-primary/10 text-primary font-semibold rounded-xl hover:bg-primary/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {checkoutLoading === 'monthly'
-                  ? '...'
-                  : alreadyHasAccess
-                    ? t('guia_landing_cta_dashboard')
-                    : user
-                      ? t('guia_landing_plan_cta')
-                      : t('guia_landing_plan_login_required')}
-              </button>
-            </div>
-            {/* Lifetime — highlighted */}
-            <div className="p-6 rounded-xl border-2 border-primary bg-primary/5 text-center relative flex flex-col">
+          <div className="flex justify-center">
+            <div className="w-full max-w-sm p-6 rounded-xl border-2 border-primary bg-primary/5 text-center relative flex flex-col">
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 text-xs font-semibold uppercase bg-primary text-primary-foreground rounded-full">
                 {t('guia_landing_plan_popular')}
               </span>
               <h3 className="font-semibold text-foreground mb-1">{t('guia_landing_plan_lifetime')}</h3>
-              <p className="text-3xl font-bold text-foreground mb-1">9&euro;</p>
+              <p className="text-3xl font-bold text-foreground mb-1">19&euro;</p>
+              <p className="text-xs font-semibold text-amber-500 dark:text-amber-400 mb-1">{t('guia_landing_plan_lifetime_launch_badge')}</p>
               <p className="text-sm text-muted-foreground mb-4">{t('guia_landing_plan_lifetime_period')}</p>
               <p className="text-sm text-muted-foreground mb-6">{t('guia_landing_plan_lifetime_desc')}</p>
               <button
@@ -242,26 +219,6 @@ export default function GuiaLandingPage() {
                 className="mt-auto w-full px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {checkoutLoading === 'lifetime'
-                  ? '...'
-                  : alreadyHasAccess
-                    ? t('guia_landing_cta_dashboard')
-                    : user
-                      ? t('guia_landing_plan_cta')
-                      : t('guia_landing_plan_login_required')}
-              </button>
-            </div>
-            {/* Annual */}
-            <div className="p-6 rounded-xl border border-border bg-surface text-center flex flex-col">
-              <h3 className="font-semibold text-foreground mb-1">{t('guia_landing_plan_annual')}</h3>
-              <p className="text-3xl font-bold text-foreground mb-1">19&euro;</p>
-              <p className="text-sm text-muted-foreground mb-4">{t('guia_landing_plan_annual_period')}</p>
-              <p className="text-sm text-muted-foreground mb-6">{t('guia_landing_plan_annual_desc')}</p>
-              <button
-                onClick={() => handleCheckout(PRICE_ANNUAL, 'annual')}
-                disabled={checkoutLoading !== null}
-                className="mt-auto w-full px-6 py-3 bg-primary/10 text-primary font-semibold rounded-xl hover:bg-primary/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {checkoutLoading === 'annual'
                   ? '...'
                   : alreadyHasAccess
                     ? t('guia_landing_cta_dashboard')
@@ -291,30 +248,8 @@ export default function GuiaLandingPage() {
           <p className="text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto mb-8">
             {t('guia_landing_b2b_subtitle')}
           </p>
-          <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            {/* B2B Annual */}
-            <div className="p-6 rounded-xl border border-border bg-surface text-center flex flex-col">
-              <h3 className="font-semibold text-foreground mb-1">{t('guia_landing_b2b_plan_annual')}</h3>
-              <p className="text-3xl font-bold text-foreground mb-1">149&euro;</p>
-              <p className="text-sm text-muted-foreground mb-4">{t('guia_landing_b2b_plan_annual_period')}</p>
-              <p className="text-sm text-muted-foreground mb-6">{t('guia_landing_b2b_plan_annual_desc')}</p>
-              <button
-                onClick={() => handleCheckout(PRICE_B2B_ANNUAL, 'b2b_annual')}
-                disabled={checkoutLoading !== null}
-                className="mt-auto w-full px-6 py-3 bg-primary/10 text-primary font-semibold rounded-xl hover:bg-primary/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {checkoutLoading === 'b2b_annual'
-                  ? '...'
-                  : user
-                    ? t('guia_landing_b2b_cta')
-                    : t('guia_landing_plan_login_required')}
-              </button>
-            </div>
-            {/* B2B Lifetime */}
-            <div className="p-6 rounded-xl border-2 border-primary bg-primary/5 text-center relative flex flex-col">
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 text-xs font-semibold uppercase bg-primary text-primary-foreground rounded-full">
-                {t('guia_landing_plan_popular')}
-              </span>
+          <div className="flex justify-center">
+            <div className="w-full max-w-sm p-6 rounded-xl border-2 border-primary bg-primary/5 text-center relative flex flex-col">
               <h3 className="font-semibold text-foreground mb-1">{t('guia_landing_b2b_plan_lifetime')}</h3>
               <p className="text-3xl font-bold text-foreground mb-1">299&euro;</p>
               <p className="text-sm text-muted-foreground mb-4">{t('guia_landing_b2b_plan_lifetime_period')}</p>
