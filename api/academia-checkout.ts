@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   try {
     const { priceId, userId, email } = await req.json();
 
-    if (!priceId || !userId || !email) {
+    if (!priceId) {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
     }
 
@@ -18,11 +18,13 @@ export async function POST(req: Request) {
     const session = await stripe.checkout.sessions.create({
       mode,
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${process.env.BASE_URL || 'http://localhost:5173'}/academia?success=1`,
+      success_url: `${process.env.BASE_URL || 'http://localhost:5173'}/academia/gracias?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.BASE_URL || 'http://localhost:5173'}/academia`,
-      customer_email: email,
+      ...(email ? { customer_email: email } : {}),
+      customer_creation: mode === 'payment' ? 'always' : undefined,
+      allow_promotion_codes: true,
       metadata: {
-        userId,
+        userId: userId ?? '',
         product: 'academia',
       },
     });

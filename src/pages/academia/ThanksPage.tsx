@@ -2,7 +2,7 @@ import { Link } from 'react-router';
 import { useLocale } from '@/hooks/useLocale';
 import { useAuth } from '@/context/AuthContext';
 
-export default function GuiaThanksPage() {
+export default function AcademiaThanksPage() {
   const { t } = useLocale();
   const { user } = useAuth();
 
@@ -15,13 +15,13 @@ export default function GuiaThanksPage() {
         {user ? (
           <>
             <p className="text-muted-foreground mb-6">
-              {t('guia_thanks_message')}
+              {t('academia_thanks_message')}
             </p>
             <Link
-              to="/guia-junior/dashboard"
+              to="/academia"
               className="inline-block py-2.5 px-4 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity"
             >
-              {t('guia_thanks_cta')}
+              {t('academia_thanks_cta')}
             </Link>
           </>
         ) : (

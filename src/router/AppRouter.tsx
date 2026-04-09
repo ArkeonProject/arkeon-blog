@@ -24,6 +24,7 @@ import GuiaThanksPage from "@/pages/guia-junior/ThanksPage";
 import GuiaDashboardPage from "@/pages/guia-junior/DashboardPage";
 import GuiaChapterPage from "@/pages/guia-junior/ChapterPage";
 import AcademiaPage from "@/pages/academia/AcademiaPage";
+import AcademiaThanksPage from "@/pages/academia/ThanksPage";
 import AcademiaCategoryPage from "@/pages/academia/AcademiaCategoryPage";
 import AcademiaExamPage from "@/pages/academia/AcademiaExamPage";
 import Header from "@/components/layout/Header";
@@ -129,6 +130,7 @@ export default function AppRouter() {
 
             {/* Academia */}
             <Route path="/academia" element={<AcademiaPage />} />
+            <Route path="/academia/gracias" element={<AcademiaThanksPage />} />
             <Route path="/academia/:category" element={<AcademiaCategoryPage />} />
             <Route path="/academia/:category/:slug" element={<AcademiaExamPage />} />
           </Route>
