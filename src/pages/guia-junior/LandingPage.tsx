@@ -70,6 +70,45 @@ export default function GuiaLandingPage() {
         <meta name="twitter:title" content={`${t('guia_landing_meta_title')} | Arkeonix Labs`} />
         <meta name="twitter:description" content={t('guia_landing_meta_desc')} />
         <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": t('guia_landing_meta_title'),
+            "description": t('guia_landing_meta_desc'),
+            "brand": { "@type": "Brand", "name": "Arkeonix Labs" },
+            "url": "https://www.arkeonixlabs.com/guia-junior",
+            "image": "https://www.arkeonixlabs.com/arkeonix-logo.png",
+            "offers": [
+              {
+                "@type": "Offer",
+                "name": "Individual Lifetime",
+                "price": "19",
+                "priceCurrency": "EUR",
+                "availability": "https://schema.org/InStock",
+                "url": "https://www.arkeonixlabs.com/guia-junior"
+              },
+              {
+                "@type": "Offer",
+                "name": "Empresa Lifetime",
+                "price": "299",
+                "priceCurrency": "EUR",
+                "availability": "https://schema.org/InStock",
+                "url": "https://www.arkeonixlabs.com/guia-junior"
+              }
+            ],
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "5",
+              "reviewCount": "3"
+            },
+            "review": [
+              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Laura M." } },
+              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Diego P." } },
+              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Sara L." } }
+            ]
+          })}
+        </script>
       </Helmet>
 
       {/* Hero */}
@@ -275,6 +314,38 @@ export default function GuiaLandingPage() {
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   {t(`guia_landing_b2b_how_${step}_desc`)}
                 </p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </ScrollReveal>
+
+      {/* Reviews */}
+      <ScrollReveal variant="fade-up" delay={100}>
+        <section className="mb-16">
+          <h2 className="text-2xl font-semibold text-[#007EAD] dark:text-[#00aaff] mb-8 text-center">
+            {t('guia_reviews_title')}
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {([1, 2, 3] as const).map((i) => (
+              <div key={i} className="p-6 rounded-xl border border-border bg-surface flex flex-col gap-4">
+                <div className="flex gap-1">
+                  {Array.from({ length: 5 }).map((_, s) => (
+                    <span key={s} className="text-yellow-400 text-sm">★</span>
+                  ))}
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed flex-1">
+                  "{t(`guia_review${i}_text`)}"
+                </p>
+                <div className="flex items-center gap-3 pt-3 border-t border-border/40">
+                  <div className="w-8 h-8 rounded-full bg-primary/15 border border-primary/20 flex items-center justify-center font-bold text-primary text-xs font-mono shrink-0">
+                    {t(`guia_review${i}_name`).charAt(0)}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">{t(`guia_review${i}_name`)}</p>
+                    <p className="text-xs text-muted-foreground">{t(`guia_review${i}_role`)}</p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>

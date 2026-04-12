@@ -193,6 +193,45 @@ export default function ArkeonixPage() {
         <meta name="twitter:title" content="Arkeonix SaaS — Arkeonix Labs" />
         <meta name="twitter:description" content={t("arkeonix_meta_description")} />
         <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "Arkeonix SaaS Boilerplate",
+            "description": t("arkeonix_meta_description"),
+            "brand": { "@type": "Brand", "name": "Arkeonix Labs" },
+            "url": "https://www.arkeonixlabs.com/arkeonix",
+            "image": "https://www.arkeonixlabs.com/arkeonix-logo.png",
+            "offers": [
+              {
+                "@type": "Offer",
+                "name": "Starter",
+                "price": "149",
+                "priceCurrency": "EUR",
+                "availability": "https://schema.org/InStock",
+                "url": "https://www.arkeonixlabs.com/arkeonix"
+              },
+              {
+                "@type": "Offer",
+                "name": "Pro",
+                "price": "299",
+                "priceCurrency": "EUR",
+                "availability": "https://schema.org/InStock",
+                "url": "https://www.arkeonixlabs.com/arkeonix"
+              }
+            ],
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "5",
+              "reviewCount": "3"
+            },
+            "review": [
+              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Carlos M." } },
+              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Andrea F." } },
+              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Javier R." } }
+            ]
+          })}
+        </script>
       </Helmet>
 
       {/* ── Hero ───────────────────────────────────────────────────────── */}
