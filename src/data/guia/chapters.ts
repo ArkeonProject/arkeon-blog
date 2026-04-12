@@ -12,8 +12,8 @@ export const chapters: ChapterMeta[] = [
   { slug: 'antes-de-empezar', index: 0, titleKey: 'guia_chapter_0_title', descKey: 'guia_chapter_0_desc', free: true },
   { slug: 'puestos-existentes', index: 1, titleKey: 'guia_chapter_1_title', descKey: 'guia_chapter_1_desc', free: false },
   { slug: 'salarios', index: 2, titleKey: 'guia_chapter_2_title', descKey: 'guia_chapter_2_desc', free: false },
-  { slug: 'que-aprender', index: 3, titleKey: 'guia_chapter_3_title', descKey: 'guia_chapter_3_desc', free: false },
-  { slug: 'practicas-cv-portfolio', index: 4, titleKey: 'guia_chapter_4_title', descKey: 'guia_chapter_4_desc', free: false },
+  { slug: 'practicas-cv-portfolio', index: 3, titleKey: 'guia_chapter_3_title', descKey: 'guia_chapter_3_desc', free: false },
+  { slug: 'que-aprender', index: 4, titleKey: 'guia_chapter_4_title', descKey: 'guia_chapter_4_desc', free: false },
   { slug: 'buenas-practicas', index: 5, titleKey: 'guia_chapter_5_title', descKey: 'guia_chapter_5_desc', free: false },
   { slug: 'primer-empleo', index: 6, titleKey: 'guia_chapter_6_title', descKey: 'guia_chapter_6_desc', free: false },
 ];

@@ -115,6 +115,20 @@ export default function AcademiaPage() {
         )}
       </section>
 
+      {/* CTA Guía Junior */}
+      <section className="mb-16 p-6 rounded-xl border border-border bg-surface flex flex-col sm:flex-row sm:items-center gap-4">
+        <div className="flex-1">
+          <p className="font-semibold text-foreground">{t('cta_guia_from_academia_title')}</p>
+          <p className="text-sm text-muted-foreground mt-1">{t('cta_guia_from_academia_desc')}</p>
+        </div>
+        <Link
+          to="/guia-junior"
+          className="shrink-0 px-5 py-2.5 border border-border bg-surface hover:bg-surface-hover text-sm font-semibold rounded-xl transition-colors whitespace-nowrap"
+        >
+          {t('cta_guia_from_academia_btn')}
+        </Link>
+      </section>
+
       {/* Pricing — solo si no tiene acceso */}
       {!hasAcademiaAccess && (
         <section className="p-8 rounded-2xl border-2 border-primary bg-primary/5 text-center">

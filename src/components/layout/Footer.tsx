@@ -7,10 +7,14 @@ const QUICK_LINKS = [
   { path: "/blog", key: "nav_blog" },
   { path: "/recursos", key: "nav_recursos" },
   { path: "/lab", key: "category_lab" },
-  { path: "/guia-junior", key: "nav_guide" },
-  { path: "/arkeonix", key: "nav_saas" },
   { path: "/about", key: "footer_about" },
   { path: "/contact", key: "nav_contact" },
+];
+
+const PRODUCTS = [
+  { path: "/guia-junior", nameKey: "footer_product_guia", priceKey: "footer_product_guia_price" },
+  { path: "/academia", nameKey: "footer_product_academia", priceKey: "footer_product_academia_price" },
+  { path: "/arkeonix", nameKey: "footer_product_boilerplate", priceKey: "footer_product_boilerplate_price" },
 ];
 
 const LEGAL_LINKS = [
@@ -31,7 +35,7 @@ export default function Footer() {
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 pb-10">
           {/* Brand */}
-          <div className="md:col-span-5 space-y-4">
+          <div className="md:col-span-4 space-y-4">
             <Link to="/blog" className="inline-flex items-center gap-2.5 group">
               <img
                 src="/arkeonix-logo.png"
@@ -70,8 +74,34 @@ export default function Footer() {
             </div>
           </div>
 
+          {/* Products */}
+          <div className="md:col-span-3">
+            <h3
+              className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              {t("footer_products")}
+            </h3>
+            <ul className="space-y-3">
+              {PRODUCTS.map(({ path, nameKey, priceKey }) => (
+                <li key={path}>
+                  <Link
+                    to={path}
+                    className="group inline-flex flex-col gap-0.5"
+                  >
+                    <span className="text-sm text-muted-foreground group-hover:text-primary transition-colors duration-200 inline-flex items-center gap-2">
+                      <span className="w-1 h-1 rounded-full bg-border group-hover:bg-primary transition-colors duration-200" />
+                      {t(nameKey)}
+                    </span>
+                    <span className="text-xs text-muted-foreground/60 pl-3">{t(priceKey)}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Quick links */}
-          <div className="md:col-span-4">
+          <div className="md:col-span-3">
             <h3
               className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4"
               style={{ fontFamily: "var(--font-mono)" }}
@@ -94,7 +124,7 @@ export default function Footer() {
           </div>
 
           {/* Legal */}
-          <div className="md:col-span-3">
+          <div className="md:col-span-2">
             <h3
               className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4"
               style={{ fontFamily: "var(--font-mono)" }}
