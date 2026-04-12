@@ -50,7 +50,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
         {/* AdSense */}
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4754704679096236" crossOrigin="anonymous"></script>
-        
+
+        {/* Impact.com verification */}
+        <meta name="impact-site-verification" content="4523a10c-aa16-4890-8092-0571f75c46f6" />
+
       </head>
       <body>
         <noscript>
