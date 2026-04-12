@@ -1,8 +1,7 @@
 import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import {
-  FiFilter, FiChevronDown, FiSearch, FiExternalLink,
-  FiMonitor, FiCloud, FiServer, FiDatabase, FiBookOpen, FiBell, FiZap,
+  FiFilter, FiChevronDown, FiSearch, FiExternalLink, FiBookOpen,
 } from "react-icons/fi";
 import PostList from "@/components/posts/PostList";
 import Pagination from "@/components/ui/Pagination";
@@ -33,65 +32,11 @@ interface AffiliateTool {
 
 const AFFILIATE_TOOLS: AffiliateTool[] = [
   {
-    name: "BrowserStack",
-    category: "testing",
-    descriptionEs: "Prueba tu web en 3.000+ navegadores reales y dispositivos móviles sin mantener infraestructura propia. Imprescindible para QA automation.",
-    descriptionEn: "Test your web app on 3,000+ real browsers and mobile devices without maintaining your own infra. Essential for QA automation.",
-    url: "#", // TODO: https://www.browserstack.com/affiliates
-    icon: FiMonitor,
-    accent: "#F56A00",
-  },
-  {
-    name: "DigitalOcean",
-    category: "hosting",
-    descriptionEs: "Hosting en cloud sencillo y asequible para developers. $25 de crédito gratuito para quien se registre con tu link.",
-    descriptionEn: "Simple and affordable cloud hosting for developers. $25 free credit for anyone who signs up through your link.",
-    url: "#", // TODO: https://www.digitalocean.com/referral
-    icon: FiCloud,
-    accent: "#0080FF",
-  },
-  {
-    name: "Railway",
-    category: "hosting",
-    descriptionEs: "Despliega backends, bases de datos y workers en segundos. Precio por uso, sin configuración de servidores.",
-    descriptionEn: "Deploy backends, databases and workers in seconds. Usage-based pricing, no server config.",
-    url: "#", // TODO: https://railway.app referral link from your dashboard
-    icon: FiServer,
-    accent: "#7B2FBE",
-  },
-  {
-    name: "Vercel",
-    category: "hosting",
-    descriptionEs: "La plataforma de referencia para desplegar apps Next.js con previews automáticas, CDN global y zero-config.",
-    descriptionEn: "The go-to platform for deploying Next.js apps with automatic previews, global CDN and zero-config.",
-    url: "#", // TODO: https://vercel.com/referral
-    icon: FiZap,
-    accent: "#FFFFFF",
-  },
-  {
-    name: "Supabase",
-    category: "databases",
-    descriptionEs: "PostgreSQL como servicio con auth, storage y realtime incluidos. La alternativa open source a Firebase.",
-    descriptionEn: "PostgreSQL as a service with auth, storage and realtime built in. The open source alternative to Firebase.",
-    url: "#", // TODO: https://supabase.com/partners
-    icon: FiDatabase,
-    accent: "#3ECF8E",
-  },
-  {
-    name: "Sentry",
-    category: "devtools",
-    descriptionEs: "Monitorización de errores en tiempo real con trazas completas. Detecta bugs en producción antes de que los reporten tus usuarios.",
-    descriptionEn: "Real-time error monitoring with full stack traces. Catch production bugs before your users report them.",
-    url: "#", // TODO: https://sentry.io/partners
-    icon: FiBell,
-    accent: "#F55150",
-  },
-  {
     name: "Udemy",
     category: "learning",
     descriptionEs: "Cursos de Playwright, ISTQB, Next.js y QA automation con descuentos frecuentes. Ideal para juniors que quieren aprender con proyectos reales.",
     descriptionEn: "Playwright, ISTQB, Next.js and QA automation courses with frequent discounts. Great for juniors learning with real projects.",
-    url: "#", // TODO: https://www.udemy.com/affiliate (via Impact.com)
+    url: "#", // TODO: sustituir por link de afiliado de Udemy (Impact.com)
     icon: FiBookOpen,
     accent: "#A435F0",
   },
@@ -311,7 +256,7 @@ export default function RecursosPage() {
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
                       <div
-                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
                         style={{ backgroundColor: `${tool.accent}1A`, border: `1px solid ${tool.accent}40` }}
                       >
                         <Icon className="w-5 h-5 shrink-0" style={{ color: tool.accent }} />
