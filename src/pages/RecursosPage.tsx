@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import {
   FiFilter, FiChevronDown, FiSearch, FiExternalLink,
-  FiMonitor, FiCloud, FiServer, FiDatabase, FiBookOpen, FiBell, FiZap,
 } from "react-icons/fi";
 import PostList from "@/components/posts/PostList";
 import Pagination from "@/components/ui/Pagination";
@@ -12,98 +11,19 @@ import Card from "@/components/ui/Card";
 import { supabase } from "@/lib/supabase";
 import { useLocale } from "@/hooks/useLocale";
 import type { PostListItem } from "@/types/post";
-import type { ElementType } from "react";
+import type { AffiliateTool } from "@/types/affiliate";
 
-// ---------------------------------------------------------------------------
-// Affiliate tools data
-// TODO: replace each `url` with your real affiliate link when approved
 // ---------------------------------------------------------------------------
 
 type AffiliateCategory = "all" | "testing" | "hosting" | "databases" | "devtools" | "learning";
 
-interface AffiliateTool {
-  name: string;
-  category: Exclude<AffiliateCategory, "all">;
-  descriptionEs: string;
-  descriptionEn: string;
-  url: string;
-  icon: ElementType;
-  accent: string;
-}
-
-const AFFILIATE_TOOLS: AffiliateTool[] = [
-  {
-    name: "BrowserStack",
-    category: "testing",
-    descriptionEs: "Prueba tu web en 3.000+ navegadores reales y dispositivos móviles sin mantener infraestructura propia. Imprescindible para QA automation.",
-    descriptionEn: "Test your web app on 3,000+ real browsers and mobile devices without maintaining your own infra. Essential for QA automation.",
-    url: "#", // TODO: https://www.browserstack.com/affiliates
-    icon: FiMonitor,
-    accent: "#F56A00",
-  },
-  {
-    name: "DigitalOcean",
-    category: "hosting",
-    descriptionEs: "Hosting en cloud sencillo y asequible para developers. $25 de crédito gratuito para quien se registre con tu link.",
-    descriptionEn: "Simple and affordable cloud hosting for developers. $25 free credit for anyone who signs up through your link.",
-    url: "#", // TODO: https://www.digitalocean.com/referral
-    icon: FiCloud,
-    accent: "#0080FF",
-  },
-  {
-    name: "Railway",
-    category: "hosting",
-    descriptionEs: "Despliega backends, bases de datos y workers en segundos. Precio por uso, sin configuración de servidores.",
-    descriptionEn: "Deploy backends, databases and workers in seconds. Usage-based pricing, no server config.",
-    url: "#", // TODO: https://railway.app referral link from your dashboard
-    icon: FiServer,
-    accent: "#7B2FBE",
-  },
-  {
-    name: "Vercel",
-    category: "hosting",
-    descriptionEs: "La plataforma de referencia para desplegar apps Next.js con previews automáticas, CDN global y zero-config.",
-    descriptionEn: "The go-to platform for deploying Next.js apps with automatic previews, global CDN and zero-config.",
-    url: "#", // TODO: https://vercel.com/referral
-    icon: FiZap,
-    accent: "#FFFFFF",
-  },
-  {
-    name: "Supabase",
-    category: "databases",
-    descriptionEs: "PostgreSQL como servicio con auth, storage y realtime incluidos. La alternativa open source a Firebase.",
-    descriptionEn: "PostgreSQL as a service with auth, storage and realtime built in. The open source alternative to Firebase.",
-    url: "#", // TODO: https://supabase.com/partners
-    icon: FiDatabase,
-    accent: "#3ECF8E",
-  },
-  {
-    name: "Sentry",
-    category: "devtools",
-    descriptionEs: "Monitorización de errores en tiempo real con trazas completas. Detecta bugs en producción antes de que los reporten tus usuarios.",
-    descriptionEn: "Real-time error monitoring with full stack traces. Catch production bugs before your users report them.",
-    url: "#", // TODO: https://sentry.io/partners
-    icon: FiBell,
-    accent: "#F55150",
-  },
-  {
-    name: "Udemy",
-    category: "learning",
-    descriptionEs: "Cursos de Playwright, ISTQB, Next.js y QA automation con descuentos frecuentes. Ideal para juniors que quieren aprender con proyectos reales.",
-    descriptionEn: "Playwright, ISTQB, Next.js and QA automation courses with frequent discounts. Great for juniors learning with real projects.",
-    url: "#", // TODO: https://www.udemy.com/affiliate (via Impact.com)
-    icon: FiBookOpen,
-    accent: "#A435F0",
-  },
-];
-
 const AFFILIATE_CATEGORY_LABELS: Record<AffiliateCategory, { es: string; en: string }> = {
-  all:       { es: "Todas",                  en: "All" },
-  testing:   { es: "Testing y QA",           en: "Testing & QA" },
-  hosting:   { es: "Infraestructura",        en: "Infrastructure" },
-  databases: { es: "Bases de datos",         en: "Databases" },
-  devtools:  { es: "Herramientas dev",       en: "Dev tools" },
-  learning:  { es: "Aprendizaje",            en: "Learning" },
+  all:       { es: "Todas",             en: "All" },
+  testing:   { es: "Testing y QA",      en: "Testing & QA" },
+  hosting:   { es: "Infraestructura",   en: "Infrastructure" },
+  databases: { es: "Bases de datos",    en: "Databases" },
+  devtools:  { es: "Herramientas dev",  en: "Dev tools" },
+  learning:  { es: "Aprendizaje",       en: "Learning" },
 };
 
 const AFFILIATE_CATEGORIES: AffiliateCategory[] = ["all", "testing", "hosting", "databases", "devtools", "learning"];
@@ -128,6 +48,7 @@ export default function RecursosPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [affiliateCategory, setAffiliateCategory] = useState<AffiliateCategory>("all");
+  const [affiliateTools, setAffiliateTools] = useState<AffiliateTool[]>([]);
   const filterRef = useRef<HTMLDivElement>(null);
 
   const languageFilter = locale.toUpperCase();
@@ -184,6 +105,18 @@ export default function RecursosPage() {
     void fetchResourceCategories();
   }, [fetchResourceCategories]);
 
+  useEffect(() => {
+    void (async () => {
+      const { data } = await supabase
+        .from("affiliate_tools")
+        .select("*")
+        .eq("active", true)
+        .order("sort_order", { ascending: true })
+        .order("id", { ascending: true });
+      setAffiliateTools((data as AffiliateTool[]) ?? []);
+    })();
+  }, []);
+
   useEffect(() => { void fetchResourcePosts(); }, [fetchResourcePosts]);
 
   useEffect(() => {
@@ -221,9 +154,9 @@ export default function RecursosPage() {
 
   const filteredAffiliateTools = useMemo(() =>
     affiliateCategory === "all"
-      ? AFFILIATE_TOOLS
-      : AFFILIATE_TOOLS.filter((tool) => tool.category === affiliateCategory),
-    [affiliateCategory]
+      ? affiliateTools
+      : affiliateTools.filter((tool) => tool.category === affiliateCategory),
+    [affiliateCategory, affiliateTools]
   );
 
   const isEs = locale === "es";
@@ -298,48 +231,52 @@ export default function RecursosPage() {
           </div>
 
           {/* Tools grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filteredAffiliateTools.map((tool) => {
-              const Icon = tool.icon;
-              const description = isEs ? tool.descriptionEs : tool.descriptionEn;
-              const categoryLabel = isEs
-                ? AFFILIATE_CATEGORY_LABELS[tool.category].es
-                : AFFILIATE_CATEGORY_LABELS[tool.category].en;
+          {filteredAffiliateTools.length === 0 ? (
+            <p className="text-center text-gray-500 dark:text-white/40 text-sm py-8">
+              {isEs ? "No hay herramientas en esta categoría todavía." : "No tools in this category yet."}
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {filteredAffiliateTools.map((tool) => {
+                const description = isEs ? tool.description_es : tool.description_en;
+                const cat = tool.category as AffiliateCategory;
+                const categoryLabel = AFFILIATE_CATEGORY_LABELS[cat]
+                  ? (isEs ? AFFILIATE_CATEGORY_LABELS[cat].es : AFFILIATE_CATEGORY_LABELS[cat].en)
+                  : tool.category;
 
-              return (
-                <Card key={tool.name} className="p-5 flex flex-col gap-4 hover:border-[#00aaff]/40 transition-all duration-300 group">
-                  <div className="flex items-start justify-between gap-3">
+                return (
+                  <Card key={tool.id} className="p-5 flex flex-col gap-4 hover:border-[#00aaff]/40 transition-all duration-300 group">
                     <div className="flex items-center gap-3">
                       <div
-                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                        style={{ backgroundColor: `${tool.accent}1A`, border: `1px solid ${tool.accent}40` }}
+                        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-sm font-bold"
+                        style={{ backgroundColor: `${tool.accent_color}1A`, border: `1px solid ${tool.accent_color}40`, color: tool.accent_color }}
                       >
-                        <Icon className="w-5 h-5 shrink-0" style={{ color: tool.accent }} />
+                        {tool.platform.slice(0, 2).toUpperCase()}
                       </div>
                       <div>
                         <p className="font-semibold text-gray-900 dark:text-white leading-tight">{tool.name}</p>
-                        <span className="text-xs text-gray-500 dark:text-white/40">{categoryLabel}</span>
+                        <span className="text-xs text-gray-500 dark:text-white/40">{tool.platform} · {categoryLabel}</span>
                       </div>
                     </div>
-                  </div>
 
-                  <p className="text-sm text-gray-600 dark:text-white/70 leading-relaxed flex-1">
-                    {description}
-                  </p>
+                    <p className="text-sm text-gray-600 dark:text-white/70 leading-relaxed flex-1">
+                      {description}
+                    </p>
 
-                  <a
-                    href={tool.url}
-                    target="_blank"
-                    rel="noopener noreferrer sponsored"
-                    className="inline-flex items-center gap-2 text-sm font-medium text-[#00aaff] hover:text-[#007EAD] transition-colors duration-200 group-hover:gap-3"
-                  >
-                    {isEs ? "Ver herramienta" : "Visit tool"}
-                    <FiExternalLink className="w-3.5 h-3.5 shrink-0" />
-                  </a>
-                </Card>
-              );
-            })}
-          </div>
+                    <a
+                      href={tool.url}
+                      target="_blank"
+                      rel="noopener noreferrer sponsored"
+                      className="inline-flex items-center gap-2 text-sm font-medium text-[#00aaff] hover:text-[#007EAD] transition-colors duration-200 group-hover:gap-3"
+                    >
+                      {isEs ? "Ver herramienta" : "Visit tool"}
+                      <FiExternalLink className="w-3.5 h-3.5 shrink-0" />
+                    </a>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
 
           {/* Affiliate disclosure */}
           <p className="mt-6 text-xs text-gray-400 dark:text-white/30 text-center">

@@ -5,9 +5,10 @@ import RichTextEditor from "@/components/admin/RichTextEditor";
 import {
   FiUsers, FiFileText, FiMail, FiLock, FiBarChart2,
   FiPlus, FiEdit2, FiTrash2,
-  FiCheck, FiX, FiLayout,
+  FiCheck, FiX, FiLayout, FiLink,
 } from "react-icons/fi";
 import type { PostListItem } from "@/types/post";
+import type { AffiliateTool, AffiliateToolInsert } from "@/types/affiliate";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -30,7 +31,7 @@ interface AdminPost {
   difficulty?: string | null;
 }
 
-type Tab = "dashboard" | "posts" | "lab";
+type Tab = "dashboard" | "posts" | "lab" | "affiliates";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -625,12 +626,252 @@ function PostsManager({ table }: { table: TableName }) {
   );
 }
 
+// ─── Affiliates Manager ───────────────────────────────────────────────────────
+
+const AFFILIATE_CATEGORIES = ["learning", "testing", "hosting", "databases", "devtools"];
+
+const EMPTY_TOOL: AffiliateToolInsert = {
+  name: "",
+  platform: "",
+  category: "learning",
+  description_es: "",
+  description_en: "",
+  url: "",
+  accent_color: "#00aaff",
+  active: true,
+  sort_order: 0,
+};
+
+function AffiliatesManager() {
+  const [tools, setTools] = useState<AffiliateTool[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState<string | null>(null);
+  const [editing, setEditing] = useState<AffiliateTool | "new" | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [form, setForm] = useState<AffiliateToolInsert>({ ...EMPTY_TOOL });
+  const [saving, setSaving] = useState(false);
+  const [formErr, setFormErr] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("affiliate_tools")
+      .select("*")
+      .order("sort_order", { ascending: true })
+      .order("id", { ascending: true });
+    if (error) { setErr(error.message); } else { setTools((data as AffiliateTool[]) ?? []); }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { void load(); }, [load]);
+
+  const openNew = () => { setForm({ ...EMPTY_TOOL }); setFormErr(null); setEditing("new"); };
+  const openEdit = (tool: AffiliateTool) => {
+    setForm({
+      name: tool.name, platform: tool.platform, category: tool.category,
+      description_es: tool.description_es, description_en: tool.description_en,
+      url: tool.url, accent_color: tool.accent_color,
+      active: tool.active, sort_order: tool.sort_order,
+    });
+    setFormErr(null);
+    setEditing(tool);
+  };
+
+  const handleSave = async () => {
+    if (!form.name.trim() || !form.url.trim() || !form.platform.trim()) {
+      setFormErr("Name, platform and URL are required.");
+      return;
+    }
+    setSaving(true);
+    setFormErr(null);
+    const { error } = editing === "new"
+      ? await supabase.from("affiliate_tools").insert(form)
+      : await supabase.from("affiliate_tools").update(form).eq("id", (editing as AffiliateTool).id);
+    if (error) { setFormErr(error.message); }
+    else { setEditing(null); void load(); }
+    setSaving(false);
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("¿Eliminar esta herramienta?")) return;
+    setDeletingId(id);
+    const { error } = await supabase.from("affiliate_tools").delete().eq("id", id);
+    if (error) { alert(error.message); }
+    else { setTools((prev) => prev.filter((t) => t.id !== id)); }
+    setDeletingId(null);
+  };
+
+  const handleToggleActive = async (tool: AffiliateTool) => {
+    const { error } = await supabase.from("affiliate_tools").update({ active: !tool.active }).eq("id", tool.id);
+    if (!error) setTools((prev) => prev.map((t) => t.id === tool.id ? { ...t, active: !t.active } : t));
+  };
+
+  const inputClass = "w-full px-3 py-2.5 rounded-xl bg-muted border border-border focus:ring-2 focus:ring-primary/40 focus:border-primary/60 outline-none transition-all text-sm";
+  const labelClass = "block text-xs font-medium text-muted-foreground mb-1.5";
+  const set = (k: keyof AffiliateToolInsert, v: unknown) => setForm((f) => ({ ...f, [k]: v }));
+
+  if (editing !== null) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-display font-bold">
+            {editing === "new" ? "Nueva herramienta" : "Editar herramienta"}
+          </h2>
+          <div className="flex gap-2">
+            <button onClick={() => setEditing(null)} className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-border text-sm hover:bg-muted transition-all">
+              <FiX className="text-xs" /> Cancelar
+            </button>
+            <button
+              onClick={() => { void handleSave(); }}
+              disabled={saving}
+              className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 disabled:opacity-50 transition-all"
+            >
+              <FiCheck className="text-xs" />
+              {saving ? "Guardando…" : editing === "new" ? "Crear" : "Actualizar"}
+            </button>
+          </div>
+        </div>
+
+        {formErr && <p className="text-red-400 text-sm px-4 py-3 rounded-xl bg-red-400/10 border border-red-400/20">{formErr}</p>}
+
+        <div className="glass-card rounded-2xl p-5 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className={labelClass}>Nombre *</label>
+              <input className={inputClass} value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="Curso Playwright con Artem Bondar" />
+            </div>
+            <div>
+              <label className={labelClass}>Plataforma *</label>
+              <input className={inputClass} value={form.platform} onChange={(e) => set("platform", e.target.value)} placeholder="Udemy" />
+            </div>
+            <div>
+              <label className={labelClass}>Categoría</label>
+              <select className={inputClass} value={form.category} onChange={(e) => set("category", e.target.value)}>
+                {AFFILIATE_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className={labelClass}>Color de acento</label>
+              <div className="flex gap-2 items-center">
+                <input type="color" value={form.accent_color} onChange={(e) => set("accent_color", e.target.value)} className="w-10 h-10 rounded-lg border border-border cursor-pointer bg-muted" />
+                <input className={`${inputClass} flex-1`} value={form.accent_color} onChange={(e) => set("accent_color", e.target.value)} placeholder="#A435F0" />
+              </div>
+            </div>
+            <div className="md:col-span-2">
+              <label className={labelClass}>URL de afiliado *</label>
+              <input className={inputClass} value={form.url} onChange={(e) => set("url", e.target.value)} placeholder="https://www.udemy.com/course/...?ref=XXX" />
+            </div>
+            <div>
+              <label className={labelClass}>Orden</label>
+              <input type="number" className={inputClass} value={form.sort_order} onChange={(e) => set("sort_order", parseInt(e.target.value) || 0)} />
+            </div>
+            <div className="flex items-center gap-3 pt-5">
+              <input type="checkbox" id="active" checked={form.active} onChange={(e) => set("active", e.target.checked)} className="w-4 h-4 rounded accent-primary cursor-pointer" />
+              <label htmlFor="active" className="text-sm cursor-pointer">Activo (visible en /recursos)</label>
+            </div>
+          </div>
+
+          <div>
+            <label className={labelClass}>Descripción en español</label>
+            <textarea rows={3} className={`${inputClass} resize-none`} value={form.description_es} onChange={(e) => set("description_es", e.target.value)} placeholder="El mejor curso de Playwright para QA automation…" />
+          </div>
+          <div>
+            <label className={labelClass}>Descripción en inglés</label>
+            <textarea rows={3} className={`${inputClass} resize-none`} value={form.description_en} onChange={(e) => set("description_en", e.target.value)} placeholder="The best Playwright course for QA automation…" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-5">
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-muted-foreground">{tools.length} herramientas</span>
+        <button
+          onClick={openNew}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-all"
+        >
+          <FiPlus /> Nueva herramienta
+        </button>
+      </div>
+
+      {loading && <div className="space-y-2">{Array.from({ length: 3 }).map((_, i) => <div key={i} className="h-14 glass-card rounded-xl animate-pulse" />)}</div>}
+      {err && <p className="text-red-400 text-sm">{err}</p>}
+
+      {!loading && tools.length === 0 && (
+        <div className="glass-card rounded-2xl p-10 text-center text-muted-foreground">
+          No hay herramientas todavía. Crea la primera.
+        </div>
+      )}
+
+      {!loading && tools.length > 0 && (
+        <div className="glass-card rounded-2xl overflow-hidden">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-border/60">
+                <th className="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Nombre</th>
+                <th className="text-left px-3 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider hidden md:table-cell">Plataforma</th>
+                <th className="text-left px-3 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider hidden lg:table-cell">Categoría</th>
+                <th className="text-left px-3 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Estado</th>
+                <th className="px-5 py-3" />
+              </tr>
+            </thead>
+            <tbody>
+              {tools.map((tool, i) => (
+                <tr key={tool.id} className={`border-b border-border/30 last:border-0 hover:bg-muted/40 transition-colors ${i % 2 === 0 ? "" : "bg-muted/10"}`}>
+                  <td className="px-5 py-3">
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: tool.accent_color }} />
+                      <p className="font-medium truncate max-w-[200px]">{tool.name}</p>
+                    </div>
+                  </td>
+                  <td className="px-3 py-3 hidden md:table-cell">
+                    <span className="text-xs px-2 py-0.5 rounded-md bg-muted border border-border/60">{tool.platform}</span>
+                  </td>
+                  <td className="px-3 py-3 text-muted-foreground hidden lg:table-cell text-xs">{tool.category}</td>
+                  <td className="px-3 py-3">
+                    <button
+                      onClick={() => { void handleToggleActive(tool); }}
+                      className={`text-xs px-2.5 py-1 rounded-full font-medium transition-all ${
+                        tool.active
+                          ? "bg-green-500/15 text-green-400 hover:bg-green-500/25"
+                          : "bg-yellow-500/15 text-yellow-400 hover:bg-yellow-500/25"
+                      }`}
+                    >
+                      {tool.active ? "Activo" : "Inactivo"}
+                    </button>
+                  </td>
+                  <td className="px-5 py-3">
+                    <div className="flex items-center gap-2 justify-end">
+                      <a href={tool.url} target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors" title="Abrir link">
+                        <FiLink className="text-sm" />
+                      </a>
+                      <button onClick={() => openEdit(tool)} className="p-1.5 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors" title="Editar">
+                        <FiEdit2 className="text-sm" />
+                      </button>
+                      <button onClick={() => { void handleDelete(tool.id); }} disabled={deletingId === tool.id} className="p-1.5 rounded-lg hover:bg-red-500/10 hover:text-red-400 transition-colors disabled:opacity-40" title="Eliminar">
+                        <FiTrash2 className="text-sm" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Page ────────────────────────────────────────────────────────────────────
 
 const TABS: { id: Tab; label: string; icon: React.ElementType }[] = [
   { id: "dashboard", label: "Overview", icon: FiLayout },
   { id: "posts", label: "Blog Posts", icon: FiFileText },
   { id: "lab", label: "Lab Posts", icon: FiBarChart2 },
+  { id: "affiliates", label: "Afiliados", icon: FiLink },
 ];
 
 export default function AdminPage() {
@@ -694,6 +935,7 @@ export default function AdminPage() {
           {tab === "dashboard" && <Overview />}
           {tab === "posts" && <PostsManager table="posts" />}
           {tab === "lab" && <PostsManager table="lab_posts" />}
+          {tab === "affiliates" && <AffiliatesManager />}
         </div>
       )}
     </div>
