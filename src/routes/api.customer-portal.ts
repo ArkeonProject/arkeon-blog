@@ -2,19 +2,17 @@ import type { ActionFunctionArgs } from "react-router";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-01-27.acacia" as Stripe.LatestApiVersion,
-});
-
-const supabaseAdmin = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
 export async function action({ request }: ActionFunctionArgs) {
   if (request.method !== "POST") {
     return new Response("Method Not Allowed", { status: 405 });
   }
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: "2025-01-27.acacia" as Stripe.LatestApiVersion,
+  });
+  const supabaseAdmin = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
   try {
     const { userId } = await request.json();
 

@@ -1,10 +1,6 @@
 import type { ActionFunctionArgs } from "react-router";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-01-27.acacia" as Stripe.LatestApiVersion,
-});
-
 export async function action({ request }: ActionFunctionArgs) {
   if (request.method !== "POST") {
     return new Response("Method Not Allowed", { status: 405 });
@@ -16,6 +12,9 @@ export async function action({ request }: ActionFunctionArgs) {
       return new Response(JSON.stringify({ error: "Missing required fields" }), { status: 400 });
     }
 
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+      apiVersion: "2025-01-27.acacia" as Stripe.LatestApiVersion,
+    });
     const price = await stripe.prices.retrieve(priceId);
     const mode = price.type === "recurring" ? "subscription" : "payment";
 

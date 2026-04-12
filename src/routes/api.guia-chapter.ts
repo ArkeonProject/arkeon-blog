@@ -1,12 +1,11 @@
 import type { LoaderFunctionArgs } from "react-router";
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseAdmin = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
 export async function loader({ request }: LoaderFunctionArgs) {
+  const supabaseAdmin = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
   try {
     const url = new URL(request.url);
     const slug = url.searchParams.get("slug");
