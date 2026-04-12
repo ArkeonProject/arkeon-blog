@@ -168,6 +168,36 @@ export default function GuiaChapterPage() {
         )}
       </div>
 
+      {slug === 'practicas-cv-portfolio' && chapterData && (
+        <div className="mt-12 p-6 rounded-xl border border-primary/20 bg-primary/5 flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="flex-1">
+            <p className="font-semibold text-foreground">{t('cta_boilerplate_from_chapter_title')}</p>
+            <p className="text-sm text-muted-foreground mt-1">{t('cta_boilerplate_from_chapter_desc')}</p>
+          </div>
+          <Link
+            to="/arkeonix"
+            className="shrink-0 px-5 py-2.5 bg-primary text-primary-foreground text-sm font-semibold rounded-xl hover:opacity-90 transition-opacity whitespace-nowrap"
+          >
+            {t('cta_boilerplate_from_chapter_btn')}
+          </Link>
+        </div>
+      )}
+
+      {slug === 'que-aprender' && chapterData && (
+        <div className="mt-12 p-6 rounded-xl border border-primary/20 bg-primary/5 flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="flex-1">
+            <p className="font-semibold text-foreground">{t('cta_academia_from_chapter_title')}</p>
+            <p className="text-sm text-muted-foreground mt-1">{t('cta_academia_from_chapter_desc')}</p>
+          </div>
+          <Link
+            to="/academia"
+            className="shrink-0 px-5 py-2.5 bg-primary text-primary-foreground text-sm font-semibold rounded-xl hover:opacity-90 transition-opacity whitespace-nowrap"
+          >
+            {t('cta_academia_from_chapter_btn')}
+          </Link>
+        </div>
+      )}
+
       <div className="mt-12 flex justify-between border-t border-border pt-6">
         {prev ? (
           <Link

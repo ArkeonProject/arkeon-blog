@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Helmet } from "react-helmet-async";
 import { useLocale } from "@/hooks/useLocale";
 import { useAuth } from "@/context/AuthContext";
@@ -492,6 +492,22 @@ export default function ArkeonixPage() {
         <p className="text-center text-sm text-muted-foreground mt-8 font-mono">
           {t("arkeonix_pricing_note")}
         </p>
+      </section>
+
+      {/* ── CTA Guía Junior ────────────────────────────────────────────── */}
+      <section className="pb-16">
+        <div className="max-w-3xl mx-auto p-6 rounded-xl border border-border bg-surface flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="flex-1">
+            <p className="font-semibold text-foreground">{t("cta_guia_from_arkeonix_title")}</p>
+            <p className="text-sm text-muted-foreground mt-1">{t("cta_guia_from_arkeonix_desc")}</p>
+          </div>
+          <Link
+            to="/guia-junior"
+            className="shrink-0 px-5 py-2.5 border border-border bg-surface hover:bg-surface-hover text-sm font-semibold rounded-xl transition-colors whitespace-nowrap"
+          >
+            {t("cta_guia_from_arkeonix_btn")}
+          </Link>
+        </div>
       </section>
 
       {/* ── Who am I ───────────────────────────────────────────────────── */}
