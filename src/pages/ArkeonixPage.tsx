@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Helmet } from "react-helmet-async";
 import { useLocale } from "@/hooks/useLocale";
 import { useAuth } from "@/context/AuthContext";
@@ -193,6 +193,45 @@ export default function ArkeonixPage() {
         <meta name="twitter:title" content="Arkeonix SaaS — Arkeonix Labs" />
         <meta name="twitter:description" content={t("arkeonix_meta_description")} />
         <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "Arkeonix SaaS Boilerplate",
+            "description": t("arkeonix_meta_description"),
+            "brand": { "@type": "Brand", "name": "Arkeonix Labs" },
+            "url": "https://www.arkeonixlabs.com/arkeonix",
+            "image": "https://www.arkeonixlabs.com/arkeonix-logo.png",
+            "offers": [
+              {
+                "@type": "Offer",
+                "name": "Starter",
+                "price": "149",
+                "priceCurrency": "EUR",
+                "availability": "https://schema.org/InStock",
+                "url": "https://www.arkeonixlabs.com/arkeonix"
+              },
+              {
+                "@type": "Offer",
+                "name": "Pro",
+                "price": "299",
+                "priceCurrency": "EUR",
+                "availability": "https://schema.org/InStock",
+                "url": "https://www.arkeonixlabs.com/arkeonix"
+              }
+            ],
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "5",
+              "reviewCount": "3"
+            },
+            "review": [
+              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Carlos M." } },
+              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Andrea F." } },
+              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Javier R." } }
+            ]
+          })}
+        </script>
       </Helmet>
 
       {/* ── Hero ───────────────────────────────────────────────────────── */}
@@ -492,6 +531,22 @@ export default function ArkeonixPage() {
         <p className="text-center text-sm text-muted-foreground mt-8 font-mono">
           {t("arkeonix_pricing_note")}
         </p>
+      </section>
+
+      {/* ── CTA Guía Junior ────────────────────────────────────────────── */}
+      <section className="pb-16">
+        <div className="max-w-3xl mx-auto p-6 rounded-xl border border-border bg-surface flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="flex-1">
+            <p className="font-semibold text-foreground">{t("cta_guia_from_arkeonix_title")}</p>
+            <p className="text-sm text-muted-foreground mt-1">{t("cta_guia_from_arkeonix_desc")}</p>
+          </div>
+          <Link
+            to="/guia-junior"
+            className="shrink-0 px-5 py-2.5 border border-border bg-surface hover:bg-surface-hover text-sm font-semibold rounded-xl transition-colors whitespace-nowrap"
+          >
+            {t("cta_guia_from_arkeonix_btn")}
+          </Link>
+        </div>
       </section>
 
       {/* ── Who am I ───────────────────────────────────────────────────── */}
