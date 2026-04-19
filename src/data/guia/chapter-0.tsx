@@ -340,8 +340,8 @@ export default function Chapter0() {
           </div>
         </div>
         <div className="bg-foreground text-background rounded-xl p-10 text-center">
-          <p className="text-4xl font-display font-black text-background tracking-tight">Desde 2,99 €/mes</p>
-          <p className="text-base text-background/60 mt-2">O pago único vitalicio desde 9 €</p>
+          <p className="text-4xl font-display font-black text-background tracking-tight">19 €</p>
+          <p className="text-base text-background/60 mt-2">Pago único vitalicio</p>
           <a href="/guia-junior" className="inline-block mt-6 bg-accent text-white text-lg font-bold px-10 py-4 rounded-full no-underline hover:opacity-90 transition-opacity">
             Accede aquí
           </a>

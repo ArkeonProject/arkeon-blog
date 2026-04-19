@@ -1,5 +1,17 @@
 import { useState, type FormEvent } from "react";
 import { Helmet } from "react-helmet-async";
+import type { MetaFunction } from "react-router";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = () => [
+  { title: "Contacto | Arkeonix Labs" },
+  { name: "description", content: "Ponte en contacto con el equipo de Arkeonix Labs para consultas técnicas o colaboraciones." },
+  { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/contact" },
+  { property: "og:title", content: "Contacto | Arkeonix Labs" },
+  { property: "og:description", content: "Ponte en contacto con el equipo de Arkeonix Labs para consultas técnicas o colaboraciones." },
+  { property: "og:url", content: "https://arkeonixlabs.com/contact" },
+  { name: "twitter:card", content: "summary" },
+];
 import { useLocale } from "@/hooks/useLocale";
 import { FiMail, FiUser, FiMessageSquare, FiSend } from "react-icons/fi";
 import ScrollReveal from "@/components/ui/ScrollReveal";

@@ -12,8 +12,50 @@ import ScrollReveal from "@/components/ui/ScrollReveal";
 import ShareButtons from "@/components/ui/ShareButtons";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import type { LabPostDetail } from "@/types/lab";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 
 marked.setOptions({ async: false });
+
+// eslint-disable-next-line react-refresh/only-export-components
+export async function loader({ params }: LoaderFunctionArgs) {
+    if (!params.slug) return { post: null };
+    const { data } = await supabase
+        .from("lab_posts")
+        .select("title, cover_image, tags, difficulty")
+        .eq("slug", params.slug)
+        .eq("status", "published")
+        .maybeSingle();
+    return { post: (data as Pick<LabPostDetail, "title" | "cover_image" | "tags" | "difficulty"> | null) };
+}
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
+    const post = data?.post;
+    const slug = params.slug ?? "";
+    const url = `https://arkeonixlabs.com/lab/${slug}`;
+    if (!post) {
+        return [
+            { title: "Reporte no encontrado | Arkeonix Labs" },
+            { name: "robots", content: "noindex, follow" },
+        ];
+    }
+    const image = post.cover_image
+        ? post.cover_image
+        : `https://arkeonixlabs.com/api/og?title=${encodeURIComponent(post.title)}&category=Lab&author=Arkeonix Labs`;
+    return [
+        { title: `${post.title} | Laboratorio — Arkeonix Labs` },
+        { name: "description", content: `Guía técnica: ${post.title}. Arkeonix Labs.` },
+        { tagName: "link", rel: "canonical", href: url },
+        { property: "og:title", content: `${post.title} | Laboratorio — Arkeonix Labs` },
+        { property: "og:description", content: `Guía técnica: ${post.title}. Arkeonix Labs.` },
+        { property: "og:type", content: "article" },
+        { property: "og:image", content: image },
+        { property: "og:url", content: url },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: `${post.title} | Laboratorio — Arkeonix Labs` },
+        { name: "twitter:image", content: image },
+    ];
+};
 
 const DIFFICULTY_STYLES: Record<string, string> = {
     beginner: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
