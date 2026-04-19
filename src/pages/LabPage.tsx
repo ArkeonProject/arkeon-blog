@@ -1,5 +1,21 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
+import type { MetaFunction } from "react-router";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = () => [
+  { title: "Laboratorio Técnico | Arkeonix Labs" },
+  { name: "description", content: "Guías avanzadas de equipos, servidores y despliegue técnico por Arkeonix Labs." },
+  { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/lab" },
+  { property: "og:title", content: "Laboratorio Técnico | Arkeonix Labs" },
+  { property: "og:description", content: "Guías avanzadas de equipos, servidores y despliegue técnico por Arkeonix Labs." },
+  { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  { property: "og:url", content: "https://arkeonixlabs.com/lab" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: "Laboratorio Técnico | Arkeonix Labs" },
+  { name: "twitter:description", content: "Guías avanzadas de equipos, servidores y despliegue técnico por Arkeonix Labs." },
+  { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+];
 import { FiTerminal } from "react-icons/fi";
 import LabPostCard from "@/components/posts/LabPostCard";
 import Pagination from "@/components/ui/Pagination";

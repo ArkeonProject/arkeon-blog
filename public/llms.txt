@@ -1,0 +1,38 @@
+# Arkeonix Labs — llms.txt
+# https://llmstxt.org
+
+> Arkeonix Labs es una plataforma de análisis técnico y contenido de precisión para desarrolladores y profesionales tech.
+
+## About
+
+Arkeonix Labs publica análisis técnicos detallados, guías de infraestructura, reseñas de hardware y recursos seleccionados para desarrolladores. También ofrece productos educativos para developers junior y un SaaS boilerplate empresarial.
+
+## Content
+
+- Blog: https://arkeonixlabs.com/blog — Análisis técnicos y artículos de tecnología
+- Recursos: https://arkeonixlabs.com/recursos — Herramientas, hardware y software recomendado
+- Lab: https://arkeonixlabs.com/lab — Guías técnicas avanzadas de infraestructura y servidores
+- Guía Junior: https://arkeonixlabs.com/guia-junior — Guía de carrera para developers junior
+- Arkeonix SaaS: https://arkeonixlabs.com/arkeonix — Boilerplate empresarial con Next.js 15
+
+## Sitemap
+
+https://arkeonixlabs.com/sitemap.xml
+
+## Contact
+
+https://arkeonixlabs.com/contact
+
+## Language
+
+Primary: Spanish (es-ES)
+Secondary: English (en-US)
+
+## Allowed
+
+User-agent: *
+Allow: /
+
+## robots.txt
+
+https://arkeonixlabs.com/robots.txt

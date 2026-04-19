@@ -14,7 +14,35 @@ import TableOfContents from "@/components/ui/TableOfContents";
 import SmartImage from "@/components/ui/SmartImage";
 import type { PostDetail } from "@/types/post";
 import { useLoaderData } from "react-router";
-import type { LoaderFunctionArgs } from "react-router";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction<typeof loader> = ({ data, params }) => {
+  const post = data?.post;
+  const slug = params.slug ?? "";
+  const url = `https://arkeonixlabs.com/post/${slug}`;
+  if (!post) {
+    return [
+      { title: "Post no encontrado | Arkeonix Labs" },
+      { name: "robots", content: "noindex, follow" },
+    ];
+  }
+  const image = post.cover_image
+    ? post.cover_image
+    : `https://arkeonixlabs.com/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category ?? "")}&author=${encodeURIComponent(post.author)}`;
+  return [
+    { title: `${post.title} | Arkeonix Labs` },
+    { tagName: "link", rel: "canonical", href: url },
+    { property: "og:title", content: `${post.title} | Arkeonix Labs` },
+    { property: "og:description", content: post.title },
+    { property: "og:type", content: "article" },
+    { property: "og:image", content: image },
+    { property: "og:url", content: url },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: `${post.title} | Arkeonix Labs` },
+    { name: "twitter:image", content: image },
+  ];
+};
 
 const RECURSOS_CATEGORY_VALUES = [
   "product",

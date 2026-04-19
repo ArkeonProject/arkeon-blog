@@ -1,4 +1,13 @@
 import { Helmet } from "react-helmet-async";
+import type { MetaFunction } from "react-router";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = () => [
+  { title: "Términos de Uso | Arkeonix Labs" },
+  { name: "description", content: "El uso de Arkeonix Labs implica la aceptación de nuestras normas de navegación y uso de contenido técnico." },
+  { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/terms" },
+  { name: "robots", content: "noindex, follow" },
+];
 import { useLocale } from "@/hooks/useLocale";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 

@@ -1,4 +1,13 @@
 import { Helmet } from "react-helmet-async";
+import type { MetaFunction } from "react-router";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = () => [
+  { title: "Política de Privacidad | Arkeonix Labs" },
+  { name: "description", content: "En Arkeonix Labs, la privacidad es una extensión de nuestra seguridad técnica. Detallamos cómo protegemos tu información." },
+  { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/privacy" },
+  { name: "robots", content: "noindex, follow" },
+];
 import { useLocale } from "@/hooks/useLocale";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 

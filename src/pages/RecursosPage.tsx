@@ -1,5 +1,21 @@
 import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet-async";
+import type { MetaFunction } from "react-router";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = () => [
+  { title: "Recursos Seleccionados | Arkeonix Labs" },
+  { name: "description", content: "Recomendaciones expertas y análisis técnicos de herramientas, hardware y software por Arkeonix Labs." },
+  { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/recursos" },
+  { property: "og:title", content: "Recursos Seleccionados | Arkeonix Labs" },
+  { property: "og:description", content: "Recomendaciones expertas y análisis técnicos de herramientas, hardware y software por Arkeonix Labs." },
+  { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  { property: "og:url", content: "https://arkeonixlabs.com/recursos" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: "Recursos Seleccionados | Arkeonix Labs" },
+  { name: "twitter:description", content: "Recomendaciones expertas y análisis técnicos de herramientas, hardware y software por Arkeonix Labs." },
+  { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+];
 import {
   FiFilter, FiChevronDown, FiSearch, FiExternalLink,
 } from "react-icons/fi";

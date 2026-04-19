@@ -21,7 +21,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        
+
         {/* Google Tag Manager */}
         <script dangerouslySetInnerHTML={{ __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -32,17 +32,64 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
 
-        {/* Global meta tags that act as fallback */}
+        {/* Fallback meta tags — overridden by each route's meta export */}
+        <title>Arkeonix Labs — Precisión Técnica</title>
+        <meta name="description" content="Análisis técnicos detallados y vanguardia tecnológica bajo el estándar de Arkeonix Labs." />
+        <meta name="author" content="David López" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://arkeonixlabs.com/" />
+
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.arkeonixlabs.com/" />
+        <meta property="og:url" content="https://arkeonixlabs.com/" />
         <meta property="og:site_name" content="Arkeonix Labs" />
+        <meta property="og:title" content="Arkeonix Labs — Precisión Técnica" />
+        <meta property="og:description" content="Análisis técnicos detallados y vanguardia tecnológica bajo el estándar de Arkeonix Labs." />
+        <meta property="og:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
         <meta property="og:locale" content="es_ES" />
         <meta property="og:locale:alternate" content="en_US" />
-        
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Arkeonix Labs — Precisión Técnica" />
+        <meta name="twitter:description" content="Análisis técnicos detallados y vanguardia tecnológica bajo el estándar de Arkeonix Labs." />
+        <meta name="twitter:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
+
+        {/* JSON-LD: Organization + WebSite */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Arkeonix Labs",
+          "url": "https://arkeonixlabs.com",
+          "logo": "https://arkeonixlabs.com/arkeonix-logo.png",
+          "description": "Análisis técnicos detallados y vanguardia tecnológica bajo el estándar de Arkeonix Labs.",
+          "sameAs": [
+            "https://github.com/ArkeonProject",
+            "https://www.linkedin.com/in/david-l%C3%B3pez-santamar%C3%ADa-946965260/"
+          ],
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer service",
+            "url": "https://arkeonixlabs.com/contact"
+          }
+        })}} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Arkeonix Labs",
+          "url": "https://arkeonixlabs.com",
+          "description": "Análisis técnicos detallados y vanguardia tecnológica bajo el estándar de Arkeonix Labs.",
+          "inLanguage": ["es", "en"],
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://arkeonixlabs.com/blog?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        })}} />
+
         <meta name="theme-color" content="#00aaff" />
         <link rel="icon" type="image/png" href="/arkeonix-logo.png" />
         <link rel="apple-touch-icon" href="/arkeonix-logo.png" />
         <link rel="manifest" href="/manifest.json" />
+        <link rel="me" href="https://github.com/ArkeonProject" />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -77,8 +124,16 @@ function GlobalLayout() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground transition-colors duration-300">
-      <Header />
-      <main className="grow container mx-auto px-4 pt-24 pb-12">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg focus:font-semibold focus:text-sm"
+      >
+        {t("a11y_skip_link")}
+      </a>
+      <header>
+        <Header />
+      </header>
+      <main id="main" className="grow container mx-auto px-4 pt-24 pb-12">
         <Outlet />
       </main>
       <Footer />
