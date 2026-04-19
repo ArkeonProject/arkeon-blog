@@ -1,12 +1,6 @@
 {
   "redirects": [
     {
-      "source": "/(.*)",
-      "has": [{ "type": "host", "value": "www.arkeonixlabs.com" }],
-      "destination": "https://arkeonixlabs.com/$1",
-      "permanent": true
-    },
-    {
       "source": "/news",
       "destination": "/blog",
       "permanent": true
