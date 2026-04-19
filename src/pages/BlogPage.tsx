@@ -1,6 +1,26 @@
 import { useEffect, useState, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router";
+import type { MetaFunction } from "react-router";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = ({ location }) => {
+  const isHome = location.pathname === "/";
+  const url = isHome ? "https://arkeonixlabs.com/" : "https://arkeonixlabs.com/blog";
+  return [
+    { title: "Arkeonix Labs — Precisión Técnica" },
+    { name: "description", content: "Análisis técnicos y vanguardia tecnológica por Arkeonix Labs." },
+    { tagName: "link", rel: "canonical", href: url },
+    { property: "og:title", content: "Arkeonix Labs — Precisión Técnica" },
+    { property: "og:description", content: "Análisis técnicos y vanguardia tecnológica por Arkeonix Labs." },
+    { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+    { property: "og:url", content: url },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: "Arkeonix Labs — Precisión Técnica" },
+    { name: "twitter:description", content: "Análisis técnicos y vanguardia tecnológica por Arkeonix Labs." },
+    { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  ];
+};
 import { FiTerminal, FiSearch, FiCode, FiFileText } from "react-icons/fi";
 import NewsletterForm from "@/components/forms/NewsletterForm";
 import InfiniteCarousel from "@/components/layout/InfiniteCarousel";

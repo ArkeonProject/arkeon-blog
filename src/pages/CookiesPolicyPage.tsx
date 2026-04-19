@@ -1,4 +1,13 @@
 import { Helmet } from "react-helmet-async";
+import type { MetaFunction } from "react-router";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = () => [
+  { title: "Política de Cookies | Arkeonix Labs" },
+  { name: "description", content: "Explicamos cómo gestionamos las cookies para optimizar tu experiencia técnica en nuestro sitio." },
+  { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/cookies" },
+  { name: "robots", content: "noindex, follow" },
+];
 import { useLocale } from "@/hooks/useLocale";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 

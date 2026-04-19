@@ -1,7 +1,19 @@
-import { Link } from "react-router";
+import { Link, data } from "react-router";
 import { Helmet } from "react-helmet-async";
 import { FiHome, FiArrowLeft, FiAlertTriangle } from "react-icons/fi";
 import { useLocale } from "@/hooks/useLocale";
+import type { MetaFunction } from "react-router";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export async function loader() {
+  return data(null, { status: 404 });
+}
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = () => [
+  { title: "404 — Página no encontrada | Arkeonix Labs" },
+  { name: "robots", content: "noindex, follow" },
+];
 
 export default function NotFoundPage() {
   const { t } = useLocale();

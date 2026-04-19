@@ -1,6 +1,22 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { Helmet } from "react-helmet-async";
+import type { MetaFunction } from "react-router";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = () => [
+  { title: "Arkeonix SaaS — Enterprise Boilerplate con Next.js 15 | Arkeonix Labs" },
+  { name: "description", content: "Arkeonix SaaS es un boilerplate listo para producción con autenticación, pagos con Stripe, multi-tenancy y RBAC. Lanza tu SaaS en días, no meses." },
+  { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/arkeonix" },
+  { property: "og:title", content: "Arkeonix SaaS — Enterprise Boilerplate | Arkeonix Labs" },
+  { property: "og:description", content: "Arkeonix SaaS es un boilerplate listo para producción con autenticación, pagos con Stripe, multi-tenancy y RBAC. Lanza tu SaaS en días, no meses." },
+  { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  { property: "og:url", content: "https://arkeonixlabs.com/arkeonix" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: "Arkeonix SaaS — Enterprise Boilerplate | Arkeonix Labs" },
+  { name: "twitter:description", content: "Arkeonix SaaS es un boilerplate listo para producción con autenticación, pagos con Stripe, multi-tenancy y RBAC. Lanza tu SaaS en días, no meses." },
+  { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+];
 import { useLocale } from "@/hooks/useLocale";
 import { useAuth } from "@/context/AuthContext";
 import {

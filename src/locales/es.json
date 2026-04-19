@@ -547,7 +547,6 @@
   "academia_submit": "Enviar respuestas",
   "academia_submit_pending": "Faltan",
   "academia_explanation": "Explicación",
-
   "cta_boilerplate_from_chapter_title": "¿Buscas un proyecto de portfolio real?",
   "cta_boilerplate_from_chapter_desc": "El boilerplate de Arkeonix tiene auth, pagos y multi-tenancy listos. Úsalo como base de tu proyecto y demuestra que sabes montar un SaaS de producción.",
   "cta_boilerplate_from_chapter_btn": "Ver el Boilerplate →",
@@ -560,12 +559,12 @@
   "cta_guia_from_academia_title": "¿Preparando también la parte laboral?",
   "cta_guia_from_academia_desc": "Aprobar el examen no es suficiente. La Guía Junior te prepara para el CV, la entrevista y el primer empleo real.",
   "cta_guia_from_academia_btn": "Ver la Guía Junior →",
-
   "footer_products": "Productos",
   "footer_product_guia": "Guía Junior",
   "footer_product_guia_price": "€19 lifetime",
   "footer_product_academia": "Academia QA",
   "footer_product_academia_price": "€19 lifetime",
   "footer_product_boilerplate": "SaaS Boilerplate",
-  "footer_product_boilerplate_price": "desde €149"
+  "footer_product_boilerplate_price": "desde €149",
+  "a11y_skip_link": "Saltar al contenido"
 }

@@ -1,4 +1,20 @@
 import { Helmet } from "react-helmet-async";
+import type { MetaFunction } from "react-router";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = () => [
+  { title: "Sobre Nosotros | Arkeonix Labs" },
+  { name: "description", content: "Conoce al equipo de Arkeonix Labs y nuestra misión de precisión técnica en análisis de tecnología." },
+  { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/about" },
+  { property: "og:title", content: "Sobre Nosotros | Arkeonix Labs" },
+  { property: "og:description", content: "Conoce al equipo de Arkeonix Labs y nuestra misión de precisión técnica en análisis de tecnología." },
+  { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  { property: "og:url", content: "https://arkeonixlabs.com/about" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: "Sobre Nosotros | Arkeonix Labs" },
+  { name: "twitter:description", content: "Conoce al equipo de Arkeonix Labs y nuestra misión de precisión técnica en análisis de tecnología." },
+  { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+];
 import { useLocale } from "@/hooks/useLocale";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 

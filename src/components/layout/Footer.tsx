@@ -40,6 +40,8 @@ export default function Footer() {
               <img
                 src="/arkeonix-logo.png"
                 alt="Arkeonix Labs Logo"
+                width={28}
+                height={28}
                 className="w-7 h-7 rounded-lg object-contain group-hover:scale-105 transition-transform duration-300"
                 style={{
                   boxShadow: "0 2px 6px color-mix(in oklch, var(--color-primary) 15%, transparent)",
@@ -54,7 +56,7 @@ export default function Footer() {
             </p>
             <div className="flex gap-2 pt-1">
               <a
-                href="https://github.com/ArkeonixLabs"
+                href="https://github.com/ArkeonProject"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-lg bg-background border border-border/40 text-muted-foreground hover:text-primary hover:border-primary/30 transition-all duration-300"
