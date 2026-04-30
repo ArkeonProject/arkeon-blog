@@ -1,33 +1,13 @@
 name: Release
 
 on:
-  workflow_dispatch:
-    inputs:
-      version-bump:
-        description: 'Version bump type'
-        required: true
-        default: 'patch'
-        type: choice
-        options:
-          - major
-          - minor
-          - patch
   push:
     branches: [main]
 
 jobs:
-  prepare-release:
-    name: Prepare Release
-    if: github.event_name == 'workflow_dispatch'
-    uses: ArkeonProject/organization-tools/.github/workflows/release-prepare.yml@v1.1.5
-    with:
-      version-bump: ${{ github.event.inputs.version-bump }}
-      project-type: 'node'
-
-  publish-release:
+  publish:
     name: Publish Release
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    uses: ArkeonProject/organization-tools/.github/workflows/release-publish.yml@v1.1.5
+    uses: ArkeonProject/organization-tools/.github/workflows/release-publish.yml@v1
     with:
-      project-type: 'node'
       create-github-release: true
+    secrets: inherit

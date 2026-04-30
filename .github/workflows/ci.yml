@@ -2,14 +2,14 @@ name: CI
 
 on:
   push:
-    branches: [develop, main]
+    branches: [main, 'feature/**']
   pull_request:
-    branches: [develop, main]
+    branches: [main]
 
 jobs:
   ci:
     name: Continuous Integration
-    uses: ArkeonProject/organization-tools/.github/workflows/ci-node.yml@v1.1.5
+    uses: ArkeonProject/organization-tools/.github/workflows/ci-node.yml@v1
     with:
       node-version: '20'
       package-manager: 'pnpm'
