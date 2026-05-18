@@ -4,7 +4,7 @@ export default [
   // Redirección de index a /blog está en el root.tsx o Layout
   // Rutas públicas base bajo un Layout general (opcional si Layout está dentro de root)
   // Usaremos Layout desde root.tsx que emula a <Layout /> de AppRouter.tsx
-  route("/", "pages/BlogPage.tsx", { id: "home" }),
+  route("/", "pages/HomePage.tsx", { id: "home" }),
   route("blog", "pages/BlogPage.tsx", { id: "blog-listing" }),
   route("recursos", "routes/recursos-redirect.ts", { id: "recursos-disabled" }),
   route("lab", "pages/LabPage.tsx"),

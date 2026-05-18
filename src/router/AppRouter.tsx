@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from "react-router";
 import { useEffect } from "react";
 import CookieConsent from "react-cookie-consent";
+import HomePage from "@/pages/HomePage";
 import BlogPage from "@/pages/BlogPage";
 import PostPage from "@/pages/PostPage";
 import ContactPage from "@/pages/ContactPage";
@@ -93,7 +94,7 @@ export default function AppRouter() {
       <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>
-            <Route path="/" element={<Navigate to="/blog" replace />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/news" element={<NewsPage />} />
             <Route path="/recursos" element={<Navigate to="/blog" replace />} />
