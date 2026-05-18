@@ -16,8 +16,8 @@ export const meta: MetaFunction = () => [
   { name: "twitter:description", content: "Guías avanzadas de equipos, servidores y despliegue técnico por Arkeonix Labs." },
   { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
 ];
-import { FiTerminal } from "react-icons/fi";
 import LabPostCard from "@/components/posts/LabPostCard";
+import PageHero from "@/components/ui/PageHero";
 import Pagination from "@/components/ui/Pagination";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import { supabase } from "@/lib/supabase";
@@ -115,20 +115,11 @@ export default function LabPage() {
 
             {/* Header */}
             <ScrollReveal variant="blur" duration={800}>
-                <header className="text-center mb-16">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
-                        <FiTerminal className="w-4 h-4 text-emerald-400" />
-                        <span className="text-emerald-400 text-sm font-semibold tracking-wide uppercase">
-                            Lab
-                        </span>
-                    </div>
-                    <h1 className="text-5xl md:text-6xl font-black text-gray-900 dark:text-white mb-4">
-                        {t("lab_title")}
-                    </h1>
-                    <p className="text-gray-600 dark:text-white/70 text-lg md:text-xl max-w-3xl mx-auto">
-                        {t("lab_description")}
-                    </p>
-                </header>
+                <PageHero
+                    badge={t("lab_badge")}
+                    title={t("lab_title")}
+                    description={t("lab_description")}
+                />
             </ScrollReveal>
 
             {/* Tag filters */}

@@ -33,7 +33,6 @@ import {
   FiAlertCircle,
   FiLock,
   FiCheckCircle,
-  FiPackage,
   FiGithub,
   FiLinkedin,
   FiExternalLink,
@@ -41,6 +40,7 @@ import {
   FiLoader,
 } from "react-icons/fi";
 import ScrollReveal from "@/components/ui/ScrollReveal";
+import PageHero from "@/components/ui/PageHero";
 import { OPEN_SOURCE_MODE } from "@/config/monetization";
 
 const PRICE_BOILERPLATE_STARTER = import.meta.env.VITE_STRIPE_PRICE_BOILERPLATE_STARTER as string | undefined;
@@ -271,26 +271,12 @@ export default function ArkeonixPage() {
         <div className="dot-grid" />
 
         <div className="relative z-10 animate-[reveal_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]">
-          {/* Badge */}
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-semibold mb-8 font-display">
-            <FiPackage className="text-xs" />
-            {t("arkeonix_badge")}
-          </span>
-
-          {/* Headline */}
-          <h1 className="text-5xl md:text-7xl font-display font-bold leading-[1.05] tracking-tight mb-6">
-            {t("arkeonix_hero_headline_1")}{" "}
-            <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-              {t("arkeonix_hero_headline_highlight")}
-            </span>
-            <br />
-            {t("arkeonix_hero_headline_2")}
-          </h1>
-
-          {/* Subheading */}
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed font-body">
-            {t("arkeonix_hero_subheading")}
-          </p>
+          <PageHero
+            badge={t("arkeonix_badge")}
+            title={t("arkeonix_hero_title")}
+            description={t("arkeonix_hero_subheading")}
+            className="mb-10"
+          />
 
           {/* CTAs */}
           <div className="flex flex-wrap items-center justify-center gap-4 mb-14">

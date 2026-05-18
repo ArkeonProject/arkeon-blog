@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { useLocale } from '@/hooks/useLocale';
 import { useSupabaseQuery } from '@/hooks/useSupabaseQuery';
 import { supabase } from '@/lib/supabase';
+import PageHero from '@/components/ui/PageHero';
 import type { AcademiaCategory } from '@/types/academia';
 import { OPEN_SOURCE_MODE } from '@/config/monetization';
 
@@ -67,17 +68,11 @@ export default function AcademiaPage() {
       </Helmet>
 
       {/* Hero */}
-      <header className="text-center mb-16">
-        <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary bg-primary/10 rounded-full mb-4">
-          {t('academia_badge')}
-        </span>
-        <h1 className="text-4xl md:text-5xl font-bold bg-linear-to-r from-[#007EAD] via-[#00aaff] to-[#007EAD] bg-clip-text text-transparent mb-6 leading-tight">
-          {t('academia_title')}
-        </h1>
-        <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
-          {t('academia_subtitle')}
-        </p>
-      </header>
+      <PageHero
+        badge={t('academia_badge')}
+        title={t('academia_title')}
+        description={t('academia_subtitle')}
+      />
 
       {/* Categories */}
       <section className="mb-16">

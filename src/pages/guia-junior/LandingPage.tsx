@@ -5,6 +5,7 @@ import { useLocale } from '@/hooks/useLocale';
 import { useAuth } from '@/context/AuthContext';
 import { chapters } from '@/data/guia/chapters';
 import ScrollReveal from '@/components/ui/ScrollReveal';
+import PageHero from '@/components/ui/PageHero';
 import { OPEN_SOURCE_MODE } from '@/config/monetization';
 
 const PRICE_LIFETIME = import.meta.env.VITE_STRIPE_PRICE_GUIA_LIFETIME;
@@ -121,32 +122,27 @@ export default function GuiaLandingPage() {
 
       {/* Hero */}
       <ScrollReveal variant="blur" duration={800}>
-        <header className="text-center mb-16">
-          <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary bg-primary/10 rounded-full mb-4">
-            {t('guia_landing_badge')}
-          </span>
-          <h1 className="text-4xl md:text-5xl font-bold bg-linear-to-r from-[#007EAD] via-[#00aaff] to-[#007EAD] bg-clip-text text-transparent mb-6 leading-tight">
-            {t('guia_landing_title')}
-          </h1>
-          <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto mb-8 leading-relaxed">
-            {t('guia_landing_subtitle')}
-          </p>
+        <PageHero
+          badge={t('guia_landing_badge')}
+          title={t('guia_landing_title')}
+          description={t('guia_landing_subtitle')}
+        >
           {alreadyHasAccess ? (
             <Link
               to="/guia-junior/dashboard"
-              className="inline-block px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity text-lg"
+              className="inline-block mt-8 px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity text-lg"
             >
               {t('guia_landing_cta_dashboard')}
             </Link>
           ) : OPEN_SOURCE_MODE ? (
             <Link
               to="/guia-junior/capitulo/antes-de-empezar"
-              className="inline-block px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity text-lg"
+              className="inline-block mt-8 px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity text-lg"
             >
               {t('guia_landing_cta_access')}
             </Link>
           ) : (
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
               <Link
                 to="/guia-junior/capitulo/antes-de-empezar"
                 className="inline-block px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity text-lg"
@@ -170,7 +166,7 @@ export default function GuiaLandingPage() {
               )}
             </div>
           )}
-        </header>
+        </PageHero>
       </ScrollReveal>
 
       {/* Who is this for */}
