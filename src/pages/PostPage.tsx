@@ -287,7 +287,7 @@ export default function PostPage() {
         </Link>
 
         {/* Dynamic Grid Layout for TOC */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12 items-start">
+        <div className={`grid grid-cols-1 gap-12 items-start ${tocItems.length > 0 ? 'lg:grid-cols-[1fr_280px]' : ''}`}>
           <div className="min-w-0">
             {post.cover_image && (
               <SmartImage
