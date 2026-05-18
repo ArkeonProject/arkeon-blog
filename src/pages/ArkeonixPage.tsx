@@ -273,9 +273,9 @@ export default function ArkeonixPage() {
         <div className="relative z-10 animate-[reveal_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]">
           <PageHero
             badge={t("arkeonix_badge")}
-            title={t("arkeonix_hero_title")}
+            title={t("arkeonix_hero_title_part1")}
+            titleHighlight={t("arkeonix_hero_title_part2")}
             description={t("arkeonix_hero_subheading")}
-            className="mb-10"
           />
 
           {/* CTAs */}

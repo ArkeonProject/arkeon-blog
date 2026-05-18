@@ -124,7 +124,8 @@ export default function GuiaLandingPage() {
       <ScrollReveal variant="blur" duration={800}>
         <PageHero
           badge={t('guia_landing_badge')}
-          title={t('guia_landing_title')}
+          title={t('guia_landing_title_part1')}
+          titleHighlight={t('guia_landing_title_part2')}
           description={t('guia_landing_subtitle')}
         >
           {alreadyHasAccess ? (

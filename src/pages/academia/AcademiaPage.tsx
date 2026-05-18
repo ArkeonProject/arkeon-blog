@@ -70,7 +70,8 @@ export default function AcademiaPage() {
       {/* Hero */}
       <PageHero
         badge={t('academia_badge')}
-        title={t('academia_title')}
+        title={t('academia_title_part1')}
+        titleHighlight={t('academia_title_part2')}
         description={t('academia_subtitle')}
       />
 

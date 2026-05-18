@@ -16,6 +16,7 @@ export const meta: MetaFunction = () => [
   { name: "twitter:description", content: "Guías avanzadas de equipos, servidores y despliegue técnico por Arkeonix Labs." },
   { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
 ];
+import { FiTerminal } from "react-icons/fi";
 import LabPostCard from "@/components/posts/LabPostCard";
 import PageHero from "@/components/ui/PageHero";
 import Pagination from "@/components/ui/Pagination";
@@ -117,8 +118,11 @@ export default function LabPage() {
             <ScrollReveal variant="blur" duration={800}>
                 <PageHero
                     badge={t("lab_badge")}
-                    title={t("lab_title")}
+                    title={t("lab_title_part1")}
+                    titleHighlight={t("lab_title_part2")}
                     description={t("lab_description")}
+                    badgeColor="emerald"
+                    badgeIcon={<FiTerminal className="w-4 h-4" />}
                 />
             </ScrollReveal>
 
