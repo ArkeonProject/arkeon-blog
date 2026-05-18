@@ -34,6 +34,8 @@ export default {
       "/",
       "/blog",
       "/lab",
+      "/herramientas",
+      "/herramientas/calculadora-salario",
       "/about",
       "/contact",
       "/privacy",

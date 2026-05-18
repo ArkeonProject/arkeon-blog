@@ -27,6 +27,8 @@ import AcademiaPage from "@/pages/academia/AcademiaPage";
 import AcademiaThanksPage from "@/pages/academia/ThanksPage";
 import AcademiaCategoryPage from "@/pages/academia/AcademiaCategoryPage";
 import AcademiaExamPage from "@/pages/academia/AcademiaExamPage";
+import HerramientasPage from "@/pages/HerramientasPage";
+import CalculadoraSalarioPage from "@/pages/herramientas/CalculadoraSalarioPage";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ScrollToTop from "@/components/ui/ScrollToTop";
@@ -98,6 +100,9 @@ export default function AppRouter() {
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/news" element={<NewsPage />} />
             <Route path="/recursos" element={<Navigate to="/blog" replace />} />
+            <Route path="/herramientas" element={<HerramientasPage />} />
+            <Route path="/herramientas/calculadora-salario" element={<CalculadoraSalarioPage />} />
+            <Route path="/calculadora-salario" element={<Navigate to="/herramientas/calculadora-salario" replace />} />
             <Route path="/lab" element={<LabPage />} />
             <Route path="/lab/:slug" element={<LabPostPage />} />
             <Route path="/post/:slug" element={<PostPage />} />

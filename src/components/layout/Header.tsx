@@ -9,6 +9,7 @@ import type { Locale } from "@/context/LocaleContext";
 const NAV_LINKS = [
   { path: "/blog", key: "blog" },
   { path: "/lab", key: "lab" },
+  { path: "/herramientas", key: "tools" },
   { path: "/guia-junior", key: "guide" },
   { path: "/academia", key: "academia" },
   { path: "/arkeonix", key: "saas" },
@@ -53,6 +54,7 @@ export default function Header() {
   const navLinkLabel = (key: string) => {
     if (key === "blog") return t("nav_blog");
     if (key === "guide") return t("nav_guide");
+    if (key === "tools") return t("nav_tools");
     if (key === "academia") return t("nav_academia");
     if (key === "saas") return t("nav_saas");
     if (key === "contact") return t("nav_contact");
@@ -95,6 +97,7 @@ export default function Header() {
             {NAV_LINKS.map(({ path, key }) => {
               const isActive =
                 location.pathname === path ||
+                location.pathname.startsWith(`${path}/`) ||
                 (path === "/blog" && location.pathname === "/");
               return (
                 <Link
@@ -232,6 +235,7 @@ export default function Header() {
             {NAV_LINKS.map(({ path, key }) => {
               const isActive =
                 location.pathname === path ||
+                location.pathname.startsWith(`${path}/`) ||
                 (path === "/blog" && location.pathname === "/");
               return (
                 <Link
