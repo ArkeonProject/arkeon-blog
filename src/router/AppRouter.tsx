@@ -13,7 +13,6 @@ import ConfirmPage from "@/pages/newsletter/ConfirmPage";
 import NewsPage from "@/pages/NewsPage";
 import LabPage from "@/pages/LabPage";
 import LabPostPage from "@/pages/LabPostPage";
-import RecursosPage from "@/pages/RecursosPage";
 import ArkeonixPage from "@/pages/ArkeonixPage";
 import AdminPage from "@/pages/AdminPage";
 import LoginPage from "@/pages/auth/LoginPage";
@@ -97,7 +96,7 @@ export default function AppRouter() {
             <Route path="/" element={<Navigate to="/blog" replace />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/news" element={<NewsPage />} />
-            <Route path="/recursos" element={<RecursosPage />} />
+            <Route path="/recursos" element={<Navigate to="/blog" replace />} />
             <Route path="/lab" element={<LabPage />} />
             <Route path="/lab/:slug" element={<LabPostPage />} />
             <Route path="/post/:slug" element={<PostPage />} />

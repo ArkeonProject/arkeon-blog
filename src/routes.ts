@@ -6,7 +6,7 @@ export default [
   // Usaremos Layout desde root.tsx que emula a <Layout /> de AppRouter.tsx
   route("/", "pages/BlogPage.tsx", { id: "home" }),
   route("blog", "pages/BlogPage.tsx", { id: "blog-listing" }),
-  route("recursos", "pages/RecursosPage.tsx"),
+  route("recursos", "routes/recursos-redirect.ts", { id: "recursos-disabled" }),
   route("lab", "pages/LabPage.tsx"),
   route("lab/:slug", "pages/LabPostPage.tsx"),
   route("post/:slug", "pages/PostPage.tsx"),

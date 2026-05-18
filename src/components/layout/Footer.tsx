@@ -5,7 +5,6 @@ import { useLocale } from "@/hooks/useLocale";
 
 const QUICK_LINKS = [
   { path: "/blog", key: "nav_blog" },
-  { path: "/recursos", key: "nav_recursos" },
   { path: "/lab", key: "category_lab" },
   { path: "/about", key: "footer_about" },
   { path: "/contact", key: "nav_contact" },

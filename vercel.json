@@ -7,13 +7,13 @@
     },
     {
       "source": "/products",
-      "destination": "/recursos",
-      "permanent": true
+      "destination": "/blog",
+      "permanent": false
     },
     {
       "source": "/products/:path*",
-      "destination": "/recursos/:path*",
-      "permanent": true
+      "destination": "/blog",
+      "permanent": false
     }
   ],
   "outputDirectory": "build/client",

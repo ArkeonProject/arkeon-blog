@@ -4,6 +4,15 @@
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- Se deshabilitó temporalmente la página `/recursos`: ya no se muestra en navegación y su URL redirige al blog.
+- Se actualizó SEO técnico para acompañar el cambio: `/recursos` se retiró del prerender y del sitemap.
+
+---
+
 ## [v2.5.2] - 2026-03-30
 
 ### 🛠️ Dependencias — Dependabot Consolidation

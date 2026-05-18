@@ -33,7 +33,6 @@ export default {
     const staticRoutes = [
       "/",
       "/blog",
-      "/recursos",
       "/lab",
       "/about",
       "/contact",
