@@ -1,6 +1,6 @@
-# CLAUDE.md — Arkeonix Blog
+# AGENTS.md — Arkeonix Blog
 
-Guía interna para Claude Code. Leer siempre antes de hacer cambios.
+Guía interna para Codex. Leer siempre antes de hacer cambios.
 
 ---
 
@@ -14,7 +14,6 @@ Guía interna para Claude Code. Leer siempre antes de hacer cambios.
 - **Despliegue**: Vercel. Config en `vercel.json`
 - **i18n**: `src/locales/es.json` + `en.json`. Claves planas, hook `useLocale()` → `t(key)`
 - **Tipos**: `src/types/post.ts` y `src/types/lab.ts` — consultar antes de trabajar con posts
-- **Modo monetización**: `src/config/monetization.ts` controla el estado temporal open-source (`OPEN_SOURCE_MODE`) y pagos (`PAYMENTS_ENABLED`) para facilitar rollback futuro
 - **Automatización de publicaciones**: existe un flujo en **n8n** que publica posts automáticamente en Supabase para las secciones de **Productos** y **Noticias**. El flujo insertan directamente en las tablas `posts` (y posiblemente `lab_posts`). Históricamente publicaba en **Markdown**; se está migrando a **HTML**. No tocar la estructura de las tablas sin considerar el impacto en n8n.
 - **Formato de contenido**: el campo `content` en Supabase acepta tanto MD (posts viejos) como HTML (posts nuevos). La detección automática en PostPage/LabPostPage distingue por si el contenido empieza con `<tag`. El flujo n8n debe generar HTML puro (sin wrapper en MD) para que se renderice correctamente.
 
@@ -36,48 +35,37 @@ Guía interna para Claude Code. Leer siempre antes de hacer cambios.
 
 ## Procedimiento reversible: modo open-source
 
-Objetivo: pausar monetización sin eliminar infraestructura ni romper la reactivación futura.
+Objetivo: pausar monetización sin eliminar infraestructura, y poder reactivar sin migraciones de emergencia.
 
-### 1) Flags a tocar (fuente de verdad)
+### Flags de control
 
-1. En `src/config/monetization.ts`:
-   - `OPEN_SOURCE_MODE = true` para abrir contenido premium en UI
-   - `PAYMENTS_ENABLED = !OPEN_SOURCE_MODE` para desactivar cobros cuando open-source está activo
-2. Estado esperado:
-   - **Open-source ON**: `OPEN_SOURCE_MODE=true`, `PAYMENTS_ENABLED=false`
-   - **Monetización ON**: `OPEN_SOURCE_MODE=false`, `PAYMENTS_ENABLED=true`
+1. Editar `src/config/monetization.ts`:
+   - `OPEN_SOURCE_MODE = true` abre experiencia premium en frontend
+   - `PAYMENTS_ENABLED = !OPEN_SOURCE_MODE` apaga/enciende pagos de forma acoplada
+2. Estados válidos:
+   - Open-source: `OPEN_SOURCE_MODE=true` + `PAYMENTS_ENABLED=false`
+   - Comercial: `OPEN_SOURCE_MODE=false` + `PAYMENTS_ENABLED=true`
 
-### 2) Comportamiento de endpoints de pago
+### Endpoints de pago (comportamiento esperado)
 
-- `POST /api/guia-checkout` y `POST /api/academia-checkout`:
-  - con pagos desactivados deben responder `410` + `Payments are temporarily disabled`
-- `POST /api/customer-portal`:
-  - con pagos desactivados debe responder `410` + `Customer portal is temporarily disabled`
-- `POST /api/guia-webhook`:
-  - con pagos desactivados debe responder `200` + `Payments disabled` (ack explícito para Stripe)
-- Al reactivar monetización, no cambiar contratos HTTP; solo volver a habilitar flags/env y mantener la misma semántica de errores.
+- `POST /api/guia-checkout` → con pagos desactivados: `410` + `Payments are temporarily disabled`
+- `POST /api/academia-checkout` → con pagos desactivados: `410` + `Payments are temporarily disabled`
+- `POST /api/customer-portal` → con pagos desactivados: `410` + `Customer portal is temporarily disabled`
+- `POST /api/guia-webhook` → con pagos desactivados: `200` + `Payments disabled` (ack para Stripe)
 
-### 3) Notas RLS obligatorias (Supabase) para Guía y Academia
+### Supabase RLS obligatorio (Guía/Academia)
 
-En open-source, la UI puede quitar paywall, pero **RLS sigue mandando**: si no se ajusta, la base de datos seguirá bloqueando contenido premium.
+- El modo open-source en UI **no** salta RLS: si no cambias políticas, seguirá habiendo `access_denied` en contenido premium.
+- Guía (`guia_chapters`): política pública actual solo para `is_free=true`; en open-source añadir/ajustar SELECT para premium y revertir al volver a monetización.
+- Academia (`academia_categories`, `academia_exams`, `academia_questions`): asegurar SELECT público temporal en open-source; al reactivar pagos, volver a gating por `user_access.product_id='academia'`.
+- Mantener RLS habilitado siempre; no usar `disable row level security` como solución rápida.
 
-- **Guía (`guia_chapters`)**:
-  - política actual pública: `is_free = true`
-  - política premium actual: requiere `user_access` activo o B2B
-  - para open-source temporal, habilitar SELECT público también para capítulos premium (política adicional o ajuste temporal)
-  - al volver a monetización, revertir esa política para restablecer gating por `user_access`
-- **Academia (`academia_categories`, `academia_exams`, `academia_questions`)**:
-  - validar que existan políticas SELECT consistentes con el modo activo
-  - en open-source: permitir lectura pública de categorías/exámenes/preguntas premium
-  - en monetización: limitar premium por `user_access.product_id='academia'` y mantener inserción de `academia_attempts` para usuarios autenticados
-- Nunca desactivar RLS globalmente como atajo; aplicar cambios puntuales por tabla/política y dejar script reversible documentado.
+### Checklist rápido de activación/reversión
 
-### 4) Checklist de rollback
-
-1. Cambiar flags en `src/config/monetization.ts`
-2. Verificar respuestas HTTP de endpoints de pago
-3. Aplicar/revertir políticas RLS de Guía y Academia según modo
-4. Probar navegación real: `guia-junior/capitulo/*` y `academia/*` con usuario anónimo y autenticado
+1. Cambiar flags de `src/config/monetization.ts`
+2. Validar respuestas HTTP en los 4 endpoints de pago
+3. Aplicar/revertir políticas RLS de Guía y Academia
+4. Probar rutas reales con usuario anónimo y logueado
 
 ---
 
@@ -125,8 +113,26 @@ En open-source, la UI puede quitar paywall, pero **RLS sigue mandando**: si no s
 - **Solución aplicada**: configurar env vars sin prefijo en Vercel dashboard para uso server-side
 - **Regla derivada**: variables server-side → sin `VITE_`. Variables cliente → con `VITE_`. Nunca mezclar.
 
-### [2026-05-18] Pausa comercial sin romper futura reactivación
-- **Qué pasé**: quitar precios/premium puede llevar a borrar rutas de checkout, webhooks y estructuras de acceso
-- **Por qué ocurrió**: solución rápida orientada a UI, sin estrategia de rollback
-- **Solución aplicada**: introducir flags (`OPEN_SOURCE_MODE` y `PAYMENTS_ENABLED`) y desactivar pagos vía código sin eliminar infraestructura
-- **Regla derivada**: para cambios temporales de negocio, preferir feature flags + desactivación reversible antes que eliminar tablas, rutas o integraciones
+### [2026-05-18] Nunca devolver answerKey al cliente en endpoints de corrección
+- **Qué pasé**: el endpoint `/api/academia-grade` devolvía `answerKey` (mapa de respuestas correctas) al frontend tras calificar un examen
+- **Por qué ocurrió**: la review UI necesitaba saber qué respuestas eran correctas para colorearlas
+- **Solución aplicada**: cambiar la respuesta del endpoint a `results: Record<number, boolean>` (solo indica si el usuario acertó o no). La UI sigue mostrando acierto/fallo por pregunta sin revelar cuál era la respuesta correcta
+- **Regla derivada**: en endpoints de corrección/exámenes, nunca devolver las respuestas correctas al cliente. Usar booleanos de resultado o revelar solo tras múltiples capas de protección (rate limit, auth, payload validation)
+
+### [2026-05-18] Webhook de Stripe no debe exponer detalles de Supabase
+- **Qué pasé**: cuando fallaba un `insert` en `user_access` dentro del webhook de Stripe, la respuesta HTTP incluía `error.message`, `error.code` y `error.details` de Supabase
+- **Por qué ocurrió**: Stripe registra las respuestas de webhook en sus logs; detalles de error de base de datos quedaban accesibles fuera de nuestra infraestructura
+- **Solución aplicada**: loggear el error completo server-side (console.error) y retornar `"Internal server error"` genérico en la respuesta HTTP
+- **Regla derivada**: en webhooks de terceros (Stripe, etc.), nunca retornar detalles de errores internos. Log local + mensaje genérico al caller.
+
+### [2026-05-18] Checkout endpoints deben validar priceId server-side
+- **Qué pasé**: los endpoints de checkout aceptaban cualquier `priceId` enviado por el cliente, permitiendo potencialmente crear sesiones de Stripe con precios no autorizados
+- **Por qué ocurrió**: el `priceId` venía del body de la request sin validación contra una allowlist
+- **Solución aplicada**: crear funciones `resolveGuiaPriceMetadata`, `getAllowedAcademiaPrices`, `getAllowedBoilerplatePrices` que validan el `priceId` contra variables de entorno conocidas antes de crear la sesión de Stripe
+- **Regla derivada**: nunca confiar en `priceId` enviado por el cliente. Validar siempre contra una allowlist server-side. Derivar product/plan desde el priceId, no desde flags del cliente.
+
+### [2026-05-18] Usar vista pública en vez de ocultar columnas en cliente
+- **Qué pasé**: el cliente de Supabase podía leer `correct_answer` de `academia_questions` porque la tabla tenía SELECT público y solo el frontend filtraba la columna
+- **Por qué ocurrió**: `select('id, exam_id, ...')` en el cliente no es una barrera de seguridad; cualquiera con la anon key puede hacer `select('*')`
+- **Solución aplicada**: crear vista `academia_questions_public` que excluye `correct_answer`, revocar SELECT sobre la tabla base para `anon`/`authenticated`, y otorgar SELECT solo sobre la vista
+- **Regla derivada**: para ocultar columnas sensibles de Supabase, usar vistas o RLS con funciones, nunca confiar en que el cliente pida solo ciertas columnas

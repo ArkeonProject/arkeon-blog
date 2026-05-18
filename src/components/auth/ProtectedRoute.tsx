@@ -1,12 +1,14 @@
 import { Navigate, useLocation } from 'react-router';
 import { useAuth } from '@/context/AuthContext';
+import { OPEN_SOURCE_MODE } from '@/config/monetization';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requiredProduct?: string;
+  allowOpenSourceBypass?: boolean;
 }
 
-export function ProtectedRoute({ children, requiredProduct }: ProtectedRouteProps) {
+export function ProtectedRoute({ children, requiredProduct, allowOpenSourceBypass = false }: ProtectedRouteProps) {
   const { user, loading, hasAccess } = useAuth();
   const location = useLocation();
 
@@ -20,6 +22,10 @@ export function ProtectedRoute({ children, requiredProduct }: ProtectedRouteProp
 
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (OPEN_SOURCE_MODE && allowOpenSourceBypass) {
+    return <>{children}</>;
   }
 
   if (requiredProduct && !hasAccess(requiredProduct)) {

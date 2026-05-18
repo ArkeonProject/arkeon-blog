@@ -44,6 +44,7 @@ export default [
   // API resource routes — must be before the wildcard
   route("api/guia-checkout", "routes/api.guia-checkout.ts"),
   route("api/academia-checkout", "routes/api.academia-checkout.ts"),
+  route("api/academia-grade", "routes/api.academia-grade.ts"),
   route("api/boilerplate-checkout", "routes/api.boilerplate-checkout.ts"),
   route("api/guia-webhook", "routes/api.guia-webhook.ts"),
   route("api/customer-portal", "routes/api.customer-portal.ts"),

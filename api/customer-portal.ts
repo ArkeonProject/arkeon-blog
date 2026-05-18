@@ -1,27 +1,44 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-01-27.acacia' as Stripe.LatestApiVersion,
-});
-
-const supabaseAdmin = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+const PAYMENTS_ENABLED = process.env.PAYMENTS_ENABLED === 'true';
 
 export async function POST(req: Request) {
+  if (!PAYMENTS_ENABLED) {
+    return new Response(JSON.stringify({ error: 'Customer portal is temporarily disabled' }), { status: 410 });
+  }
+  if (req.method !== 'POST') {
+    return new Response('Method Not Allowed', { status: 405 });
+  }
   try {
-    const { userId } = await req.json();
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+      apiVersion: '2025-01-27.acacia' as Stripe.LatestApiVersion,
+    });
+    const supabaseAdmin = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
 
-    if (!userId) {
-      return new Response(JSON.stringify({ error: 'Missing userId' }), { status: 400 });
+    const authHeader = req.headers.get('authorization') ?? '';
+    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+
+    if (!token) {
+      return new Response(JSON.stringify({ error: 'Missing auth token' }), { status: 401 });
+    }
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabaseAdmin.auth.getUser(token);
+
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
     }
 
     const { data, error } = await supabaseAdmin
       .from('user_access')
       .select('stripe_customer_id')
-      .eq('user_id', userId)
+      .eq('user_id', user.id)
       .not('stripe_customer_id', 'is', null)
       .limit(1)
       .single();
@@ -37,8 +54,7 @@ export async function POST(req: Request) {
 
     return new Response(JSON.stringify({ url: session.url }), { status: 200 });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Customer portal error:', message);
-    return new Response(JSON.stringify({ error: message }), { status: 500 });
+    console.error('Customer portal error:', error);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
   }
 }

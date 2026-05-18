@@ -28,6 +28,8 @@ export interface AcademiaQuestion {
   explanation: string;
 }
 
+export type AcademiaPublicQuestion = Omit<AcademiaQuestion, 'correct_answer'>;
+
 export interface AcademiaAttempt {
   id: number;
   user_id: string;

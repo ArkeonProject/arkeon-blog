@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase';
 import { getChapterBySlug, getAdjacentChapters } from '@/data/guia/chapters';
 import Chapter0 from '@/data/guia/chapter-0';
 import ChapterContentRenderer from '@/components/guia/ChapterContentRenderer';
+import { OPEN_SOURCE_MODE } from '@/config/monetization';
 
 interface ChapterData {
   slug: string;
@@ -41,7 +42,7 @@ export default function GuiaChapterPage() {
       return;
     }
 
-    if (!user || !hasAccess('guia_junior')) {
+    if (!OPEN_SOURCE_MODE && (!user || !hasAccess('guia_junior'))) {
       navigate('/guia-junior');
       return;
     }
@@ -109,16 +110,16 @@ export default function GuiaChapterPage() {
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md">
           <h1 className="text-2xl font-display font-bold text-foreground mb-4">
-            Contenido premium
+            {t('guia_access_denied_title')}
           </h1>
           <p className="text-muted-foreground mb-6">
-            Necesitas acceso activo a la Guia Junior para leer este capitulo.
+            {t('guia_access_denied_desc')}
           </p>
           <Link
             to="/guia-junior"
             className="inline-block py-2.5 px-4 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity"
           >
-            Ver planes →
+            {t('guia_access_denied_back')}
           </Link>
         </div>
       </div>
@@ -126,8 +127,11 @@ export default function GuiaChapterPage() {
   }
 
   const chapterTitle = chapterData?.title || (chapter ? t(chapter.titleKey) : '');
+  const nextChapterLink = OPEN_SOURCE_MODE && slug === 'antes-de-empezar'
+    ? '/guia-junior/capitulo/puestos-existentes'
+    : (next ? `/guia-junior/capitulo/${next.slug}` : null);
   const chapterDesc = isFree
-    ? 'Capítulo gratuito de la Guía para Juniors: qué hacer después de tu curso de programación en España.'
+    ? 'Capítulo de apertura de la Guía para Juniors: qué hacer después de tu curso de programación en España.'
     : `Capítulo ${chapter?.index || ''} de la Guía para Juniors.`;
   const canonicalUrl = `https://www.arkeonixlabs.com/guia-junior/capitulo/${slug}`;
 
@@ -155,7 +159,7 @@ export default function GuiaChapterPage() {
         <h1 className="text-4xl font-display font-bold text-foreground mt-4 leading-tight">
           {chapterData?.title || t(chapter.titleKey)}
         </h1>
-        {!isFree && chapterData?.is_free === false && (
+        {!OPEN_SOURCE_MODE && !isFree && chapterData?.is_free === false && (
           <span className="inline-block mt-3 text-sm font-bold text-accent uppercase tracking-wider">Premium</span>
         )}
       </div>
@@ -163,7 +167,7 @@ export default function GuiaChapterPage() {
       <div className="text-base leading-relaxed">
         {isFree && <Chapter0 />}
 
-        {chapterData && chapterData.is_free === false && chapterData.content && (
+        {chapterData?.content && (
           <ChapterContentRenderer content={chapterData.content as unknown as { sections: Array<{ type: string; [key: string]: unknown }> }} />
         )}
       </div>
@@ -209,9 +213,9 @@ export default function GuiaChapterPage() {
         ) : (
           <span />
         )}
-        {next ? (
+        {nextChapterLink ? (
           <Link
-            to={`/guia-junior/capitulo/${next.slug}`}
+            to={nextChapterLink}
             className="text-sm text-muted-foreground hover:text-primary transition-colors"
           >
             {t('guia_chapter_next')}

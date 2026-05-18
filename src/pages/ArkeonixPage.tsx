@@ -5,8 +5,8 @@ import type { MetaFunction } from "react-router";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const meta: MetaFunction = () => [
-  { title: "Arkeonix SaaS — Enterprise Boilerplate con Next.js 15 | Arkeonix Labs" },
-  { name: "description", content: "Arkeonix SaaS es un boilerplate listo para producción con autenticación, pagos con Stripe, multi-tenancy y RBAC. Lanza tu SaaS en días, no meses." },
+  { title: OPEN_SOURCE_MODE ? "Arkeonix SaaS — Open Source Boilerplate | Arkeonix Labs" : "Arkeonix SaaS — Enterprise Boilerplate con Next.js 15 | Arkeonix Labs" },
+  { name: "description", content: OPEN_SOURCE_MODE ? "Arkeonix SaaS es un boilerplate open source listo para producción con autenticación, multi-tenancy y RBAC. Revisa el código en GitHub." : "Arkeonix SaaS es un boilerplate listo para producción con autenticación, pagos con Stripe, multi-tenancy y RBAC. Lanza tu SaaS en días, no meses." },
   { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/arkeonix" },
   { property: "og:title", content: "Arkeonix SaaS — Enterprise Boilerplate | Arkeonix Labs" },
   { property: "og:description", content: "Arkeonix SaaS es un boilerplate listo para producción con autenticación, pagos con Stripe, multi-tenancy y RBAC. Lanza tu SaaS en días, no meses." },
@@ -41,6 +41,7 @@ import {
   FiLoader,
 } from "react-icons/fi";
 import ScrollReveal from "@/components/ui/ScrollReveal";
+import { OPEN_SOURCE_MODE } from "@/config/monetization";
 
 const PRICE_BOILERPLATE_STARTER = import.meta.env.VITE_STRIPE_PRICE_BOILERPLATE_STARTER as string | undefined;
 const PRICE_BOILERPLATE_PRO = import.meta.env.VITE_STRIPE_PRICE_BOILERPLATE_PRO as string | undefined;
@@ -160,7 +161,7 @@ const PLANS = [
 
 export default function ArkeonixPage() {
   const { t } = useLocale();
-  const { user } = useAuth();
+  const { user, session } = useAuth();
   const navigate = useNavigate();
   const [demoTab, setDemoTab] = useState<"landing" | "dashboard">("landing");
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
@@ -180,8 +181,11 @@ export default function ArkeonixPage() {
     try {
       const res = await fetch('/api/boilerplate-checkout', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ priceId, userId: user.id, email: user.email }),
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        },
+        body: JSON.stringify({ priceId, email: user.email }),
       });
       if (!res.ok) throw new Error();
       const { url } = await res.json() as { url: string };
@@ -197,55 +201,65 @@ export default function ArkeonixPage() {
     <div className="relative max-w-6xl mx-auto">
       <Helmet>
         <title>Arkeonix SaaS — {t("arkeonix_meta_title")}</title>
-        <meta name="description" content={t("arkeonix_meta_description")} />
+        <meta name="description" content={OPEN_SOURCE_MODE ? t("arkeonix_meta_description_open_source") : t("arkeonix_meta_description")} />
         <link rel="canonical" href="https://www.arkeonixlabs.com/arkeonix" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Arkeonix SaaS — Arkeonix Labs" />
-        <meta property="og:description" content={t("arkeonix_meta_description")} />
+        <meta property="og:description" content={OPEN_SOURCE_MODE ? t("arkeonix_meta_description_open_source") : t("arkeonix_meta_description")} />
         <meta property="og:url" content="https://www.arkeonixlabs.com/arkeonix" />
         <meta property="og:site_name" content="Arkeonix Labs" />
         <meta property="og:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Arkeonix SaaS — Arkeonix Labs" />
-        <meta name="twitter:description" content={t("arkeonix_meta_description")} />
+        <meta name="twitter:description" content={OPEN_SOURCE_MODE ? t("arkeonix_meta_description_open_source") : t("arkeonix_meta_description")} />
         <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Product",
             "name": "Arkeonix SaaS Boilerplate",
-            "description": t("arkeonix_meta_description"),
+            "description": OPEN_SOURCE_MODE ? t("arkeonix_meta_description_open_source") : t("arkeonix_meta_description"),
             "brand": { "@type": "Brand", "name": "Arkeonix Labs" },
             "url": "https://www.arkeonixlabs.com/arkeonix",
             "image": "https://www.arkeonixlabs.com/arkeonix-logo.png",
-            "offers": [
-              {
-                "@type": "Offer",
-                "name": "Starter",
-                "price": "149",
-                "priceCurrency": "EUR",
-                "availability": "https://schema.org/InStock",
-                "url": "https://www.arkeonixlabs.com/arkeonix"
-              },
-              {
-                "@type": "Offer",
-                "name": "Pro",
-                "price": "299",
-                "priceCurrency": "EUR",
-                "availability": "https://schema.org/InStock",
-                "url": "https://www.arkeonixlabs.com/arkeonix"
+            ...(OPEN_SOURCE_MODE
+              ? {}
+              : {
+                "offers": [
+                  {
+                    "@type": "Offer",
+                    "name": "Starter",
+                    "price": "149",
+                    "priceCurrency": "EUR",
+                    "availability": "https://schema.org/InStock",
+                    "url": "https://www.arkeonixlabs.com/arkeonix"
+                  },
+                  {
+                    "@type": "Offer",
+                    "name": "Pro",
+                    "price": "299",
+                    "priceCurrency": "EUR",
+                    "availability": "https://schema.org/InStock",
+                    "url": "https://www.arkeonixlabs.com/arkeonix"
+                  }
+                ],
+              }),
+            ...(OPEN_SOURCE_MODE
+              ? {
+                "codeRepository": "https://github.com/ArkeonProject/arkeonix-saas"
               }
-            ],
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": "5",
-              "reviewCount": "3"
-            },
-            "review": [
-              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Carlos M." } },
-              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Andrea F." } },
-              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Javier R." } }
-            ]
+              : {
+                "aggregateRating": {
+                  "@type": "AggregateRating",
+                  "ratingValue": "5",
+                  "reviewCount": "3"
+                },
+                "review": [
+                  { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Carlos M." } },
+                  { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Andrea F." } },
+                  { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Javier R." } }
+                ]
+              })
           })}
         </script>
       </Helmet>
@@ -281,10 +295,12 @@ export default function ArkeonixPage() {
           {/* CTAs */}
           <div className="flex flex-wrap items-center justify-center gap-4 mb-14">
             <a
-              href="#pricing"
+              href={OPEN_SOURCE_MODE ? "https://github.com/ArkeonProject/arkeonix-saas" : "#pricing"}
+              target={OPEN_SOURCE_MODE ? "_blank" : undefined}
+              rel={OPEN_SOURCE_MODE ? "noopener noreferrer" : undefined}
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-all duration-200 shadow-lg shadow-primary/25"
             >
-              {t("arkeonix_cta_primary")} →
+              {OPEN_SOURCE_MODE ? t("arkeonix_cta_open_source") : t("arkeonix_cta_primary")} →
             </a>
             <a
               href="#features"
@@ -482,8 +498,27 @@ export default function ArkeonixPage() {
         </ScrollReveal>
       </section>
 
-      {/* ── Pricing ────────────────────────────────────────────────────── */}
+      {/* ── Pricing / Open Source ─────────────────────────────────────── */}
       <section id="pricing" className="pb-24">
+        {OPEN_SOURCE_MODE ? (
+          <ScrollReveal variant="fade-up">
+            <div className="max-w-3xl mx-auto glass-card rounded-2xl p-8 text-center border border-primary/30">
+              <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">Open Source</h2>
+              <p className="text-muted-foreground mb-6">
+                {t("arkeonix_open_source_note")}
+              </p>
+              <a
+                href="https://github.com/ArkeonProject/arkeonix-saas"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-all"
+              >
+                {t("arkeonix_cta_open_source")}
+              </a>
+            </div>
+          </ScrollReveal>
+        ) : (
+        <>
         <ScrollReveal variant="fade-up">
           <div className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
@@ -547,6 +582,8 @@ export default function ArkeonixPage() {
         <p className="text-center text-sm text-muted-foreground mt-8 font-mono">
           {t("arkeonix_pricing_note")}
         </p>
+        </>
+        )}
       </section>
 
       {/* ── CTA Guía Junior ────────────────────────────────────────────── */}
@@ -688,6 +725,7 @@ export default function ArkeonixPage() {
       </section>
 
       {/* ── Reviews ─────────────────────────────────────────────────────── */}
+      {!OPEN_SOURCE_MODE && (
       <section className="pb-24">
         <ScrollReveal variant="fade-up">
           <div className="text-center mb-12">
@@ -726,6 +764,7 @@ export default function ArkeonixPage() {
           ))}
         </div>
       </section>
+      )}
 
       {/* ── Checkout error ──────────────────────────────────────────────── */}
       {checkoutError && (
@@ -749,13 +788,15 @@ export default function ArkeonixPage() {
                 {t("arkeonix_footer_cta_subtitle")}
               </p>
               <a
-                href="#pricing"
+                href={OPEN_SOURCE_MODE ? "https://github.com/ArkeonProject/arkeonix-saas" : "#pricing"}
+                target={OPEN_SOURCE_MODE ? "_blank" : undefined}
+                rel={OPEN_SOURCE_MODE ? "noopener noreferrer" : undefined}
                 className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-all shadow-lg shadow-primary/25"
               >
-                {t("arkeonix_cta_primary")} →
+                {OPEN_SOURCE_MODE ? t("arkeonix_cta_open_source") : t("arkeonix_cta_primary")} →
               </a>
               <p className="text-xs text-muted-foreground mt-6 font-mono">
-                {t("arkeonix_footer_note")}
+                {OPEN_SOURCE_MODE ? t("arkeonix_footer_note_open_source") : t("arkeonix_footer_note")}
               </p>
             </div>
           </div>

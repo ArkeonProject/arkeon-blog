@@ -1,10 +1,12 @@
+import { OPEN_SOURCE_MODE } from '@/config/monetization';
+
 export default function Chapter0() {
   return (
     <div className="max-w-3xl mx-auto space-y-14">
       {/* ═══ PORTADA ═══ */}
       <section className="text-center space-y-6 py-10">
         <span className="inline-block bg-accent/10 text-accent text-sm font-bold tracking-widest uppercase px-4 py-1.5 rounded-full">
-          Guía gratuita · 2026
+          Guía para Juniors · 2026
         </span>
         <h1 className="text-4xl md:text-5xl font-display font-bold text-foreground leading-tight">
           Guía para juniors: qué hacer después de tu curso de programación en España
@@ -307,12 +309,12 @@ export default function Chapter0() {
         </div>
       </section>
 
-      {/* ═══ PÁGINA 10: CTA PREMIUM ═══ */}
+      {/* ═══ PÁGINA 10: CTA ═══ */}
       <section className="space-y-8">
         <div className="text-center">
-          <p className="text-sm font-bold tracking-widest uppercase text-accent mb-3">Guía premium</p>
-          <h2 className="text-3xl font-display font-bold text-foreground">¿Quieres el plan completo?</h2>
-          <p className="text-base text-muted-foreground mt-3 leading-relaxed">Todo lo del free y mucho más. Seleccionado por puesto, semana a semana, sin relleno.</p>
+          <p className="text-sm font-bold tracking-widest uppercase text-accent mb-3">Siguiente paso</p>
+          <h2 className="text-3xl font-display font-bold text-foreground">Continua con el contenido completo</h2>
+          <p className="text-base text-muted-foreground mt-3 leading-relaxed">Sigue el recorrido por puestos, salarios, CV, portfolio y entrevistas, en orden y sin relleno.</p>
         </div>
         <div className="grid gap-3 md:grid-cols-2">
           {[
@@ -339,13 +341,23 @@ export default function Chapter0() {
             <p className="text-sm text-muted-foreground mt-1">El día a día real, herramientas que se usan, cómo preparar una entrevista de testing. Algo que nadie más ofrece.</p>
           </div>
         </div>
-        <div className="bg-foreground text-background rounded-xl p-10 text-center">
-          <p className="text-4xl font-display font-black text-background tracking-tight">19 €</p>
-          <p className="text-base text-background/60 mt-2">Pago único vitalicio</p>
-          <a href="/guia-junior" className="inline-block mt-6 bg-accent text-white text-lg font-bold px-10 py-4 rounded-full no-underline hover:opacity-90 transition-opacity">
-            Accede aquí
-          </a>
-        </div>
+        {OPEN_SOURCE_MODE ? (
+          <div className="bg-foreground text-background rounded-xl p-10 text-center">
+            <p className="text-2xl font-display font-black text-background tracking-tight">Capitulo 1: puestos existentes</p>
+            <p className="text-base text-background/70 mt-2">Continua con el siguiente capitulo para seguir la ruta completa.</p>
+            <a href="/guia-junior/capitulo/puestos-existentes" className="inline-block mt-6 bg-accent text-white text-lg font-bold px-10 py-4 rounded-full no-underline hover:opacity-90 transition-opacity">
+              Ir al capitulo 1
+            </a>
+          </div>
+        ) : (
+          <div className="bg-foreground text-background rounded-xl p-10 text-center">
+            <p className="text-4xl font-display font-black text-background tracking-tight">19 EUR</p>
+            <p className="text-base text-background/60 mt-2">Pago unico vitalicio</p>
+            <a href="/guia-junior" className="inline-block mt-6 bg-accent text-white text-lg font-bold px-10 py-4 rounded-full no-underline hover:opacity-90 transition-opacity">
+              Accede aqui
+            </a>
+          </div>
+        )}
       </section>
     </div>
   );

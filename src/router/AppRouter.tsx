@@ -121,7 +121,7 @@ export default function AppRouter() {
 
             {/* Guía Junior - protegidas (requieren auth + acceso pagado) */}
             <Route path="/guia-junior/dashboard" element={
-              <ProtectedRoute requiredProduct="guia_junior">
+              <ProtectedRoute requiredProduct="guia_junior" allowOpenSourceBypass>
                 <GuiaDashboardPage />
               </ProtectedRoute>
             } />

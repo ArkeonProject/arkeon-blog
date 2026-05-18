@@ -11,9 +11,9 @@ const QUICK_LINKS = [
 ];
 
 const PRODUCTS = [
-  { path: "/guia-junior", nameKey: "footer_product_guia", priceKey: "footer_product_guia_price" },
-  { path: "/academia", nameKey: "footer_product_academia", priceKey: "footer_product_academia_price" },
-  { path: "/arkeonix", nameKey: "footer_product_boilerplate", priceKey: "footer_product_boilerplate_price" },
+  { path: "/guia-junior", nameKey: "footer_product_guia" },
+  { path: "/academia", nameKey: "footer_product_academia" },
+  { path: "/arkeonix", nameKey: "footer_product_boilerplate" },
 ];
 
 const LEGAL_LINKS = [
@@ -84,7 +84,7 @@ export default function Footer() {
               {t("footer_products")}
             </h3>
             <ul className="space-y-3">
-              {PRODUCTS.map(({ path, nameKey, priceKey }) => (
+              {PRODUCTS.map(({ path, nameKey }) => (
                 <li key={path}>
                   <Link
                     to={path}
@@ -94,7 +94,6 @@ export default function Footer() {
                       <span className="w-1 h-1 rounded-full bg-border group-hover:bg-primary transition-colors duration-200" />
                       {t(nameKey)}
                     </span>
-                    <span className="text-xs text-muted-foreground/60 pl-3">{t(priceKey)}</span>
                   </Link>
                 </li>
               ))}

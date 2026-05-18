@@ -1,25 +1,18 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router';
 import { useLocale } from '@/hooks/useLocale';
-import { useAuth } from '@/context/AuthContext';
 import { useSupabaseQuery } from '@/hooks/useSupabaseQuery';
 import { supabase } from '@/lib/supabase';
 import type { AcademiaCategory } from '@/types/academia';
+import { OPEN_SOURCE_MODE } from '@/config/monetization';
 
 type CategoryWithCount = AcademiaCategory & {
   exams: { count: number }[];
 };
 
-const PRICE_ACADEMIA_LIFETIME = import.meta.env.VITE_STRIPE_PRICE_ACADEMIA_LIFETIME;
-
 export default function AcademiaPage() {
   const { t } = useLocale();
-  const { user, hasAccess } = useAuth();
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const [checkoutError, setCheckoutError] = useState<string | null>(null);
-
-  const hasAcademiaAccess = user && hasAccess('academia');
 
   const fetcher = useCallback(async () => {
     const { data, error } = await supabase
@@ -30,32 +23,6 @@ export default function AcademiaPage() {
   }, []);
 
   const { data: categories, loading } = useSupabaseQuery(fetcher);
-
-  const handleCheckout = async () => {
-    if (!PRICE_ACADEMIA_LIFETIME) {
-      setCheckoutError(t('academia_checkout_error_config'));
-      return;
-    }
-    setCheckoutLoading(true);
-    setCheckoutError(null);
-    try {
-      const res = await fetch('/api/academia-checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          priceId: PRICE_ACADEMIA_LIFETIME,
-          ...(user ? { userId: user.id, email: user.email } : {}),
-        }),
-      });
-      if (!res.ok) throw new Error();
-      const { url } = await res.json();
-      if (url) window.location.href = url;
-    } catch {
-      setCheckoutError(t('academia_checkout_error'));
-    } finally {
-      setCheckoutLoading(false);
-    }
-  };
 
   return (
     <div className="max-w-4xl mx-auto py-12">
@@ -81,23 +48,20 @@ export default function AcademiaPage() {
             "brand": { "@type": "Brand", "name": "Arkeonix Labs" },
             "url": "https://www.arkeonixlabs.com/academia",
             "image": "https://www.arkeonixlabs.com/arkeonix-logo.png",
-            "offers": {
-              "@type": "Offer",
-              "price": "19",
-              "priceCurrency": "EUR",
-              "availability": "https://schema.org/InStock",
-              "url": "https://www.arkeonixlabs.com/academia"
-            },
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": "5",
-              "reviewCount": "3"
-            },
-            "review": [
-              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Miguel A." } },
-              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Lucía V." } },
-              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Pablo R." } }
-            ]
+            ...(OPEN_SOURCE_MODE
+              ? {}
+              : {
+                "aggregateRating": {
+                  "@type": "AggregateRating",
+                  "ratingValue": "5",
+                  "reviewCount": "3"
+                },
+                "review": [
+                  { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Miguel A." } },
+                  { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Lucía V." } },
+                  { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Pablo R." } }
+                ]
+              })
           })}
         </script>
       </Helmet>
@@ -113,11 +77,6 @@ export default function AcademiaPage() {
         <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
           {t('academia_subtitle')}
         </p>
-        {hasAcademiaAccess && (
-          <span className="inline-block mt-6 px-4 py-1.5 text-sm font-semibold text-green-600 bg-green-500/10 rounded-full border border-green-500/20">
-            {t('academia_access_active')}
-          </span>
-        )}
       </header>
 
       {/* Categories */}
@@ -155,9 +114,6 @@ export default function AcademiaPage() {
                             {examCount} {t('academia_exams_label')}
                           </span>
                         )}
-                        <span className="text-xs px-2 py-0.5 bg-green-500/10 text-green-600 rounded-full font-medium">
-                          {t('academia_free_preview')}
-                        </span>
                       </div>
                     </div>
                     <span className="text-muted-foreground group-hover:text-primary transition-colors text-lg shrink-0">→</span>
@@ -184,6 +140,7 @@ export default function AcademiaPage() {
       </section>
 
       {/* Reviews */}
+      {!OPEN_SOURCE_MODE && (
       <section className="mb-16">
         <h2 className="text-2xl font-semibold text-[#007EAD] dark:text-[#00aaff] mb-8 text-center">
           {t('academia_reviews_title')}
@@ -212,35 +169,8 @@ export default function AcademiaPage() {
           ))}
         </div>
       </section>
-
-      {/* Pricing — solo si no tiene acceso */}
-      {!hasAcademiaAccess && (
-        <section className="p-8 rounded-2xl border-2 border-primary bg-primary/5 text-center">
-          <h2 className="text-2xl font-semibold text-foreground mb-2">
-            {t('academia_pricing_title')}
-          </h2>
-          <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
-            {t('academia_pricing_desc')}
-          </p>
-          <p className="text-4xl font-bold text-foreground mb-1">
-            {t('academia_pricing_price')}
-          </p>
-          <p className="text-sm text-muted-foreground mb-8">
-            {t('academia_pricing_period')}
-          </p>
-          <button
-            onClick={handleCheckout}
-            disabled={checkoutLoading}
-            className="px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed text-lg"
-          >
-            {checkoutLoading ? '...' : t('academia_cta_buy')}
-          </button>
-          {checkoutError && (
-            <p className="mt-4 text-sm text-red-500">{checkoutError}</p>
-          )}
-          <p className="mt-4 text-xs text-muted-foreground">{t('academia_pricing_note')}</p>
-        </section>
       )}
+
     </div>
   );
 }
