@@ -38,6 +38,7 @@ export default {
       "/herramientas",
       "/herramientas/calculadora-salario",
       "/herramientas/test-rol-tech",
+      "/herramientas/checklist-portfolio-junior",
       "/about",
       "/contact",
       "/privacy",

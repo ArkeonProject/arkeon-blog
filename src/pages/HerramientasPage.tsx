@@ -41,7 +41,7 @@ export default function HerramientasPage() {
         </h2>
 
         <ScrollReveal variant="fade-up" duration={800}>
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             <Card className="p-6 border border-border hover:border-primary/30 transition-colors">
               <div className="flex h-full flex-col gap-4">
                 <div>
@@ -74,6 +74,25 @@ export default function HerramientasPage() {
                     className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
                   >
                     {t("role_quiz_card_cta")}
+                    <FiArrowRight />
+                  </Link>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-6 border border-border hover:border-primary/30 transition-colors">
+              <div className="flex h-full flex-col gap-4">
+                <div>
+                  <p className="inline-flex items-center gap-2 text-xs uppercase tracking-wide text-primary"><FiTool /> {t("portfolio_checklist_badge")}</p>
+                  <h3 className="mt-2 font-display text-xl text-foreground">{t("portfolio_checklist_card_title")}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{t("portfolio_checklist_card_description")}</p>
+                </div>
+                <div className="mt-auto">
+                  <Link
+                    to="/herramientas/checklist-portfolio-junior"
+                    className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
+                  >
+                    {t("portfolio_checklist_card_cta")}
                     <FiArrowRight />
                   </Link>
                 </div>

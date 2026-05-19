@@ -23,6 +23,7 @@ const RESOURCE_SUBLINKS = [
 const TOOL_SUBLINKS = [
   { path: "/herramientas/calculadora-salario", key: "tools_salary" },
   { path: "/herramientas/test-rol-tech", key: "tools_role_quiz" },
+  { path: "/herramientas/checklist-portfolio-junior", key: "tools_portfolio" },
 ];
 
 function MobileDropdownSection({
@@ -124,6 +125,7 @@ export default function Header() {
     if (key === "contact") return t("nav_contact");
     if (key === "tools_salary") return t("nav_tools_salary");
     if (key === "tools_role_quiz") return t("nav_tools_role_quiz");
+    if (key === "tools_portfolio") return t("nav_tools_portfolio");
     return t(`category_${key}`);
   };
 
