@@ -11,6 +11,8 @@
     "sitemap": "npx tsx scripts/sitemap-generator.ts",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "react-router preview",
+    "test": "tsx --test \"src/**/*.test.ts\" \"src/**/*.test.tsx\"",
+    "test:security": "tsx --test \"src/routes/__tests__/*.test.ts\" \"src/routes/utils/*.test.ts\"",
     "typecheck": "tsc -b",
     "lab:publish": "npx tsx scripts/lab-cli.ts publish",
     "lab:update": "npx tsx scripts/lab-cli.ts update",

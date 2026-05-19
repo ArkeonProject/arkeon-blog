@@ -6,7 +6,7 @@ export default [
   // Usaremos Layout desde root.tsx que emula a <Layout /> de AppRouter.tsx
   route("/", "pages/HomePage.tsx", { id: "home" }),
   route("blog", "pages/BlogPage.tsx", { id: "blog-listing" }),
-  route("recursos", "routes/recursos-redirect.ts", { id: "recursos-disabled" }),
+  route("recursos", "pages/RecursosPage.tsx"),
   route("herramientas", "pages/HerramientasPage.tsx"),
   route("herramientas/calculadora-salario", "pages/herramientas/CalculadoraSalarioPage.tsx"),
   route("calculadora-salario", "routes/calculadora-redirect.ts"),
@@ -22,8 +22,10 @@ export default [
   route("affiliate-disclosure", "pages/AffiliateDisclosurePage.tsx"),
   
   route("newsletter/confirm", "pages/newsletter/ConfirmPage.tsx"),
-  route("arkeonix", "pages/ArkeonixPage.tsx"),
-  route("arkeonix/gracias", "pages/arkeonix/ThanksPage.tsx"),
+  route("recursos/saas-boilerplate", "pages/ArkeonixPage.tsx"),
+  route("saas-boilerplate", "routes/saas-boilerplate-redirect.ts"),
+  route("arkeonix", "routes/arkeonix-redirect.ts"),
+  route("arkeonix/gracias", "routes/arkeonix-thanks-redirect.ts"),
   route("admin", "pages/AdminPage.tsx"),
   
   // Auth routes
@@ -32,15 +34,20 @@ export default [
   route("reset-password", "pages/auth/ResetPasswordPage.tsx"),
   
   // Guía Junior
-  route("guia-junior", "pages/guia-junior/LandingPage.tsx"),
-  route("guia-junior/gracias", "pages/guia-junior/ThanksPage.tsx"),
+  route("recursos/guia-junior", "pages/guia-junior/LandingPage.tsx"),
+  route("recursos/guia-junior/gracias", "pages/guia-junior/ThanksPage.tsx"),
+  route("guia-junior", "routes/guia-junior-redirect.ts"),
+  route("guia-junior/gracias", "routes/guia-junior-thanks-redirect.ts"),
   
   // Protected routes will still use their internal guards or loaders
-  route("guia-junior/dashboard", "pages/guia-junior/DashboardPage.tsx"),
-  route("guia-junior/capitulo/:slug", "pages/guia-junior/ChapterPage.tsx"),
+  route("recursos/guia-junior/dashboard", "pages/guia-junior/DashboardProtectedPage.tsx"),
+  route("recursos/guia-junior/capitulo/:slug", "pages/guia-junior/ChapterPage.tsx"),
+  route("guia-junior/dashboard", "routes/guia-junior-dashboard-redirect.ts"),
+  route("guia-junior/capitulo/:slug", "routes/guia-junior-chapter-redirect.ts"),
 
   // Academia
   route("academia", "pages/academia/AcademiaPage.tsx"),
+  route("academia/gracias", "pages/academia/ThanksPage.tsx"),
   route("academia/:category", "pages/academia/AcademiaCategoryPage.tsx"),
   route("academia/:category/:slug", "pages/academia/AcademiaExamPage.tsx"),
 

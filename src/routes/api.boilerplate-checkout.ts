@@ -1,7 +1,17 @@
 import type { ActionFunctionArgs } from "react-router";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
-const PAYMENTS_ENABLED = process.env.PAYMENTS_ENABLED === "true";
+import { getBaseUrl } from "./utils/base-url";
+import { normalizeOptionalCustomerEmail } from "./utils/customer-email";
+import { logRouteError } from "./utils/log-route-error";
+
+function arePaymentsEnabled(): boolean {
+  return process.env.PAYMENTS_ENABLED === "true";
+}
+
+function areBoilerplatePaymentsEnabled(): boolean {
+  return process.env.BOILERPLATE_PAYMENTS_ENABLED === "true";
+}
 
 function getBearerToken(request: Request): string | null {
   const authHeader = request.headers.get("authorization") ?? "";
@@ -17,7 +27,7 @@ function getAllowedBoilerplatePrices(): Set<string> {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  if (!PAYMENTS_ENABLED) {
+  if (!arePaymentsEnabled() || !areBoilerplatePaymentsEnabled()) {
     return new Response(JSON.stringify({ error: "Payments are temporarily disabled" }), { status: 410 });
   }
   if (request.method !== "POST") {
@@ -50,6 +60,11 @@ export async function action({ request }: ActionFunctionArgs) {
       return new Response(JSON.stringify({ error: "Missing required fields" }), { status: 400 });
     }
 
+    const customerEmail = normalizeOptionalCustomerEmail(user.email ?? email);
+    if (customerEmail === null) {
+      return new Response(JSON.stringify({ error: "Invalid email" }), { status: 400 });
+    }
+
     const allowedPrices = getAllowedBoilerplatePrices();
     if (!allowedPrices.has(priceId)) {
       return new Response(JSON.stringify({ error: "Invalid price for product" }), { status: 400 });
@@ -58,12 +73,13 @@ export async function action({ request }: ActionFunctionArgs) {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
       apiVersion: "2025-01-27.acacia" as Stripe.LatestApiVersion,
     });
+    const baseUrl = getBaseUrl();
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${process.env.BASE_URL || "http://localhost:5173"}/arkeonix/gracias?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.BASE_URL || "http://localhost:5173"}/arkeonix`,
-      ...(user.email || email ? { customer_email: user.email ?? email } : {}),
+      success_url: `${baseUrl}/recursos/saas-boilerplate`,
+      cancel_url: `${baseUrl}/recursos/saas-boilerplate`,
+      ...(customerEmail ? { customer_email: customerEmail } : {}),
       allow_promotion_codes: true,
       metadata: {
         userId: user.id,
@@ -73,7 +89,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     return new Response(JSON.stringify({ url: session.url }), { status: 200 });
   } catch (error) {
-    console.error("Boilerplate checkout error:", error);
+    logRouteError("Boilerplate checkout error", error);
     return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
   }
 }

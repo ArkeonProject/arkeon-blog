@@ -345,7 +345,7 @@ export default function Chapter0() {
           <div className="bg-foreground text-background rounded-xl p-10 text-center">
             <p className="text-2xl font-display font-black text-background tracking-tight">Capitulo 1: puestos existentes</p>
             <p className="text-base text-background/70 mt-2">Continua con el siguiente capitulo para seguir la ruta completa.</p>
-            <a href="/guia-junior/capitulo/puestos-existentes" className="inline-block mt-6 bg-accent text-white text-lg font-bold px-10 py-4 rounded-full no-underline hover:opacity-90 transition-opacity">
+            <a href="/recursos/guia-junior/capitulo/puestos-existentes" className="inline-block mt-6 bg-accent text-white text-lg font-bold px-10 py-4 rounded-full no-underline hover:opacity-90 transition-opacity">
               Ir al capitulo 1
             </a>
           </div>
@@ -353,7 +353,7 @@ export default function Chapter0() {
           <div className="bg-foreground text-background rounded-xl p-10 text-center">
             <p className="text-4xl font-display font-black text-background tracking-tight">19 EUR</p>
             <p className="text-base text-background/60 mt-2">Pago unico vitalicio</p>
-            <a href="/guia-junior" className="inline-block mt-6 bg-accent text-white text-lg font-bold px-10 py-4 rounded-full no-underline hover:opacity-90 transition-opacity">
+            <a href="/recursos/guia-junior" className="inline-block mt-6 bg-accent text-white text-lg font-bold px-10 py-4 rounded-full no-underline hover:opacity-90 transition-opacity">
               Accede aqui
             </a>
           </div>

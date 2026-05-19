@@ -1,7 +1,13 @@
 import type { ActionFunctionArgs } from "react-router";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
-const PAYMENTS_ENABLED = process.env.PAYMENTS_ENABLED === "true";
+import { getBaseUrl } from "./utils/base-url";
+import { normalizeOptionalCustomerEmail } from "./utils/customer-email";
+import { logRouteError } from "./utils/log-route-error";
+
+function arePaymentsEnabled(): boolean {
+  return process.env.PAYMENTS_ENABLED === "true";
+}
 
 function getBearerToken(request: Request): string | null {
   const authHeader = request.headers.get("authorization") ?? "";
@@ -37,7 +43,7 @@ function resolveGuiaPriceMetadata(priceId: string): { product: "guia_junior" | "
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  if (!PAYMENTS_ENABLED) {
+  if (!arePaymentsEnabled()) {
     return new Response(JSON.stringify({ error: "Payments are temporarily disabled" }), { status: 410 });
   }
   if (request.method !== "POST") {
@@ -79,18 +85,24 @@ export async function action({ request }: ActionFunctionArgs) {
       authenticatedUserEmail = user.email ?? undefined;
     }
 
+    const customerEmail = normalizeOptionalCustomerEmail(authenticatedUserEmail ?? email);
+    if (customerEmail === null) {
+      return new Response(JSON.stringify({ error: "Invalid email" }), { status: 400 });
+    }
+
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
       apiVersion: "2025-01-27.acacia" as Stripe.LatestApiVersion,
     });
+    const baseUrl = getBaseUrl();
     const price = await stripe.prices.retrieve(priceId);
     const mode = price.type === "recurring" ? "subscription" : "payment";
 
     const session = await stripe.checkout.sessions.create({
       mode,
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${process.env.BASE_URL || "http://localhost:5173"}/guia-junior/gracias?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.BASE_URL || "http://localhost:5173"}/guia-junior`,
-      ...(authenticatedUserEmail || email ? { customer_email: authenticatedUserEmail ?? email } : {}),
+      success_url: `${baseUrl}/recursos/guia-junior/gracias`,
+      cancel_url: `${baseUrl}/recursos/guia-junior`,
+      ...(customerEmail ? { customer_email: customerEmail } : {}),
       customer_creation: mode === "payment" ? "always" : undefined,
       allow_promotion_codes: true,
       metadata: {
@@ -102,7 +114,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     return new Response(JSON.stringify({ url: session.url }), { status: 200 });
   } catch (error) {
-    console.error("Guia checkout error:", error);
+    logRouteError("Guia checkout error", error);
     return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
   }
 }

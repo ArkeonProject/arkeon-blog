@@ -43,7 +43,7 @@ export default function GuiaChapterPage() {
     }
 
     if (!OPEN_SOURCE_MODE && (!user || !hasAccess('guia_junior'))) {
-      navigate('/guia-junior');
+      navigate('/recursos/guia-junior');
       return;
     }
 
@@ -97,7 +97,7 @@ export default function GuiaChapterPage() {
           <h1 className="text-2xl font-display font-bold text-foreground mb-4">
             {t('guia_chapter_not_found_title')}
           </h1>
-          <Link to="/guia-junior/dashboard" className="text-primary hover:underline">
+          <Link to="/recursos/guia-junior/dashboard" className="text-primary hover:underline">
             {t('guia_chapter_back_index')}
           </Link>
         </div>
@@ -116,7 +116,7 @@ export default function GuiaChapterPage() {
             {t('guia_access_denied_desc')}
           </p>
           <Link
-            to="/guia-junior"
+            to="/recursos/guia-junior"
             className="inline-block py-2.5 px-4 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity"
           >
             {t('guia_access_denied_back')}
@@ -128,12 +128,12 @@ export default function GuiaChapterPage() {
 
   const chapterTitle = chapterData?.title || (chapter ? t(chapter.titleKey) : '');
   const nextChapterLink = OPEN_SOURCE_MODE && slug === 'antes-de-empezar'
-    ? '/guia-junior/capitulo/puestos-existentes'
-    : (next ? `/guia-junior/capitulo/${next.slug}` : null);
+    ? '/recursos/guia-junior/capitulo/puestos-existentes'
+    : (next ? `/recursos/guia-junior/capitulo/${next.slug}` : null);
   const chapterDesc = isFree
     ? 'Capítulo de apertura de la Guía para Juniors: qué hacer después de tu curso de programación en España.'
     : `Capítulo ${chapter?.index || ''} de la Guía para Juniors.`;
-  const canonicalUrl = `https://www.arkeonixlabs.com/guia-junior/capitulo/${slug}`;
+  const canonicalUrl = `https://www.arkeonixlabs.com/recursos/guia-junior/capitulo/${slug}`;
 
   return (
     <div className="py-10 max-w-4xl mx-auto px-4">
@@ -153,7 +153,7 @@ export default function GuiaChapterPage() {
         <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
       </Helmet>
       <div className="mb-10">
-        <Link to="/guia-junior/dashboard" className="text-base text-muted-foreground hover:text-primary transition-colors">
+        <Link to="/recursos/guia-junior/dashboard" className="text-base text-muted-foreground hover:text-primary transition-colors">
           {t('guia_chapter_back_index')}
         </Link>
         <h1 className="text-4xl font-display font-bold text-foreground mt-4 leading-tight">
@@ -179,7 +179,7 @@ export default function GuiaChapterPage() {
             <p className="text-sm text-muted-foreground mt-1">{t('cta_boilerplate_from_chapter_desc')}</p>
           </div>
           <Link
-            to="/arkeonix"
+            to="/recursos/saas-boilerplate"
             className="shrink-0 px-5 py-2.5 bg-primary text-primary-foreground text-sm font-semibold rounded-xl hover:opacity-90 transition-opacity whitespace-nowrap"
           >
             {t('cta_boilerplate_from_chapter_btn')}
@@ -205,7 +205,7 @@ export default function GuiaChapterPage() {
       <div className="mt-12 flex justify-between border-t border-border pt-6">
         {prev ? (
           <Link
-            to={`/guia-junior/capitulo/${prev.slug}`}
+            to={`/recursos/guia-junior/capitulo/${prev.slug}`}
             className="text-sm text-muted-foreground hover:text-primary transition-colors"
           >
             {t('guia_chapter_prev')}
@@ -222,7 +222,7 @@ export default function GuiaChapterPage() {
           </Link>
         ) : (
           <Link
-            to="/guia-junior/dashboard"
+            to="/recursos/guia-junior/dashboard"
             className="text-sm text-muted-foreground hover:text-primary transition-colors"
           >
             {t('guia_chapter_back_index')}

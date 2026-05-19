@@ -471,7 +471,7 @@ export default function HomePage() {
             {/* Guía Junior */}
             <ScrollReveal variant="fade-left" duration={800}>
               <Link
-                to="/guia-junior"
+                to="/recursos/guia-junior"
                 className="group block h-full"
               >
                 <div className="tech-card card-accent-border rounded-2xl p-8 h-full hover:border-emerald-500/40 transition-all duration-300 hover:-translate-y-0.5">
@@ -505,7 +505,7 @@ export default function HomePage() {
             {/* SaaS Boilerplate */}
             <ScrollReveal variant="fade-right" duration={800}>
               <Link
-                to="/arkeonix"
+                to="/recursos/saas-boilerplate"
                 className="group block h-full"
               >
                 <div className="tech-card card-accent-border rounded-2xl p-8 h-full hover:border-primary/40 transition-all duration-300 hover:-translate-y-0.5">

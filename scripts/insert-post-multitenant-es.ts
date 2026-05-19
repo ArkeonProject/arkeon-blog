@@ -233,7 +233,7 @@ if (org._count.members &gt;= limit) {
     success: false,
     error: {
       code: 'PLAN_LIMIT_REACHED',
-      message: `Your ${org.plan} plan is limited to ${limit} members. Upgrade to add more.`,
+      message: \`Your \${org.plan} plan is limited to \${limit} members. Upgrade to add more.\`,
     },
   }
 }</code></pre>
@@ -244,7 +244,7 @@ if (org._count.members &gt;= limit) {
 
 <pre><code class="language-typescript">await prisma.$transaction(async (tx) => {
   // Bloquea la fila del org — serializa intentos concurrentes
-  await tx.$queryRaw`SELECT id FROM "Organization" WHERE id = ${orgId} FOR UPDATE`
+  await tx.$queryRaw\`SELECT id FROM "Organization" WHERE id = \${orgId} FOR UPDATE\`
 
   const count = await tx.organizationMember.count({
     where: { organizationId: orgId },
@@ -316,7 +316,7 @@ export const test = base.extend&lt;{ orgContext: OrgFixture }&gt;({
   orgContext: async ({ page }, use) => {
     const owner = await prisma.user.create({
       data: {
-        email: `owner-${Date.now()}@test.com`,
+        email: \`owner-\${Date.now()}@test.com\`,
         name: 'Test Owner',
         role: 'USER',
       },
@@ -324,7 +324,7 @@ export const test = base.extend&lt;{ orgContext: OrgFixture }&gt;({
     const org = await prisma.organization.create({
       data: {
         name: 'Test Org',
-        slug: `test-org-${Date.now()}`,
+        slug: \`test-org-\${Date.now()}\`,
         members: {
           create: { userId: owner.id, role: 'OWNER' },
         },
@@ -347,7 +347,7 @@ export { expect } from '@playwright/test'</code></pre>
 
 <pre><code class="language-typescript">test('flujo completo de invitación', async ({ page, orgContext }) => {
   // Invitar via UI
-  await page.goto(`/org/${orgContext.org.slug}`)
+  await page.goto(\`/org/\${orgContext.org.slug}\`)
   await page.fill('[name=email]', 'newuser@test.com')
   await page.click('button[type=submit]')
   await expect(page.getByText('Invitation sent')).toBeVisible()
@@ -362,7 +362,7 @@ export { expect } from '@playwright/test'</code></pre>
   expect(invitation?.status).toBe('PENDING')
 
   // Navegar directamente a la URL de aceptación
-  await page.goto(`/invite/accept?token=${invitation!.token}`)
+  await page.goto(\`/invite/accept?token=\${invitation!.token}\`)
   await expect(page.getByText('Invitation accepted')).toBeVisible()
 
   // Verificar membresía creada
@@ -402,7 +402,7 @@ export { expect } from '@playwright/test'</code></pre>
   <li><strong>Tests:</strong> Crea fixtures con Prisma. Lee tokens de invitación directamente de la DB. Browser contexts separados para múltiples usuarios.</li>
 </ul>
 
-<p>Si no quieres implementar todo esto desde cero, el <a href="/arkeonix">boilerplate de Arkeonix Labs</a> tiene el sistema multi-tenant completo ya implementado y testeado en producción: schema Prisma con todos los índices, Server Actions con Zod, flujo de invitaciones con Resend, RBAC dual, audit logs inmutables y suite E2E con Playwright.</p>`;
+<p>Si no quieres implementar todo esto desde cero, el <a href="/recursos/saas-boilerplate">boilerplate de Arkeonix Labs</a> tiene el sistema multi-tenant completo ya implementado y testeado en producción: schema Prisma con todos los índices, Server Actions con Zod, flujo de invitaciones con Resend, RBAC dual, audit logs inmutables y suite E2E con Playwright.</p>`;
 
 // ─── Post metadata ───────────────────────────────────────────────────
 

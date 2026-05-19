@@ -34,6 +34,7 @@ export default {
       "/",
       "/blog",
       "/lab",
+      "/recursos",
       "/herramientas",
       "/herramientas/calculadora-salario",
       "/about",
@@ -41,7 +42,8 @@ export default {
       "/privacy",
       "/terms",
       "/cookies",
-      "/arkeonix"
+      "/recursos/saas-boilerplate",
+      "/recursos/guia-junior"
     ];
 
     let dynamicRoutes: string[] = [];

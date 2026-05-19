@@ -8,8 +8,10 @@
 
 ### Changed
 
-- Se deshabilitó temporalmente la página `/recursos`: ya no se muestra en navegación y su URL redirige al blog.
-- Se actualizó SEO técnico para acompañar el cambio: `/recursos` se retiró del prerender y del sitemap.
+- Se reactivó `/recursos` como hub de recursos con accesos a Guía Junior y SaaS Boilerplate.
+- Guía Junior y SaaS Boilerplate se movieron bajo `/recursos/guia-junior` y `/recursos/saas-boilerplate`, manteniendo redirecciones legacy permanentes.
+- Se endurecieron los endpoints de checkout y portal: URLs de retorno validadas, `priceId` allowlisted, email opcional validado y logs de error sanitizados.
+- Se añadieron tests de seguridad/routing para redirects legacy, rutas protegidas, flags de pagos y validación de URL base.
 
 ---
 

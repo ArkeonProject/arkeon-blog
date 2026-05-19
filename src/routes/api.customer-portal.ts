@@ -1,23 +1,29 @@
 import type { ActionFunctionArgs } from "react-router";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
-const PAYMENTS_ENABLED = process.env.PAYMENTS_ENABLED === "true";
+import { getBaseUrl } from "./utils/base-url";
+import { logRouteError } from "./utils/log-route-error";
+
+function arePaymentsEnabled(): boolean {
+  return process.env.PAYMENTS_ENABLED === "true";
+}
 
 export async function action({ request }: ActionFunctionArgs) {
-  if (!PAYMENTS_ENABLED) {
+  if (!arePaymentsEnabled()) {
     return new Response(JSON.stringify({ error: "Customer portal is temporarily disabled" }), { status: 410 });
   }
   if (request.method !== "POST") {
     return new Response("Method Not Allowed", { status: 405 });
   }
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: "2025-01-27.acacia" as Stripe.LatestApiVersion,
-  });
-  const supabaseAdmin = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
   try {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+      apiVersion: "2025-01-27.acacia" as Stripe.LatestApiVersion,
+    });
+    const supabaseAdmin = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
     const authHeader = request.headers.get("authorization") ?? "";
     const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
 
@@ -46,14 +52,16 @@ export async function action({ request }: ActionFunctionArgs) {
       return new Response(JSON.stringify({ error: "No Stripe customer found" }), { status: 404 });
     }
 
+    const baseUrl = getBaseUrl();
+
     const session = await stripe.billingPortal.sessions.create({
       customer: data.stripe_customer_id,
-      return_url: `${process.env.BASE_URL || "http://localhost:5173"}/guia-junior/dashboard`,
+      return_url: `${baseUrl}/recursos/guia-junior/dashboard`,
     });
 
     return new Response(JSON.stringify({ url: session.url }), { status: 200 });
   } catch (error) {
-    console.error("Customer portal error:", error);
+    logRouteError("Customer portal error", error);
     return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
   }
 }

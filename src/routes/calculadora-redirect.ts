@@ -1,8 +1,6 @@
 import { redirect } from "react-router";
-import type { LoaderFunctionArgs } from "react-router";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export async function loader(_args: LoaderFunctionArgs) {
+export async function loader() {
   return redirect("/herramientas/calculadora-salario", 302);
 }
 

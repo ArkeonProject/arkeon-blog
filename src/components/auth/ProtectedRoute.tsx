@@ -29,7 +29,7 @@ export function ProtectedRoute({ children, requiredProduct, allowOpenSourceBypas
   }
 
   if (requiredProduct && !hasAccess(requiredProduct)) {
-    return <Navigate to="/guia-junior" state={{ from: location }} replace />;
+    return <Navigate to="/recursos/guia-junior" state={{ from: location }} replace />;
   }
 
   return <>{children}</>;

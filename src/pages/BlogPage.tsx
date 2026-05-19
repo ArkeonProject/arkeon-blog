@@ -310,7 +310,7 @@ export default function BlogPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Guía Junior */}
             <ScrollReveal variant="fade-left" duration={800}>
-              <Link to="/guia-junior" className="group block h-full">
+              <Link to="/recursos/guia-junior" className="group block h-full">
                 <div className="tech-card card-accent-border rounded-2xl p-6 h-full hover:border-emerald-500/40 transition-all duration-300 hover:-translate-y-0.5">
                   <div className="flex flex-col h-full space-y-3">
                     <span
@@ -339,7 +339,7 @@ export default function BlogPage() {
 
             {/* SaaS Boilerplate */}
             <ScrollReveal variant="fade-right" duration={800}>
-              <Link to="/arkeonix" className="group block h-full">
+              <Link to="/recursos/saas-boilerplate" className="group block h-full">
                 <div className="tech-card card-accent-border rounded-2xl p-6 h-full hover:border-primary/40 transition-all duration-300 hover:-translate-y-0.5">
                   <div className="flex flex-col h-full space-y-3">
                     <span

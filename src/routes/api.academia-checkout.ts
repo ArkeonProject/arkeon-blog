@@ -1,7 +1,13 @@
 import type { ActionFunctionArgs } from "react-router";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
-const PAYMENTS_ENABLED = process.env.PAYMENTS_ENABLED === "true";
+import { getBaseUrl } from "./utils/base-url";
+import { normalizeOptionalCustomerEmail } from "./utils/customer-email";
+import { logRouteError } from "./utils/log-route-error";
+
+function arePaymentsEnabled(): boolean {
+  return process.env.PAYMENTS_ENABLED === "true";
+}
 
 function getBearerToken(request: Request): string | null {
   const authHeader = request.headers.get("authorization") ?? "";
@@ -24,7 +30,7 @@ function getAllowedAcademiaPrices(): Set<string> {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  if (!PAYMENTS_ENABLED) {
+  if (!arePaymentsEnabled()) {
     return new Response(JSON.stringify({ error: "Payments are temporarily disabled" }), { status: 410 });
   }
   if (request.method !== "POST") {
@@ -57,6 +63,11 @@ export async function action({ request }: ActionFunctionArgs) {
       return new Response(JSON.stringify({ error: "Missing required fields" }), { status: 400 });
     }
 
+    const customerEmail = normalizeOptionalCustomerEmail(user.email ?? email);
+    if (customerEmail === null) {
+      return new Response(JSON.stringify({ error: "Invalid email" }), { status: 400 });
+    }
+
     const allowedPrices = getAllowedAcademiaPrices();
     if (!allowedPrices.has(priceId)) {
       return new Response(JSON.stringify({ error: "Invalid price for product" }), { status: 400 });
@@ -65,15 +76,16 @@ export async function action({ request }: ActionFunctionArgs) {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
       apiVersion: "2025-01-27.acacia" as Stripe.LatestApiVersion,
     });
+    const baseUrl = getBaseUrl();
     const price = await stripe.prices.retrieve(priceId);
     const mode = price.type === "recurring" ? "subscription" : "payment";
 
     const session = await stripe.checkout.sessions.create({
       mode,
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${process.env.BASE_URL || "http://localhost:5173"}/academia/gracias?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.BASE_URL || "http://localhost:5173"}/academia`,
-      ...(user.email || email ? { customer_email: user.email ?? email } : {}),
+      success_url: `${baseUrl}/academia/gracias`,
+      cancel_url: `${baseUrl}/academia`,
+      ...(customerEmail ? { customer_email: customerEmail } : {}),
       customer_creation: mode === "payment" ? "always" : undefined,
       allow_promotion_codes: true,
       metadata: {
@@ -84,7 +96,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     return new Response(JSON.stringify({ url: session.url }), { status: 200 });
   } catch (error) {
-    console.error("Academia checkout error:", error);
+    logRouteError("Academia checkout error", error);
     return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
   }
 }

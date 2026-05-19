@@ -128,7 +128,7 @@ export default function AcademiaPage() {
           <p className="text-sm text-muted-foreground mt-1">{t('cta_guia_from_academia_desc')}</p>
         </div>
         <Link
-          to="/guia-junior"
+          to="/recursos/guia-junior"
           className="shrink-0 px-5 py-2.5 border border-border bg-surface hover:bg-surface-hover text-sm font-semibold rounded-xl transition-colors whitespace-nowrap"
         >
           {t('cta_guia_from_academia_btn')}

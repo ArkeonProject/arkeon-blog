@@ -60,11 +60,11 @@ export default function GuiaLandingPage() {
       <Helmet>
         <title>{t('guia_landing_meta_title')} | Arkeonix Labs</title>
         <meta name="description" content={t('guia_landing_meta_desc')} />
-        <link rel="canonical" href="https://www.arkeonixlabs.com/guia-junior" />
+        <link rel="canonical" href="https://www.arkeonixlabs.com/recursos/guia-junior" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={`${t('guia_landing_meta_title')} | Arkeonix Labs`} />
         <meta property="og:description" content={t('guia_landing_meta_desc')} />
-        <meta property="og:url" content="https://www.arkeonixlabs.com/guia-junior" />
+        <meta property="og:url" content="https://www.arkeonixlabs.com/recursos/guia-junior" />
         <meta property="og:site_name" content="Arkeonix Labs" />
         <meta property="og:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -78,7 +78,7 @@ export default function GuiaLandingPage() {
             "name": t('guia_landing_meta_title'),
             "description": t('guia_landing_meta_desc'),
             "brand": { "@type": "Brand", "name": "Arkeonix Labs" },
-            "url": "https://www.arkeonixlabs.com/guia-junior",
+            "url": "https://www.arkeonixlabs.com/recursos/guia-junior",
             "image": "https://www.arkeonixlabs.com/arkeonix-logo.png",
             ...(OPEN_SOURCE_MODE
               ? {}
@@ -90,7 +90,7 @@ export default function GuiaLandingPage() {
                     "price": "19",
                     "priceCurrency": "EUR",
                     "availability": "https://schema.org/InStock",
-                    "url": "https://www.arkeonixlabs.com/guia-junior"
+                    "url": "https://www.arkeonixlabs.com/recursos/guia-junior"
                   },
                   {
                     "@type": "Offer",
@@ -98,7 +98,7 @@ export default function GuiaLandingPage() {
                     "price": "299",
                     "priceCurrency": "EUR",
                     "availability": "https://schema.org/InStock",
-                    "url": "https://www.arkeonixlabs.com/guia-junior"
+                    "url": "https://www.arkeonixlabs.com/recursos/guia-junior"
                   }
                 ],
               }),
@@ -130,14 +130,14 @@ export default function GuiaLandingPage() {
         >
           {alreadyHasAccess ? (
             <Link
-              to="/guia-junior/dashboard"
+              to="/recursos/guia-junior/dashboard"
               className="inline-block mt-8 px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity text-lg"
             >
               {t('guia_landing_cta_dashboard')}
             </Link>
           ) : OPEN_SOURCE_MODE ? (
             <Link
-              to="/guia-junior/capitulo/antes-de-empezar"
+              to="/recursos/guia-junior/capitulo/antes-de-empezar"
               className="inline-block mt-8 px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity text-lg"
             >
               {t('guia_landing_cta_access')}
@@ -145,14 +145,14 @@ export default function GuiaLandingPage() {
           ) : (
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
               <Link
-                to="/guia-junior/capitulo/antes-de-empezar"
+                to="/recursos/guia-junior/capitulo/antes-de-empezar"
                 className="inline-block px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity text-lg"
               >
                 {t('guia_landing_cta_free')}
               </Link>
               {user ? (
                 <Link
-                  to="/guia-junior/dashboard"
+                  to="/recursos/guia-junior/dashboard"
                   className="inline-block px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity text-lg"
                 >
                   {t('guia_landing_cta_access')}
@@ -380,7 +380,7 @@ export default function GuiaLandingPage() {
             {t('guia_landing_bottom_cta_desc')}
           </p>
           <Link
-            to={alreadyHasAccess ? '/guia-junior/dashboard' : '/guia-junior/capitulo/antes-de-empezar'}
+            to={alreadyHasAccess ? '/recursos/guia-junior/dashboard' : '/recursos/guia-junior/capitulo/antes-de-empezar'}
             className="inline-block px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity text-lg"
           >
             {alreadyHasAccess ? t('guia_landing_cta_dashboard') : (OPEN_SOURCE_MODE ? t('guia_landing_cta_access') : t('guia_landing_cta_free'))}

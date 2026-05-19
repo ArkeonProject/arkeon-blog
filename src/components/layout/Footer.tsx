@@ -11,9 +11,9 @@ const QUICK_LINKS = [
 ];
 
 const PRODUCTS = [
-  { path: "/guia-junior", nameKey: "footer_product_guia" },
+  { path: "/recursos/guia-junior", nameKey: "footer_product_guia" },
   { path: "/academia", nameKey: "footer_product_academia" },
-  { path: "/arkeonix", nameKey: "footer_product_boilerplate" },
+  { path: "/recursos/saas-boilerplate", nameKey: "footer_product_boilerplate" },
 ];
 
 const LEGAL_LINKS = [

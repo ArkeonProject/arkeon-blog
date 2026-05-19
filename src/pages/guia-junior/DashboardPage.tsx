@@ -50,7 +50,7 @@ export default function GuiaDashboardPage() {
         {chapters.map((ch) => (
           <Link
             key={ch.slug}
-            to={`/guia-junior/capitulo/${ch.slug}`}
+            to={`/recursos/guia-junior/capitulo/${ch.slug}`}
             className="block p-6 rounded-xl border border-border bg-surface hover:bg-surface-hover transition-colors"
           >
             {!OPEN_SOURCE_MODE && (
