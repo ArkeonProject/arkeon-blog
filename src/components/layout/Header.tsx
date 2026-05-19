@@ -1,11 +1,11 @@
 import { Link, useLocation, useNavigate } from "react-router";
 import { useState, useRef, useEffect } from "react";
-import type { MouseEvent as ReactMouseEvent } from "react";
 import { FiChevronDown, FiUser, FiLogOut, FiSettings } from "react-icons/fi";
 import { useLocale } from "@/hooks/useLocale";
 import { useAuth } from "@/context/AuthContext";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import type { Locale } from "@/context/LocaleContext";
+import DropdownNavItem from "./DropdownNavItem";
 
 const NAV_LINKS = [
   { path: "/blog", key: "blog" },
@@ -20,8 +20,50 @@ const RESOURCE_SUBLINKS = [
   { path: "/recursos/saas-boilerplate", key: "saas" },
 ];
 
-const RESOURCES_MENU_ID = "resources-menu";
+const TOOL_SUBLINKS = [
+  { path: "/herramientas/calculadora-salario", key: "tools_salary" },
+  { path: "/herramientas/test-rol-tech", key: "tools_role_quiz" },
+];
 
+function MobileDropdownSection({
+  mainPath,
+  label,
+  isActive,
+  subLinks,
+  onNavigate,
+}: {
+  mainPath: string;
+  label: string;
+  isActive: boolean;
+  subLinks: { path: string; label: string }[];
+  onNavigate: () => void;
+}) {
+  return (
+    <div className="rounded-xl border border-border/30 px-2 py-2">
+      <Link
+        to={mainPath}
+        onClick={onNavigate}
+        className={`flex items-center gap-3 px-2 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive ? "text-primary" : "text-muted-foreground hover:bg-surface-hover hover:text-foreground"}`}
+      >
+        {isActive && <span className="w-1.5 h-1.5 rounded-full bg-primary" />}
+        {label}
+      </Link>
+      <div className="space-y-1 pl-3">
+        {subLinks.map((item) => (
+          <Link
+            key={item.path}
+            to={item.path}
+            onClick={onNavigate}
+            className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-muted-foreground hover:bg-surface-hover hover:text-foreground focus-visible:bg-surface-hover focus-visible:text-foreground"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-border/60" />
+            {item.label}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function Header() {
   const { locale, setLocale, t } = useLocale();
@@ -31,11 +73,8 @@ export default function Header() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isUserOpen, setIsUserOpen] = useState(false);
-  const [isResourcesOpen, setIsResourcesOpen] = useState(false);
-  const resourcesCloseTimeoutRef = useRef<number | null>(null);
   const langRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
-  const resourcesRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -46,31 +85,9 @@ export default function Header() {
       if (userRef.current && !userRef.current.contains(event.target as Node)) {
         setIsUserOpen(false);
       }
-      if (resourcesRef.current && !resourcesRef.current.contains(event.target as Node)) {
-        setIsResourcesOpen(false);
-      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    const handleEscapeKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsResourcesOpen(false);
-      }
-    };
-
-    document.addEventListener("keydown", handleEscapeKey);
-    return () => document.removeEventListener("keydown", handleEscapeKey);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (resourcesCloseTimeoutRef.current !== null) {
-        window.clearTimeout(resourcesCloseTimeoutRef.current);
-      }
-    };
   }, []);
 
   useEffect(() => {
@@ -81,7 +98,6 @@ export default function Header() {
 
   useEffect(() => {
     setIsMobileOpen(false);
-    setIsResourcesOpen(false);
   }, [location.pathname]);
 
   const isResourcesPath =
@@ -94,31 +110,9 @@ export default function Header() {
     location.pathname === "/arkeonix" ||
     location.pathname.startsWith("/arkeonix/");
 
-  const openResourcesMenu = () => {
-    if (resourcesCloseTimeoutRef.current !== null) {
-      window.clearTimeout(resourcesCloseTimeoutRef.current);
-      resourcesCloseTimeoutRef.current = null;
-    }
-    setIsResourcesOpen(true);
-  };
-
-  const scheduleCloseResourcesMenu = () => {
-    if (resourcesCloseTimeoutRef.current !== null) {
-      window.clearTimeout(resourcesCloseTimeoutRef.current);
-    }
-    resourcesCloseTimeoutRef.current = window.setTimeout(() => {
-      setIsResourcesOpen(false);
-      resourcesCloseTimeoutRef.current = null;
-    }, 240);
-  };
-
-  const handleResourcesMouseLeave = (event: ReactMouseEvent<HTMLDivElement>) => {
-    const nextTarget = event.relatedTarget;
-    if (nextTarget instanceof Node && resourcesRef.current?.contains(nextTarget)) {
-      return;
-    }
-    scheduleCloseResourcesMenu();
-  };
+  const isToolsPath =
+    location.pathname === "/herramientas" ||
+    location.pathname.startsWith("/herramientas/");
 
   const navLinkLabel = (key: string) => {
     if (key === "blog") return t("nav_blog");
@@ -128,8 +122,20 @@ export default function Header() {
     if (key === "academia") return t("nav_academia");
     if (key === "saas") return t("nav_saas");
     if (key === "contact") return t("nav_contact");
+    if (key === "tools_salary") return t("nav_tools_salary");
+    if (key === "tools_role_quiz") return t("nav_tools_role_quiz");
     return t(`category_${key}`);
   };
+
+  const resourceSubLinks = RESOURCE_SUBLINKS.map((s) => ({
+    path: s.path,
+    label: navLinkLabel(s.key),
+  }));
+
+  const toolSubLinks = TOOL_SUBLINKS.map((s) => ({
+    path: s.path,
+    label: navLinkLabel(s.key),
+  }));
 
   return (
     <nav
@@ -167,77 +173,24 @@ export default function Header() {
             {NAV_LINKS.map(({ path, key }) => {
               if (key === "resources") {
                 return (
-                  <div
+                  <DropdownNavItem
                     key={path}
-                    className="relative"
-                    ref={resourcesRef}
-                    onMouseEnter={openResourcesMenu}
-                    onMouseLeave={handleResourcesMouseLeave}
-                    onBlurCapture={(event) => {
-                      const nextTarget = event.relatedTarget;
-                      if (nextTarget instanceof Node && resourcesRef.current?.contains(nextTarget)) {
-                        return;
-                      }
-                      setIsResourcesOpen(false);
-                    }}
-                  >
-                    <div className={`relative inline-flex items-center rounded-lg transition-all duration-300 ${isResourcesPath
-                      ? "text-primary bg-primary/8"
-                      : "text-muted-foreground hover:text-foreground hover:bg-surface"
-                      }`}
-                    >
-                      <Link
-                        to="/recursos"
-                        onFocus={openResourcesMenu}
-                        className="px-3.5 py-1.5 pr-1 text-[13px] font-medium"
-                      >
-                        {navLinkLabel(key)}
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          setIsResourcesOpen((prev) => !prev);
-                        }}
-                        className="py-1.5 pl-1 pr-2.5"
-                        aria-label={`${navLinkLabel(key)} submenu`}
-                        aria-expanded={isResourcesOpen}
-                        aria-haspopup="menu"
-                        aria-controls={RESOURCES_MENU_ID}
-                      >
-                        <FiChevronDown className={`w-3 h-3 transition-transform duration-200 ${isResourcesOpen ? "rotate-180" : ""}`} />
-                      </button>
-                      {isResourcesPath && (
-                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-0.5 rounded-full bg-primary" />
-                      )}
-                    </div>
-
-                    {isResourcesOpen && (
-                      <div
-                        id={RESOURCES_MENU_ID}
-                        role="menu"
-                        className="absolute left-1/2 top-full z-50 w-56 -translate-x-1/2 pt-2"
-                        onMouseEnter={openResourcesMenu}
-                        onMouseLeave={handleResourcesMouseLeave}
-                      >
-                        <div className="rounded-xl border border-border/60 surface-elevated p-1.5 animate-reveal">
-                        {RESOURCE_SUBLINKS.map((item) => {
-                          return (
-                            <Link
-                              key={item.path}
-                              to={item.path}
-                              role="menuitem"
-                              className="flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-all duration-200 text-muted-foreground hover:bg-muted/50 hover:text-foreground focus-visible:bg-muted/50 focus-visible:text-foreground"
-                            >
-                              <span>{navLinkLabel(item.key)}</span>
-                              <span className="text-xs opacity-70">-&gt;</span>
-                            </Link>
-                          );
-                        })}
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                    label={navLinkLabel("resources")}
+                    mainPath="/recursos"
+                    subLinks={resourceSubLinks}
+                    isActive={isResourcesPath}
+                  />
+                );
+              }
+              if (key === "tools") {
+                return (
+                  <DropdownNavItem
+                    key={path}
+                    label={navLinkLabel("tools")}
+                    mainPath="/herramientas"
+                    subLinks={toolSubLinks}
+                    isActive={isToolsPath}
+                  />
                 );
               }
 
@@ -381,31 +334,27 @@ export default function Header() {
             {NAV_LINKS.map(({ path, key }) => {
               if (key === "resources") {
                 return (
-                  <div key={path} className="rounded-xl border border-border/30 px-2 py-2">
-                    <Link
-                      to="/recursos"
-                      onClick={() => setIsMobileOpen(false)}
-                      className={`flex items-center gap-3 px-2 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isResourcesPath ? "text-primary" : "text-muted-foreground hover:bg-surface-hover hover:text-foreground"}`}
-                    >
-                      {isResourcesPath && <span className="w-1.5 h-1.5 rounded-full bg-primary" />}
-                      {navLinkLabel(key)}
-                    </Link>
-                    <div className="space-y-1 pl-3">
-                      {RESOURCE_SUBLINKS.map((item) => {
-                        return (
-                          <Link
-                            key={item.path}
-                            to={item.path}
-                            onClick={() => setIsMobileOpen(false)}
-                            className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-muted-foreground hover:bg-surface-hover hover:text-foreground focus-visible:bg-surface-hover focus-visible:text-foreground"
-                          >
-                            <span className="w-1.5 h-1.5 rounded-full bg-border/60" />
-                            {navLinkLabel(item.key)}
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  </div>
+                  <MobileDropdownSection
+                    key={path}
+                    mainPath="/recursos"
+                    label={navLinkLabel("resources")}
+                    isActive={isResourcesPath}
+                    subLinks={resourceSubLinks}
+                    onNavigate={() => setIsMobileOpen(false)}
+                  />
+                );
+              }
+
+              if (key === "tools") {
+                return (
+                  <MobileDropdownSection
+                    key={path}
+                    mainPath="/herramientas"
+                    label={navLinkLabel("tools")}
+                    isActive={isToolsPath}
+                    subLinks={toolSubLinks}
+                    onNavigate={() => setIsMobileOpen(false)}
+                  />
                 );
               }
 

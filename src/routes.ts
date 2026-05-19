@@ -9,6 +9,7 @@ export default [
   route("recursos", "pages/RecursosPage.tsx"),
   route("herramientas", "pages/HerramientasPage.tsx"),
   route("herramientas/calculadora-salario", "pages/herramientas/CalculadoraSalarioPage.tsx"),
+  route("herramientas/test-rol-tech", "pages/herramientas/TechRoleQuizPage.tsx"),
   route("calculadora-salario", "routes/calculadora-redirect.ts"),
   route("lab", "pages/LabPage.tsx"),
   route("lab/:slug", "pages/LabPostPage.tsx"),

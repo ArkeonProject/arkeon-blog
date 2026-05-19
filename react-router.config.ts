@@ -37,6 +37,7 @@ export default {
       "/recursos",
       "/herramientas",
       "/herramientas/calculadora-salario",
+      "/herramientas/test-rol-tech",
       "/about",
       "/contact",
       "/privacy",

@@ -61,16 +61,22 @@ export default function HerramientasPage() {
               </div>
             </Card>
 
-            <Card className="p-6 border border-border/70">
+            <Card className="p-6 border border-border hover:border-primary/30 transition-colors">
               <div className="flex h-full flex-col gap-4">
                 <div>
-                  <p className="inline-flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground"><FiTool /> {t("tools_coming_badge")}</p>
-                  <h3 className="mt-2 font-display text-xl text-foreground">{t("tools_coming_title")}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{t("tools_coming_description")}</p>
+                  <p className="inline-flex items-center gap-2 text-xs uppercase tracking-wide text-primary"><FiTool /> {t("role_quiz_badge")}</p>
+                  <h3 className="mt-2 font-display text-xl text-foreground">{t("role_quiz_card_title")}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{t("role_quiz_card_description")}</p>
                 </div>
-                <span className="mt-auto inline-flex w-fit rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
-                  {t("home_coming_soon")}
-                </span>
+                <div className="mt-auto">
+                  <Link
+                    to="/herramientas/test-rol-tech"
+                    className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
+                  >
+                    {t("role_quiz_card_cta")}
+                    <FiArrowRight />
+                  </Link>
+                </div>
               </div>
             </Card>
           </div>
