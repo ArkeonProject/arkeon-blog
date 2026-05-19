@@ -71,4 +71,18 @@ describe("rutas data", () => {
     const slugs = new Set(rutas.map((r) => r.slug));
     assert.strictEqual(slugs.size, rutas.length);
   });
+
+  test("no content has trailing double newline", () => {
+    for (const ruta of rutas) {
+      for (const section of ruta.sections) {
+        // This test validates a rendering assumption: content is split on \n\n
+        // and rendered as <p> tags. A trailing \n\n would create an empty <p>.
+        const content = section.contentKey; // key name, not translated content
+        assert.ok(
+          !content.endsWith("_content\n\n"),
+          `Ruta ${ruta.slug} section ${section.id} content key implies trailing newline`
+        );
+      }
+    }
+  });
 });

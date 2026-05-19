@@ -130,6 +130,7 @@ export default function RutaDetailPage() {
               <div className="space-y-4 text-base text-muted-foreground leading-relaxed">
                 {t(section.contentKey)
                   .split("\n\n")
+                  .filter(Boolean)
                   .map((paragraph, i) => (
                     <p key={i}>{paragraph}</p>
                   ))}
