@@ -9,6 +9,7 @@ import {
   categories,
   downloadChecklist,
   getAllItemKeys,
+  getCategoryScore,
   maxScore,
 } from "@/utils/portfolioChecklist";
 
@@ -36,15 +37,10 @@ export default function PortfolioChecklist() {
   }, [phase, checkedItems]);
 
   const currentScore = useMemo(() => {
-    let score = 0;
-    for (const cat of categories) {
-      for (const item of cat.items) {
-        if (checkedItems.has(item.key)) {
-          score += item.points;
-        }
-      }
-    }
-    return score;
+    return categories.reduce(
+      (total, cat) => total + getCategoryScore(cat, checkedItems),
+      0
+    );
   }, [checkedItems]);
 
   const progress = (currentScore / maxScore) * 100;
@@ -99,7 +95,14 @@ export default function PortfolioChecklist() {
             </span>
             <span>{Math.round(progress)}%</span>
           </div>
-          <div className="h-2.5 rounded-full bg-muted overflow-hidden">
+          <div
+            className="h-2.5 rounded-full bg-muted overflow-hidden"
+            role="progressbar"
+            aria-valuenow={currentScore}
+            aria-valuemin={0}
+            aria-valuemax={maxScore}
+            aria-label={t("portfolio_checklist_result_label")}
+          >
             <div
               className="h-full rounded-full bg-primary transition-all duration-500 ease-out"
               style={{ width: `${progress}%` }}
@@ -127,10 +130,7 @@ export default function PortfolioChecklist() {
         {/* Categories */}
         <div className="space-y-6 pb-4">
           {categories.map((cat, catIdx) => {
-            const catScore = cat.items.reduce(
-              (sum, item) => sum + (checkedItems.has(item.key) ? item.points : 0),
-              0
-            );
+            const catScore = getCategoryScore(cat, checkedItems);
             const catMax = cat.items.reduce((sum, item) => sum + item.points, 0);
             const isComplete = catScore === catMax;
 
@@ -278,10 +278,7 @@ export default function PortfolioChecklist() {
           </h3>
           <div className="space-y-3">
             {categories.map((cat) => {
-              const catScore = cat.items.reduce(
-                (sum, item) => sum + (checkedItems.has(item.key) ? item.points : 0),
-                0
-              );
+              const catScore = getCategoryScore(cat, checkedItems);
               const catMax = cat.items.reduce((sum, item) => sum + item.points, 0);
               const catPct = (catScore / catMax) * 100;
               return (

@@ -9,8 +9,8 @@ export interface ChecklistCategory {
 }
 
 export interface ScoreLevel {
-  minScore: number;
-  maxScore: number;
+  minPercentage: number;
+  maxPercentage: number;
   levelKey: string;
   descriptionKey: string;
   colorClass: string;
@@ -112,6 +112,7 @@ export const categories: ChecklistCategory[] = [
   },
 ];
 
+// Computed from categories; assert === 100 via test to catch weight drift
 export const maxScore = categories.reduce(
   (total, cat) => total + cat.items.reduce((sum, item) => sum + item.points, 0),
   0
@@ -119,29 +120,29 @@ export const maxScore = categories.reduce(
 
 export const scoreLevels: ScoreLevel[] = [
   {
-    minScore: 0,
-    maxScore: 40,
+    minPercentage: 0,
+    maxPercentage: 40,
     levelKey: "portfolio_level_needs_work",
     descriptionKey: "portfolio_level_needs_work_desc",
     colorClass: "bg-red-500/10 border-red-500/30 text-red-600",
   },
   {
-    minScore: 41,
-    maxScore: 60,
+    minPercentage: 41,
+    maxPercentage: 60,
     levelKey: "portfolio_level_basic",
     descriptionKey: "portfolio_level_basic_desc",
     colorClass: "bg-amber-500/10 border-amber-500/30 text-amber-600",
   },
   {
-    minScore: 61,
-    maxScore: 80,
+    minPercentage: 61,
+    maxPercentage: 80,
     levelKey: "portfolio_level_acceptable",
     descriptionKey: "portfolio_level_acceptable_desc",
     colorClass: "bg-sky-500/10 border-sky-500/30 text-sky-600",
   },
   {
-    minScore: 81,
-    maxScore: 100,
+    minPercentage: 81,
+    maxPercentage: 100,
     levelKey: "portfolio_level_professional",
     descriptionKey: "portfolio_level_professional_desc",
     colorClass: "bg-emerald-500/10 border-emerald-500/30 text-emerald-600",
@@ -161,7 +162,7 @@ export function calculateScore(checkedItems: Set<string>): ChecklistResult {
   const percentage = Math.round((score / maxScore) * 100);
 
   const level =
-    scoreLevels.find((l) => percentage >= l.minScore && percentage <= l.maxScore) ??
+    scoreLevels.find((l) => percentage >= l.minPercentage && percentage <= l.maxPercentage) ??
     scoreLevels[0];
 
   const improvements = getPriorityImprovements(checkedItems);
@@ -179,6 +180,16 @@ export function getPriorityImprovements(checkedItems: Set<string>): Improvement[
     }
   }
   return unchecked.sort((a, b) => b.points - a.points).slice(0, 3);
+}
+
+export function getCategoryScore(
+  cat: ChecklistCategory,
+  checkedItems: Set<string>
+): number {
+  return cat.items.reduce(
+    (sum, item) => sum + (checkedItems.has(item.key) ? item.points : 0),
+    0
+  );
 }
 
 export function getAllItemKeys(): string[] {
@@ -212,8 +223,9 @@ export function generateMarkdown(
 
   if (result.improvements.length > 0) {
     lines.push(`## ${t("portfolio_checklist_improvements_title")}`);
-    for (const imp of result.improvements) {
-      lines.push(`1. ${t(imp.itemKey)} (${t(imp.categoryKey)}) — +${imp.points} pts`);
+    for (let i = 0; i < result.improvements.length; i++) {
+      const imp = result.improvements[i];
+      lines.push(`${i + 1}. ${t(imp.itemKey)} (${t(imp.categoryKey)}) — +${imp.points} pts`);
     }
     lines.push("");
   }
@@ -230,7 +242,7 @@ export function downloadChecklist(
   t: (key: string) => string
 ): void {
   const markdown = generateMarkdown(checkedItems, result, t);
-  const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
+  const blob = new Blob([markdown], { type: "text/markdown" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
