@@ -1,13 +1,15 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router";
+import type { MetaFunction } from "react-router";
 import { Helmet } from "react-helmet-async";
 import { FiArrowLeft, FiArrowRight, FiExternalLink } from "react-icons/fi";
 import PageHero from "@/components/ui/PageHero";
 import TableOfContents from "@/components/rutas/TableOfContents";
-import { getRutaBySlug, getAdjacentRutas, rutas } from "@/data/rutas";
+import { getRutaBySlug, getAdjacentRutas } from "@/data/rutas";
+import type { RutaSection } from "@/types/ruta";
 import { useLocale } from "@/hooks/useLocale";
 
-function MobileToc({ sections, t }: { sections: typeof rutas[0]["sections"]; t: (key: string) => string }) {
+function MobileToc({ sections, t }: { sections: RutaSection[]; t: (key: string) => string }) {
   return (
     <details className="lg:hidden mb-8 border border-border rounded-xl bg-surface/50">
       <summary className="px-4 py-3 text-sm font-semibold text-foreground cursor-pointer list-none flex items-center justify-between">
@@ -30,11 +32,27 @@ function MobileToc({ sections, t }: { sections: typeof rutas[0]["sections"]; t: 
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = ({ params }) => {
+  const slug = params.slug ?? "";
+  const ruta = getRutaBySlug(slug);
+  if (!ruta) {
+    return [
+      { title: "Ruta no encontrada | Arkeonix Labs" },
+      { name: "description", content: "Ruta de aprendizaje no encontrada." },
+      { tagName: "link", rel: "canonical", href: `https://arkeonixlabs.com/rutas/${slug}` },
+    ];
+  }
+  return [
+    { title: "Ruta de aprendizaje | Arkeonix Labs" },
+    { tagName: "link", rel: "canonical", href: `https://arkeonixlabs.com/rutas/${slug}` },
+  ];
+};
+
 export default function RutaDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const { t } = useLocale();
   const [activeId, setActiveId] = useState("");
-  const sectionRefs = useRef<Record<string, HTMLElement>>({});
 
   const ruta = slug ? getRutaBySlug(slug) : undefined;
   const adjacent = slug ? getAdjacentRutas(slug) : { prev: null, next: null };
@@ -43,10 +61,11 @@ export default function RutaDetailPage() {
     if (!ruta) return;
     const observer = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
+        const intersecting = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (intersecting.length > 0) {
+          setActiveId(intersecting[0].target.id);
         }
       },
       { rootMargin: "-10% 0px -70% 0px" }
@@ -55,7 +74,6 @@ export default function RutaDetailPage() {
     for (const section of ruta.sections) {
       const el = document.getElementById(section.id);
       if (el) {
-        sectionRefs.current[section.id] = el;
         observer.observe(el);
       }
     }

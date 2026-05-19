@@ -302,12 +302,15 @@ export function getRutaBySlug(slug: string) {
   return rutas.find((r) => r.slug === slug);
 }
 
-export function getRutaIndex(slug: string) {
+function getRutaIndex(slug: string) {
   return rutas.findIndex((r) => r.slug === slug);
 }
 
 export function getAdjacentRutas(slug: string) {
   const index = getRutaIndex(slug);
+  if (index === -1) {
+    return { prev: null, next: null };
+  }
   return {
     prev: index > 0 ? rutas[index - 1] : null,
     next: index < rutas.length - 1 ? rutas[index + 1] : null,
