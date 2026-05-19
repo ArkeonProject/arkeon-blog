@@ -101,7 +101,7 @@ export default function PortfolioChecklist() {
             aria-valuenow={currentScore}
             aria-valuemin={0}
             aria-valuemax={maxScore}
-            aria-label={t("portfolio_checklist_result_label")}
+            aria-label={t("portfolio_checklist_progress_label")}
           >
             <div
               className="h-full rounded-full bg-primary transition-all duration-500 ease-out"
