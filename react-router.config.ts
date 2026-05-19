@@ -45,7 +45,14 @@ export default {
       "/terms",
       "/cookies",
       "/recursos/saas-boilerplate",
-      "/recursos/guia-junior"
+      "/recursos/guia-junior",
+      "/rutas",
+      "/rutas/primer-empleo-tech",
+      "/rutas/qa-automation",
+      "/rutas/java-selenium",
+      "/rutas/portfolio-junior",
+      "/rutas/ci-cd-basico",
+      "/rutas/crear-saas"
     ];
 
     let dynamicRoutes: string[] = [];

@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { path: "/blog", key: "blog" },
   { path: "/lab", key: "lab" },
   { path: "/herramientas", key: "tools" },
+  { path: "/rutas", key: "rutas" },
   { path: "/recursos", key: "resources" },
   { path: "/academia", key: "academia" },
 ];
@@ -24,6 +25,15 @@ const TOOL_SUBLINKS = [
   { path: "/herramientas/calculadora-salario", key: "tools_salary" },
   { path: "/herramientas/test-rol-tech", key: "tools_role_quiz" },
   { path: "/herramientas/checklist-portfolio-junior", key: "tools_portfolio" },
+];
+
+const RUTAS_SUBLINKS = [
+  { path: "/rutas/primer-empleo-tech", key: "ruta_primer_empleo_tech_title" },
+  { path: "/rutas/qa-automation", key: "ruta_qa_automation_title" },
+  { path: "/rutas/java-selenium", key: "ruta_java_selenium_title" },
+  { path: "/rutas/portfolio-junior", key: "ruta_portfolio_junior_title" },
+  { path: "/rutas/ci-cd-basico", key: "ruta_ci_cd_basico_title" },
+  { path: "/rutas/crear-saas", key: "ruta_crear_saas_title" },
 ];
 
 function MobileDropdownSection({
@@ -115,6 +125,10 @@ export default function Header() {
     location.pathname === "/herramientas" ||
     location.pathname.startsWith("/herramientas/");
 
+  const isRutasPath =
+    location.pathname === "/rutas" ||
+    location.pathname.startsWith("/rutas/");
+
   const navLinkLabel = (key: string) => {
     if (key === "blog") return t("nav_blog");
     if (key === "guide") return t("nav_guide");
@@ -126,6 +140,7 @@ export default function Header() {
     if (key === "tools_salary") return t("nav_tools_salary");
     if (key === "tools_role_quiz") return t("nav_tools_role_quiz");
     if (key === "tools_portfolio") return t("nav_tools_portfolio");
+    if (key === "rutas") return t("nav_rutas");
     return t(`category_${key}`);
   };
 
@@ -137,6 +152,11 @@ export default function Header() {
   const toolSubLinks = TOOL_SUBLINKS.map((s) => ({
     path: s.path,
     label: navLinkLabel(s.key),
+  }));
+
+  const rutasSubLinks = RUTAS_SUBLINKS.map((s) => ({
+    path: s.path,
+    label: t(s.key),
   }));
 
   return (
@@ -192,6 +212,17 @@ export default function Header() {
                     mainPath="/herramientas"
                     subLinks={toolSubLinks}
                     isActive={isToolsPath}
+                  />
+                );
+              }
+              if (key === "rutas") {
+                return (
+                  <DropdownNavItem
+                    key={path}
+                    label={navLinkLabel("rutas")}
+                    mainPath="/rutas"
+                    subLinks={rutasSubLinks}
+                    isActive={isRutasPath}
                   />
                 );
               }
@@ -355,6 +386,19 @@ export default function Header() {
                     label={navLinkLabel("tools")}
                     isActive={isToolsPath}
                     subLinks={toolSubLinks}
+                    onNavigate={() => setIsMobileOpen(false)}
+                  />
+                );
+              }
+
+              if (key === "rutas") {
+                return (
+                  <MobileDropdownSection
+                    key={path}
+                    mainPath="/rutas"
+                    label={navLinkLabel("rutas")}
+                    isActive={isRutasPath}
+                    subLinks={rutasSubLinks}
                     onNavigate={() => setIsMobileOpen(false)}
                   />
                 );
