@@ -53,7 +53,7 @@ export function renderWelcomeEmail(email: string): string {
 
       <!-- CTA -->
       <div style="text-align:center;margin:32px 0;">
-        <a href="https://www.arkeonixlabs.com/blog" style="background-color:#6366f1;color:#fff;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:700;text-decoration:none;display:inline-block;letter-spacing:-0.01em;">Read the latest analysis &rarr;</a>
+        <a href="https://arkeonixlabs.com/blog" style="background-color:#6366f1;color:#fff;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:700;text-decoration:none;display:inline-block;letter-spacing:-0.01em;">Read the latest analysis &rarr;</a>
       </div>
 
       <hr style="border-color:rgba(255,255,255,0.08);margin:24px 0;" />

@@ -33,14 +33,29 @@ export default {
     const staticRoutes = [
       "/",
       "/blog",
-      "/recursos",
       "/lab",
+      "/recursos",
+      "/herramientas",
+      "/herramientas/calculadora-salario",
+      "/herramientas/test-rol-tech",
+      "/herramientas/checklist-portfolio-junior",
       "/about",
       "/contact",
       "/privacy",
       "/terms",
       "/cookies",
-      "/arkeonix"
+      "/affiliate-disclosure",
+      "/recursos/saas-boilerplate",
+      "/recursos/guia-junior",
+      "/recursos/guia-junior/capitulo/antes-de-empezar",
+      "/rutas",
+      "/rutas/primer-empleo-tech",
+      "/rutas/qa-automation",
+      "/rutas/java-selenium",
+      "/rutas/portfolio-junior",
+      "/rutas/ci-cd-basico",
+      "/rutas/crear-saas",
+      "/academia"
     ];
 
     let dynamicRoutes: string[] = [];

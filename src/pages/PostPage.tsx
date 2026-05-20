@@ -202,7 +202,6 @@ export default function PostPage() {
         <Helmet>
           <title>{post.title} | Arkeonix Labs</title>
           <meta name="description" content={description} />
-          <link rel="canonical" href={`https://www.arkeonixlabs.com/post/${slug}`} />
           <meta property="og:title" content={`${post.title} | Arkeonix Labs`} />
           <meta property="og:description" content={description} />
           <meta property="og:type" content="article" />
@@ -242,12 +241,12 @@ export default function PostPage() {
                 "name": "Arkeonix Labs",
                 "logo": {
                   "@type": "ImageObject",
-                  "url": "https://www.arkeonixlabs.com/arkeonix-logo.png",
+                  "url": "https://arkeonixlabs.com/arkeonix-logo.png",
                 },
               },
               "mainEntityOfPage": {
                 "@type": "WebPage",
-                "@id": `https://www.arkeonixlabs.com/post/${slug}`,
+                "@id": `https://arkeonixlabs.com/post/${slug}`,
               },
               ...(post.cover_image && { image: post.cover_image }),
               // Enhanced schema for Reviews/Products in Recursos
@@ -287,7 +286,7 @@ export default function PostPage() {
         </Link>
 
         {/* Dynamic Grid Layout for TOC */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12 items-start">
+        <div className={`grid grid-cols-1 gap-12 items-start ${tocItems.length > 0 ? 'lg:grid-cols-[1fr_280px]' : ''}`}>
           <div className="min-w-0">
             {post.cover_image && (
               <SmartImage
@@ -311,7 +310,7 @@ export default function PostPage() {
 
         <div className="mb-8">
           <ShareButtons
-            url={typeof window !== "undefined" ? window.location.href : `https://www.arkeonixlabs.com/post/${slug}`}
+            url={typeof window !== "undefined" ? window.location.href : `https://arkeonixlabs.com/post/${slug}`}
             title={post.title}
           />
         </div>

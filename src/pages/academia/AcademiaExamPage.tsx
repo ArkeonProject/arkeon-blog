@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import type { MetaFunction } from "react-router";
 import { Link, useParams } from 'react-router';
 import { useLocale } from '@/hooks/useLocale';
 import { useAuth } from '@/context/AuthContext';
 import { useSupabaseQuery } from '@/hooks/useSupabaseQuery';
 import { supabase } from '@/lib/supabase';
-import type { AcademiaExam, AcademiaQuestion } from '@/types/academia';
+import type { AcademiaExam, AcademiaPublicQuestion } from '@/types/academia';
 
-type ExamPhase = 'loading' | 'intro' | 'in_progress' | 'completed' | 'paywall' | 'error';
+type ExamPhase = 'loading' | 'intro' | 'in_progress' | 'completed' | 'error';
 
 interface ExamWithCategory extends AcademiaExam {
   academia_categories: { slug: string; title: string; icon: string };
@@ -14,18 +16,33 @@ interface ExamWithCategory extends AcademiaExam {
 
 const PASS_THRESHOLD = 65;
 
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = ({ params }) => {
+  const categorySlug = params.category ?? "";
+  const examSlug = params.slug ?? "";
+  return [
+    { title: "Examen de práctica | Arkeonix Labs" },
+    { name: "description", content: "Examen de práctica técnico en Arkeonix Labs." },
+    { name: "robots", content: "noindex, nofollow" },
+    { tagName: "link", rel: "canonical", href: `https://arkeonixlabs.com/academia/${categorySlug}/${examSlug}` },
+  ];
+};
+
 export default function AcademiaExamPage() {
   const { t } = useLocale();
   const { category: categorySlug, slug: examSlug } = useParams<{ category: string; slug: string }>();
-  const { user, hasAccess } = useAuth();
+  const { user } = useAuth();
 
   const [phase, setPhase] = useState<ExamPhase>('loading');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [results, setResults] = useState<Record<number, boolean>>({});
   const [timeLeft, setTimeLeft] = useState(0);
   const [score, setScore] = useState<number | null>(null);
+  const [showAnonymousWarning, setShowAnonymousWarning] = useState(false);
   const startedAt = useRef<string>('');
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const warningDialogRef = useRef<HTMLDivElement | null>(null);
 
   const examFetcher = useCallback(async () => {
     const { data, error } = await supabase
@@ -41,11 +58,11 @@ export default function AcademiaExamPage() {
   const questionsFetcher = useCallback(async () => {
     if (!exam) return { data: null, error: null };
     const { data, error } = await supabase
-      .from('academia_questions')
-      .select('*')
+      .from('academia_questions_public')
+      .select('id, exam_id, order, question, options, explanation')
       .eq('exam_id', exam.id)
       .order('order', { ascending: true });
-    return { data: data as AcademiaQuestion[] | null, error: error as Error | null };
+    return { data: data as AcademiaPublicQuestion[] | null, error: error as Error | null };
   }, [exam]);
 
   const { data: questions } = useSupabaseQuery(questionsFetcher);
@@ -53,13 +70,15 @@ export default function AcademiaExamPage() {
   // Determine phase once exam + questions are loaded
   useEffect(() => {
     if (!exam || !questions) return;
-    if (exam.is_premium && (!user || !hasAccess('academia'))) {
-      setPhase('paywall');
-      return;
-    }
     setTimeLeft(exam.time_limit_minutes * 60);
     setPhase('intro');
-  }, [exam, questions, user, hasAccess]);
+  }, [exam, questions]);
+
+  useEffect(() => {
+    if (showAnonymousWarning) {
+      warningDialogRef.current?.focus();
+    }
+  }, [showAnonymousWarning]);
 
   // Timer
   useEffect(() => {
@@ -78,9 +97,18 @@ export default function AcademiaExamPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
 
-  const startExam = () => {
+  const startExam = useCallback(() => {
     startedAt.current = new Date().toISOString();
+    setShowAnonymousWarning(false);
     setPhase('in_progress');
+  }, []);
+
+  const handleStartClick = () => {
+    if (user) {
+      startExam();
+      return;
+    }
+    setShowAnonymousWarning(true);
   };
 
   const handleAnswer = (questionId: number, optionId: string) => {
@@ -91,13 +119,43 @@ export default function AcademiaExamPage() {
     if (!exam || !questions) return;
     clearInterval(timerRef.current!);
 
-    const totalQuestions = questions.length;
-    const correct = questions.filter((q) => answers[q.id] === q.correct_answer).length;
-    const finalScore = Math.round((correct / totalQuestions) * 100);
+    const answeredCount = Object.keys(answers).length;
+    if (answeredCount !== questions.length) {
+      setPhase('error');
+      return;
+    }
+
+    let gradeResponse: Response;
+    try {
+      gradeResponse = await fetch('/api/academia-grade', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ examId: exam.id, answers }),
+      });
+    } catch {
+      setPhase('error');
+      return;
+    }
+
+    if (!gradeResponse.ok) {
+      setPhase('error');
+      return;
+    }
+
+    const gradeResult = await gradeResponse.json() as {
+      score: number;
+      correct: number;
+      totalQuestions: number;
+      results: Record<number, boolean>;
+    };
+    const computedResults = gradeResult.results;
+    const finalScore = gradeResult.score;
     const timeSpent = exam.time_limit_minutes * 60 - timeLeft;
 
     setScore(finalScore);
     setPhase('completed');
+
+    setResults(computedResults);
 
     if (user) {
       await supabase.from('academia_attempts').insert({
@@ -138,27 +196,6 @@ export default function AcademiaExamPage() {
     );
   }
 
-  if (phase === 'paywall') {
-    return (
-      <div className="max-w-4xl mx-auto py-12 text-center">
-        <span className="text-5xl mb-6 block">🔒</span>
-        <h1 className="text-2xl font-bold text-foreground mb-3">{t('academia_paywall_title')}</h1>
-        <p className="text-muted-foreground mb-8 max-w-md mx-auto">{t('academia_paywall_desc')}</p>
-        <Link
-          to="/academia"
-          className="inline-block px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity"
-        >
-          {t('academia_cta_buy')}
-        </Link>
-        <div className="mt-4">
-          <Link to={`/academia/${categorySlug}`} className="text-sm text-muted-foreground hover:text-primary transition-colors">
-            ← {t('academia_back')}
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   if (phase === 'intro') {
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
@@ -178,11 +215,60 @@ export default function AcademiaExamPage() {
           </div>
         </div>
         <button
-          onClick={startExam}
+          type="button"
+          onClick={handleStartClick}
           className="px-10 py-4 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity text-lg"
         >
           {t('academia_exam_start')}
         </button>
+        {showAnonymousWarning && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            <div
+              ref={warningDialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="anonymous-warning-title"
+              aria-describedby="anonymous-warning-description"
+              tabIndex={-1}
+              className="w-full max-w-md rounded-2xl border border-border bg-background p-6 text-left shadow-xl"
+              onKeyDown={(event) => {
+                if (event.key === 'Escape') {
+                  setShowAnonymousWarning(false);
+                }
+              }}
+            >
+              <h2 id="anonymous-warning-title" className="text-xl font-semibold text-foreground">
+                {t('academia_anonymous_modal_title')}
+              </h2>
+              <p id="anonymous-warning-description" className="mt-3 text-sm text-muted-foreground">
+                {t('academia_anonymous_modal_desc')}
+              </p>
+              <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                <button
+                  type="button"
+                  onClick={() => setShowAnonymousWarning(false)}
+                  className="px-4 py-2.5 rounded-xl border border-border text-sm font-semibold text-foreground hover:bg-surface-hover transition-colors"
+                >
+                  {t('academia_anonymous_modal_cancel')}
+                </button>
+                <Link
+                  to="/login"
+                  state={{ returnTo: `/academia/${categorySlug}/${examSlug}` }}
+                  className="px-4 py-2.5 rounded-xl border border-border text-sm font-semibold text-foreground hover:bg-surface-hover transition-colors text-center"
+                >
+                  {t('academia_anonymous_modal_login')}
+                </Link>
+                <button
+                  type="button"
+                  onClick={startExam}
+                  className="px-4 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity"
+                >
+                  {t('academia_anonymous_modal_continue')}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         <p className="mt-4 text-xs text-muted-foreground">{t('academia_intro_warning')}</p>
       </div>
     );
@@ -190,7 +276,7 @@ export default function AcademiaExamPage() {
 
   if (phase === 'completed' && score !== null) {
     const passed = score >= PASS_THRESHOLD;
-    const correct = questions.filter((q) => answers[q.id] === q.correct_answer).length;
+    const correctCount = questions.filter((q) => results[q.id]).length;
 
     return (
       <div className="max-w-3xl mx-auto py-12">
@@ -204,7 +290,7 @@ export default function AcademiaExamPage() {
           </h1>
           <p className="text-5xl font-bold text-foreground my-4">{score}%</p>
           <p className="text-muted-foreground">
-            {correct} / {questions.length} {t('academia_result_correct')}
+            {correctCount} / {questions.length} {t('academia_result_correct')}
           </p>
         </div>
 
@@ -213,7 +299,7 @@ export default function AcademiaExamPage() {
         <div className="space-y-6">
           {questions.map((q, i) => {
             const userAnswer = answers[q.id];
-            const isCorrect = userAnswer === q.correct_answer;
+            const isCorrect = results[q.id];
             return (
               <div key={q.id} className={`p-6 rounded-xl border ${
                 isCorrect ? 'border-green-500/30 bg-green-500/5' : 'border-red-500/30 bg-red-500/5'
@@ -225,19 +311,18 @@ export default function AcademiaExamPage() {
                 <div className="space-y-2 mb-4">
                   {q.options.map((opt) => {
                     const isSelected = userAnswer === opt.id;
-                    const isRight = opt.id === q.correct_answer;
                     return (
                       <div key={opt.id} className={`px-4 py-2.5 rounded-lg text-sm font-medium border ${
-                        isRight
+                        isSelected && isCorrect
                           ? 'border-green-500 bg-green-500/10 text-green-700 dark:text-green-400'
-                          : isSelected
+                          : isSelected && !isCorrect
                             ? 'border-red-500 bg-red-500/10 text-red-700 dark:text-red-400'
                             : 'border-border text-muted-foreground'
                       }`}>
                         <span className="font-bold mr-2">{opt.id.toUpperCase()}.</span>
                         {opt.text}
-                        {isRight && <span className="ml-2">✓</span>}
-                        {isSelected && !isRight && <span className="ml-2">✗</span>}
+                        {isSelected && isCorrect && <span className="ml-2">✓</span>}
+                        {isSelected && !isCorrect && <span className="ml-2">✗</span>}
                       </div>
                     );
                   })}
@@ -289,6 +374,11 @@ export default function AcademiaExamPage() {
 
   return (
     <div className="max-w-5xl mx-auto py-6">
+      <Helmet>
+        <title>{exam ? `${exam.title} | Arkeonix Labs` : "Examen de práctica | Arkeonix Labs"}</title>
+        <meta name="description" content={exam ? `Examen de práctica de ${exam.title} en Arkeonix Labs.` : "Examen de práctica técnico en Arkeonix Labs."} />
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       {/* Header bar */}
       <div className="flex items-center justify-between mb-6 p-4 rounded-xl bg-surface border border-border">
         <div className="flex items-center gap-3">

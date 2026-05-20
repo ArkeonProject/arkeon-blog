@@ -1,6 +1,7 @@
-import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation, useParams } from "react-router";
 import { useEffect } from "react";
 import CookieConsent from "react-cookie-consent";
+import HomePage from "@/pages/HomePage";
 import BlogPage from "@/pages/BlogPage";
 import PostPage from "@/pages/PostPage";
 import ContactPage from "@/pages/ContactPage";
@@ -13,7 +14,6 @@ import ConfirmPage from "@/pages/newsletter/ConfirmPage";
 import NewsPage from "@/pages/NewsPage";
 import LabPage from "@/pages/LabPage";
 import LabPostPage from "@/pages/LabPostPage";
-import RecursosPage from "@/pages/RecursosPage";
 import ArkeonixPage from "@/pages/ArkeonixPage";
 import AdminPage from "@/pages/AdminPage";
 import LoginPage from "@/pages/auth/LoginPage";
@@ -27,6 +27,9 @@ import AcademiaPage from "@/pages/academia/AcademiaPage";
 import AcademiaThanksPage from "@/pages/academia/ThanksPage";
 import AcademiaCategoryPage from "@/pages/academia/AcademiaCategoryPage";
 import AcademiaExamPage from "@/pages/academia/AcademiaExamPage";
+import HerramientasPage from "@/pages/HerramientasPage";
+import CalculadoraSalarioPage from "@/pages/herramientas/CalculadoraSalarioPage";
+import RecursosPage from "@/pages/RecursosPage";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ScrollToTop from "@/components/ui/ScrollToTop";
@@ -39,6 +42,14 @@ function RouteScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
   return null;
+}
+
+function LegacyGuiaChapterRedirect() {
+  const { slug } = useParams();
+  const rawSlug = slug ?? "antes-de-empezar";
+  const isValidSlug = /^[a-z0-9-]+$/i.test(rawSlug);
+  const safeSlug = isValidSlug ? rawSlug : "antes-de-empezar";
+  return <Navigate to={`/recursos/guia-junior/capitulo/${encodeURIComponent(safeSlug)}`} replace />;
 }
 
 function Layout() {
@@ -94,10 +105,13 @@ export default function AppRouter() {
       <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>
-            <Route path="/" element={<Navigate to="/blog" replace />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/news" element={<NewsPage />} />
             <Route path="/recursos" element={<RecursosPage />} />
+            <Route path="/herramientas" element={<HerramientasPage />} />
+            <Route path="/herramientas/calculadora-salario" element={<CalculadoraSalarioPage />} />
+            <Route path="/calculadora-salario" element={<Navigate to="/herramientas/calculadora-salario" replace />} />
             <Route path="/lab" element={<LabPage />} />
             <Route path="/lab/:slug" element={<LabPostPage />} />
             <Route path="/post/:slug" element={<PostPage />} />
@@ -108,7 +122,10 @@ export default function AppRouter() {
             <Route path="/cookies" element={<CookiesPolicyPage />} />
             <Route path="/affiliate-disclosure" element={<AffiliateDisclosurePage />} />
             <Route path="/newsletter/confirm" element={<ConfirmPage />} />
-            <Route path="/arkeonix" element={<ArkeonixPage />} />
+            <Route path="/recursos/saas-boilerplate" element={<ArkeonixPage />} />
+            <Route path="/saas-boilerplate" element={<Navigate to="/recursos/saas-boilerplate" replace />} />
+            <Route path="/arkeonix" element={<Navigate to="/recursos/saas-boilerplate" replace />} />
+            <Route path="/arkeonix/gracias" element={<Navigate to="/recursos/saas-boilerplate" replace />} />
             <Route path="/admin" element={<AdminPage />} />
 
             {/* Auth routes - públicas */}
@@ -117,16 +134,20 @@ export default function AppRouter() {
             <Route path="/reset-password" element={<ResetPasswordPage />} />
 
             {/* Guía Junior - públicas */}
-            <Route path="/guia-junior" element={<GuiaLandingPage />} />
-            <Route path="/guia-junior/gracias" element={<GuiaThanksPage />} />
+            <Route path="/recursos/guia-junior" element={<GuiaLandingPage />} />
+            <Route path="/recursos/guia-junior/gracias" element={<GuiaThanksPage />} />
+            <Route path="/guia-junior" element={<Navigate to="/recursos/guia-junior" replace />} />
+            <Route path="/guia-junior/gracias" element={<Navigate to="/recursos/guia-junior/gracias" replace />} />
 
             {/* Guía Junior - protegidas (requieren auth + acceso pagado) */}
-            <Route path="/guia-junior/dashboard" element={
-              <ProtectedRoute requiredProduct="guia_junior">
+            <Route path="/recursos/guia-junior/dashboard" element={
+              <ProtectedRoute requiredProduct="guia_junior" allowOpenSourceBypass>
                 <GuiaDashboardPage />
               </ProtectedRoute>
             } />
-            <Route path="/guia-junior/capitulo/:slug" element={<GuiaChapterPage />} />
+            <Route path="/recursos/guia-junior/capitulo/:slug" element={<GuiaChapterPage />} />
+            <Route path="/guia-junior/dashboard" element={<Navigate to="/recursos/guia-junior/dashboard" replace />} />
+            <Route path="/guia-junior/capitulo/:slug" element={<LegacyGuiaChapterRedirect />} />
 
             {/* Academia */}
             <Route path="/academia" element={<AcademiaPage />} />

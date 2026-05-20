@@ -1,17 +1,37 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router';
+import type { MetaFunction } from 'react-router';
 import { useLocale } from '@/hooks/useLocale';
 import { useAuth } from '@/context/AuthContext';
 import { chapters } from '@/data/guia/chapters';
 import ScrollReveal from '@/components/ui/ScrollReveal';
+import PageHero from '@/components/ui/PageHero';
+import { OPEN_SOURCE_MODE } from '@/config/monetization';
 
 const PRICE_LIFETIME = import.meta.env.VITE_STRIPE_PRICE_GUIA_LIFETIME;
 const PRICE_B2B_LIFETIME = import.meta.env.VITE_STRIPE_PRICE_GUIA_B2B_LIFETIME;
 
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = () => [
+  { title: "Guía Junior Tech | Arkeonix Labs" },
+  { name: "description", content: "Guía práctica para juniors: roles, salarios, aprendizaje, CV, portfolio y primer empleo tech en España." },
+  { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/recursos/guia-junior" },
+  { property: "og:title", content: "Guía Junior Tech | Arkeonix Labs" },
+  { property: "og:description", content: "Guía práctica para juniors: roles, salarios, aprendizaje, CV, portfolio y primer empleo tech en España." },
+  { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  { property: "og:url", content: "https://arkeonixlabs.com/recursos/guia-junior" },
+  { property: "og:site_name", content: "Arkeonix Labs" },
+  { property: "og:type", content: "website" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: "Guía Junior Tech | Arkeonix Labs" },
+  { name: "twitter:description", content: "Guía práctica para juniors: roles, salarios, aprendizaje, CV, portfolio y primer empleo tech en España." },
+  { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+];
+
 export default function GuiaLandingPage() {
   const { t } = useLocale();
-  const { user, hasAccess } = useAuth();
+  const { user, session, hasAccess } = useAuth();
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
@@ -28,27 +48,26 @@ export default function GuiaLandingPage() {
     try {
       const res = await fetch('/api/guia-checkout', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        },
         body: JSON.stringify({
           priceId,
-          ...(user ? { userId: user.id, email: user.email } : {}),
+          ...(user?.email ? { email: user.email } : {}),
         }),
       });
 
-      console.log('Checkout response status:', res.status);
-
       if (!res.ok) {
         const errBody = await res.text();
-        console.error('Checkout failed:', errBody);
-        throw new Error(`Checkout failed (${res.status}): ${errBody}`);
+        console.error('Checkout failed:', res.status, errBody);
+        throw new Error('checkout_failed');
       }
 
       const { url } = await res.json();
-      console.log('Checkout URL:', url);
       if (url) window.location.href = url;
-    } catch (err) {
-      console.error('Checkout error:', err);
-      setCheckoutError(err instanceof Error ? err.message : t('guia_landing_checkout_error'));
+    } catch {
+      setCheckoutError(t('guia_landing_checkout_error'));
     } finally {
       setCheckoutLoading(null);
     }
@@ -59,17 +78,17 @@ export default function GuiaLandingPage() {
       <Helmet>
         <title>{t('guia_landing_meta_title')} | Arkeonix Labs</title>
         <meta name="description" content={t('guia_landing_meta_desc')} />
-        <link rel="canonical" href="https://www.arkeonixlabs.com/guia-junior" />
+        <link rel="canonical" href="https://arkeonixlabs.com/recursos/guia-junior" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={`${t('guia_landing_meta_title')} | Arkeonix Labs`} />
         <meta property="og:description" content={t('guia_landing_meta_desc')} />
-        <meta property="og:url" content="https://www.arkeonixlabs.com/guia-junior" />
+        <meta property="og:url" content="https://arkeonixlabs.com/recursos/guia-junior" />
         <meta property="og:site_name" content="Arkeonix Labs" />
-        <meta property="og:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta property="og:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${t('guia_landing_meta_title')} | Arkeonix Labs`} />
         <meta name="twitter:description" content={t('guia_landing_meta_desc')} />
-        <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta name="twitter:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -77,70 +96,81 @@ export default function GuiaLandingPage() {
             "name": t('guia_landing_meta_title'),
             "description": t('guia_landing_meta_desc'),
             "brand": { "@type": "Brand", "name": "Arkeonix Labs" },
-            "url": "https://www.arkeonixlabs.com/guia-junior",
-            "image": "https://www.arkeonixlabs.com/arkeonix-logo.png",
-            "offers": [
-              {
-                "@type": "Offer",
-                "name": "Individual Lifetime",
-                "price": "19",
-                "priceCurrency": "EUR",
-                "availability": "https://schema.org/InStock",
-                "url": "https://www.arkeonixlabs.com/guia-junior"
-              },
-              {
-                "@type": "Offer",
-                "name": "Empresa Lifetime",
-                "price": "299",
-                "priceCurrency": "EUR",
-                "availability": "https://schema.org/InStock",
-                "url": "https://www.arkeonixlabs.com/guia-junior"
-              }
-            ],
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": "5",
-              "reviewCount": "3"
-            },
-            "review": [
-              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Laura M." } },
-              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Diego P." } },
-              { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Sara L." } }
-            ]
+            "url": "https://arkeonixlabs.com/recursos/guia-junior",
+            "image": "https://arkeonixlabs.com/arkeonix-logo.png",
+            ...(OPEN_SOURCE_MODE
+              ? {}
+              : {
+                "offers": [
+                  {
+                    "@type": "Offer",
+                    "name": "Individual Lifetime",
+                    "price": "19",
+                    "priceCurrency": "EUR",
+                    "availability": "https://schema.org/InStock",
+                    "url": "https://arkeonixlabs.com/recursos/guia-junior"
+                  },
+                  {
+                    "@type": "Offer",
+                    "name": "Empresa Lifetime",
+                    "price": "299",
+                    "priceCurrency": "EUR",
+                    "availability": "https://schema.org/InStock",
+                    "url": "https://arkeonixlabs.com/recursos/guia-junior"
+                  }
+                ],
+              }),
+            ...(OPEN_SOURCE_MODE
+              ? {}
+              : {
+                "aggregateRating": {
+                  "@type": "AggregateRating",
+                  "ratingValue": "5",
+                  "reviewCount": "3"
+                },
+                "review": [
+                  { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Laura M." } },
+                  { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Diego P." } },
+                  { "@type": "Review", "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "author": { "@type": "Person", "name": "Sara L." } }
+                ]
+              })
           })}
         </script>
       </Helmet>
 
       {/* Hero */}
       <ScrollReveal variant="blur" duration={800}>
-        <header className="text-center mb-16">
-          <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary bg-primary/10 rounded-full mb-4">
-            {t('guia_landing_badge')}
-          </span>
-          <h1 className="text-4xl md:text-5xl font-bold bg-linear-to-r from-[#007EAD] via-[#00aaff] to-[#007EAD] bg-clip-text text-transparent mb-6 leading-tight">
-            {t('guia_landing_title')}
-          </h1>
-          <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto mb-8 leading-relaxed">
-            {t('guia_landing_subtitle')}
-          </p>
+        <PageHero
+          badge={t('guia_landing_badge')}
+          title={t('guia_landing_title_part1')}
+          titleHighlight={t('guia_landing_title_part2')}
+          description={t('guia_landing_subtitle')}
+        >
           {alreadyHasAccess ? (
             <Link
-              to="/guia-junior/dashboard"
-              className="inline-block px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity text-lg"
+              to="/recursos/guia-junior/dashboard"
+              className="inline-block mt-8 px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity text-lg"
             >
               {t('guia_landing_cta_dashboard')}
             </Link>
+          ) : OPEN_SOURCE_MODE ? (
+            <Link
+              to="/recursos/guia-junior/capitulo/antes-de-empezar"
+              className="inline-block mt-8 px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity text-lg"
+            >
+              {t('guia_landing_cta_access')}
+            </Link>
           ) : (
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
               <Link
-                to="/guia-junior/capitulo/antes-de-empezar"
+                to="/recursos/guia-junior/capitulo/antes-de-empezar"
                 className="inline-block px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity text-lg"
               >
                 {t('guia_landing_cta_free')}
               </Link>
               {user ? (
                 <Link
-                  to="/guia-junior/dashboard"
+                  to="/recursos/guia-junior/dashboard"
                   className="inline-block px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity text-lg"
                 >
                   {t('guia_landing_cta_access')}
@@ -155,7 +185,7 @@ export default function GuiaLandingPage() {
               )}
             </div>
           )}
-        </header>
+        </PageHero>
       </ScrollReveal>
 
       {/* Who is this for */}
@@ -195,7 +225,7 @@ export default function GuiaLandingPage() {
                   <h3 className="font-semibold text-foreground">{t(ch.titleKey)}</h3>
                   <p className="text-sm text-muted-foreground">{t(ch.descKey)}</p>
                 </div>
-                {ch.free && (
+                {!OPEN_SOURCE_MODE && ch.free && (
                   <span className="shrink-0 text-xs font-semibold text-primary uppercase">
                     {t('guia_dashboard_free')}
                   </span>
@@ -227,7 +257,7 @@ export default function GuiaLandingPage() {
         </section>
       </ScrollReveal>
 
-      {/* Pricing */}
+      {!OPEN_SOURCE_MODE && (
       <ScrollReveal variant="zoom-in" duration={800}>
         <section className="mb-16">
           <h2 className="text-2xl font-semibold text-[#007EAD] dark:text-[#00aaff] mb-6 text-center">
@@ -266,8 +296,9 @@ export default function GuiaLandingPage() {
           )}
         </section>
       </ScrollReveal>
+      )}
 
-      {/* B2B Pricing */}
+      {!OPEN_SOURCE_MODE && (
       <ScrollReveal variant="zoom-in" duration={800}>
         <section className="mb-16">
           <h2 className="text-2xl font-semibold text-[#007EAD] dark:text-[#00aaff] mb-3 text-center">
@@ -295,8 +326,10 @@ export default function GuiaLandingPage() {
           </div>
         </section>
       </ScrollReveal>
+      )}
 
       {/* B2B How it works */}
+      {!OPEN_SOURCE_MODE && (
       <ScrollReveal variant="fade-up" delay={100}>
         <section className="mb-16">
           <h2 className="text-2xl font-semibold text-[#007EAD] dark:text-[#00aaff] mb-6 text-center">
@@ -319,8 +352,10 @@ export default function GuiaLandingPage() {
           </div>
         </section>
       </ScrollReveal>
+      )}
 
       {/* Reviews */}
+      {!OPEN_SOURCE_MODE && (
       <ScrollReveal variant="fade-up" delay={100}>
         <section className="mb-16">
           <h2 className="text-2xl font-semibold text-[#007EAD] dark:text-[#00aaff] mb-8 text-center">
@@ -351,6 +386,7 @@ export default function GuiaLandingPage() {
           </div>
         </section>
       </ScrollReveal>
+      )}
 
       {/* Bottom CTA */}
       <ScrollReveal variant="fade-up">
@@ -362,10 +398,10 @@ export default function GuiaLandingPage() {
             {t('guia_landing_bottom_cta_desc')}
           </p>
           <Link
-            to={alreadyHasAccess ? '/guia-junior/dashboard' : '/guia-junior/capitulo/antes-de-empezar'}
+            to={alreadyHasAccess ? '/recursos/guia-junior/dashboard' : '/recursos/guia-junior/capitulo/antes-de-empezar'}
             className="inline-block px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-opacity text-lg"
           >
-            {alreadyHasAccess ? t('guia_landing_cta_dashboard') : t('guia_landing_cta_free')}
+            {alreadyHasAccess ? t('guia_landing_cta_dashboard') : (OPEN_SOURCE_MODE ? t('guia_landing_cta_access') : t('guia_landing_cta_free'))}
           </Link>
         </section>
       </ScrollReveal>

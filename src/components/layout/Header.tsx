@@ -5,16 +5,76 @@ import { useLocale } from "@/hooks/useLocale";
 import { useAuth } from "@/context/AuthContext";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import type { Locale } from "@/context/LocaleContext";
+import DropdownNavItem from "./DropdownNavItem";
 
 const NAV_LINKS = [
   { path: "/blog", key: "blog" },
-  { path: "/recursos", key: "recursos" },
   { path: "/lab", key: "lab" },
-  { path: "/guia-junior", key: "guide" },
+  { path: "/herramientas", key: "tools" },
+  { path: "/rutas", key: "rutas" },
+  { path: "/recursos", key: "resources" },
   { path: "/academia", key: "academia" },
-  { path: "/arkeonix", key: "saas" },
 ];
 
+const RESOURCE_SUBLINKS = [
+  { path: "/recursos/guia-junior", key: "guide" },
+  { path: "/recursos/saas-boilerplate", key: "saas" },
+];
+
+const TOOL_SUBLINKS = [
+  { path: "/herramientas/calculadora-salario", key: "tools_salary" },
+  { path: "/herramientas/test-rol-tech", key: "tools_role_quiz" },
+  { path: "/herramientas/checklist-portfolio-junior", key: "tools_portfolio" },
+];
+
+const RUTAS_SUBLINKS = [
+  { path: "/rutas/primer-empleo-tech", key: "ruta_primer_empleo_tech_title" },
+  { path: "/rutas/qa-automation", key: "ruta_qa_automation_title" },
+  { path: "/rutas/java-selenium", key: "ruta_java_selenium_title" },
+  { path: "/rutas/portfolio-junior", key: "ruta_portfolio_junior_title" },
+  { path: "/rutas/ci-cd-basico", key: "ruta_ci_cd_basico_title" },
+  { path: "/rutas/crear-saas", key: "ruta_crear_saas_title" },
+];
+
+function MobileDropdownSection({
+  mainPath,
+  label,
+  isActive,
+  subLinks,
+  onNavigate,
+}: {
+  mainPath: string;
+  label: string;
+  isActive: boolean;
+  subLinks: { path: string; label: string }[];
+  onNavigate: () => void;
+}) {
+  return (
+    <div className="rounded-xl border border-border/30 px-2 py-2">
+      <Link
+        to={mainPath}
+        onClick={onNavigate}
+        className={`flex items-center gap-3 px-2 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive ? "text-primary" : "text-muted-foreground hover:bg-surface-hover hover:text-foreground"}`}
+      >
+        {isActive && <span className="w-1.5 h-1.5 rounded-full bg-primary" />}
+        {label}
+      </Link>
+      <div className="space-y-1 pl-3">
+        {subLinks.map((item) => (
+          <Link
+            key={item.path}
+            to={item.path}
+            onClick={onNavigate}
+            className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-muted-foreground hover:bg-surface-hover hover:text-foreground focus-visible:bg-surface-hover focus-visible:text-foreground"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-border/60" />
+            {item.label}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function Header() {
   const { locale, setLocale, t } = useLocale();
@@ -51,15 +111,53 @@ export default function Header() {
     setIsMobileOpen(false);
   }, [location.pathname]);
 
+  const isResourcesPath =
+    location.pathname === "/recursos" ||
+    location.pathname.startsWith("/recursos/") ||
+    location.pathname === "/guia-junior" ||
+    location.pathname.startsWith("/guia-junior/") ||
+    location.pathname === "/saas-boilerplate" ||
+    location.pathname.startsWith("/saas-boilerplate/") ||
+    location.pathname === "/arkeonix" ||
+    location.pathname.startsWith("/arkeonix/");
+
+  const isToolsPath =
+    location.pathname === "/herramientas" ||
+    location.pathname.startsWith("/herramientas/");
+
+  const isRutasPath =
+    location.pathname === "/rutas" ||
+    location.pathname.startsWith("/rutas/");
+
   const navLinkLabel = (key: string) => {
     if (key === "blog") return t("nav_blog");
-    if (key === "recursos") return t("nav_recursos");
     if (key === "guide") return t("nav_guide");
+    if (key === "tools") return t("nav_tools");
+    if (key === "resources") return t("nav_recursos");
     if (key === "academia") return t("nav_academia");
     if (key === "saas") return t("nav_saas");
     if (key === "contact") return t("nav_contact");
+    if (key === "tools_salary") return t("nav_tools_salary");
+    if (key === "tools_role_quiz") return t("nav_tools_role_quiz");
+    if (key === "tools_portfolio") return t("nav_tools_portfolio");
+    if (key === "rutas") return t("nav_rutas");
     return t(`category_${key}`);
   };
+
+  const resourceSubLinks = RESOURCE_SUBLINKS.map((s) => ({
+    path: s.path,
+    label: navLinkLabel(s.key),
+  }));
+
+  const toolSubLinks = TOOL_SUBLINKS.map((s) => ({
+    path: s.path,
+    label: navLinkLabel(s.key),
+  }));
+
+  const rutasSubLinks = RUTAS_SUBLINKS.map((s) => ({
+    path: s.path,
+    label: t(s.key),
+  }));
 
   return (
     <nav
@@ -95,8 +193,43 @@ export default function Header() {
           {/* Desktop nav */}
           <div className="hidden md:flex items-center justify-center gap-0.5 mx-auto">
             {NAV_LINKS.map(({ path, key }) => {
+              if (key === "resources") {
+                return (
+                  <DropdownNavItem
+                    key={path}
+                    label={navLinkLabel("resources")}
+                    mainPath="/recursos"
+                    subLinks={resourceSubLinks}
+                    isActive={isResourcesPath}
+                  />
+                );
+              }
+              if (key === "tools") {
+                return (
+                  <DropdownNavItem
+                    key={path}
+                    label={navLinkLabel("tools")}
+                    mainPath="/herramientas"
+                    subLinks={toolSubLinks}
+                    isActive={isToolsPath}
+                  />
+                );
+              }
+              if (key === "rutas") {
+                return (
+                  <DropdownNavItem
+                    key={path}
+                    label={navLinkLabel("rutas")}
+                    mainPath="/rutas"
+                    subLinks={rutasSubLinks}
+                    isActive={isRutasPath}
+                  />
+                );
+              }
+
               const isActive =
                 location.pathname === path ||
+                location.pathname.startsWith(`${path}/`) ||
                 (path === "/blog" && location.pathname === "/");
               return (
                 <Link
@@ -174,7 +307,7 @@ export default function Header() {
                 {isUserOpen && (
                   <div className="absolute right-0 mt-2 w-48 surface-elevated rounded-xl overflow-hidden animate-reveal p-1.5 border border-border/60">
                     <Link
-                      to="/guia-junior/dashboard"
+                      to="/recursos/guia-junior/dashboard"
                       onClick={() => setIsUserOpen(false)}
                       className="flex items-center gap-2.5 w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-200 text-muted-foreground hover:bg-muted/50 hover:text-foreground"
                     >
@@ -226,14 +359,54 @@ export default function Header() {
 
       {/* Mobile drawer */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-400 ease-out ${isMobileOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+        className={`md:hidden overflow-hidden transition-all duration-400 ease-out ${isMobileOpen ? "max-h-[calc(100vh-4rem)] opacity-100 overflow-y-auto" : "max-h-0 opacity-0"
           }`}
       >
         <div className="border-t border-border/20 bg-surface/95 backdrop-blur-3xl">
           <div className="px-4 py-3 space-y-0.5">
             {NAV_LINKS.map(({ path, key }) => {
+              if (key === "resources") {
+                return (
+                  <MobileDropdownSection
+                    key={path}
+                    mainPath="/recursos"
+                    label={navLinkLabel("resources")}
+                    isActive={isResourcesPath}
+                    subLinks={resourceSubLinks}
+                    onNavigate={() => setIsMobileOpen(false)}
+                  />
+                );
+              }
+
+              if (key === "tools") {
+                return (
+                  <MobileDropdownSection
+                    key={path}
+                    mainPath="/herramientas"
+                    label={navLinkLabel("tools")}
+                    isActive={isToolsPath}
+                    subLinks={toolSubLinks}
+                    onNavigate={() => setIsMobileOpen(false)}
+                  />
+                );
+              }
+
+              if (key === "rutas") {
+                return (
+                  <MobileDropdownSection
+                    key={path}
+                    mainPath="/rutas"
+                    label={navLinkLabel("rutas")}
+                    isActive={isRutasPath}
+                    subLinks={rutasSubLinks}
+                    onNavigate={() => setIsMobileOpen(false)}
+                  />
+                );
+              }
+
               const isActive =
                 location.pathname === path ||
+                location.pathname.startsWith(`${path}/`) ||
                 (path === "/blog" && location.pathname === "/");
               return (
                 <Link
@@ -290,7 +463,7 @@ export default function Header() {
           {user ? (
             <div className="px-4 py-3 space-y-2">
               <Link
-                to="/guia-junior/dashboard"
+                to="/recursos/guia-junior/dashboard"
                 onClick={() => setIsMobileOpen(false)}
                 className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:bg-surface-hover hover:text-foreground transition-all"
               >

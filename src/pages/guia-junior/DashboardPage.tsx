@@ -3,9 +3,10 @@ import { useAuth } from '@/context/AuthContext';
 import { useLocale } from '@/hooks/useLocale';
 import { Link } from 'react-router';
 import { chapters } from '@/data/guia/chapters';
+import { OPEN_SOURCE_MODE } from '@/config/monetization';
 
 export default function GuiaDashboardPage() {
-  const { user, access } = useAuth();
+  const { user, access, session } = useAuth();
   const { t } = useLocale();
   const [portalLoading, setPortalLoading] = useState(false);
   const [portalError, setPortalError] = useState<string | null>(null);
@@ -21,8 +22,10 @@ export default function GuiaDashboardPage() {
     try {
       const res = await fetch('/api/customer-portal', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id }),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session?.access_token ?? ''}`,
+        },
       });
       if (!res.ok) throw new Error();
       const { url } = await res.json();
@@ -47,12 +50,14 @@ export default function GuiaDashboardPage() {
         {chapters.map((ch) => (
           <Link
             key={ch.slug}
-            to={`/guia-junior/capitulo/${ch.slug}`}
+            to={`/recursos/guia-junior/capitulo/${ch.slug}`}
             className="block p-6 rounded-xl border border-border bg-surface hover:bg-surface-hover transition-colors"
           >
-            <span className="text-xs font-semibold text-primary uppercase">
-              {ch.free ? t('guia_dashboard_free') : t('guia_dashboard_premium')}
-            </span>
+            {!OPEN_SOURCE_MODE && (
+              <span className="text-xs font-semibold text-primary uppercase">
+                {ch.free ? t('guia_dashboard_free') : t('guia_dashboard_premium')}
+              </span>
+            )}
             <h3 className="text-lg font-semibold text-foreground mt-1">
               {t(ch.titleKey)}
             </h3>
@@ -63,7 +68,7 @@ export default function GuiaDashboardPage() {
         ))}
       </div>
 
-      {isSubscriber && (
+      {!OPEN_SOURCE_MODE && isSubscriber && (
         <div className="mt-10 p-5 rounded-xl border border-border bg-surface flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <p className="font-semibold text-foreground">{t('guia_dashboard_manage_sub')}</p>

@@ -14,6 +14,7 @@ Guía interna para Claude Code. Leer siempre antes de hacer cambios.
 - **Despliegue**: Vercel. Config en `vercel.json`
 - **i18n**: `src/locales/es.json` + `en.json`. Claves planas, hook `useLocale()` → `t(key)`
 - **Tipos**: `src/types/post.ts` y `src/types/lab.ts` — consultar antes de trabajar con posts
+- **Modo monetización**: `src/config/monetization.ts` controla el estado temporal open-source (`OPEN_SOURCE_MODE`) y pagos (`PAYMENTS_ENABLED`) para facilitar rollback futuro
 - **Automatización de publicaciones**: existe un flujo en **n8n** que publica posts automáticamente en Supabase para las secciones de **Productos** y **Noticias**. El flujo insertan directamente en las tablas `posts` (y posiblemente `lab_posts`). Históricamente publicaba en **Markdown**; se está migrando a **HTML**. No tocar la estructura de las tablas sin considerar el impacto en n8n.
 - **Formato de contenido**: el campo `content` en Supabase acepta tanto MD (posts viejos) como HTML (posts nuevos). La detección automática en PostPage/LabPostPage distingue por si el contenido empieza con `<tag`. El flujo n8n debe generar HTML puro (sin wrapper en MD) para que se renderice correctamente.
 
@@ -29,6 +30,54 @@ Guía interna para Claude Code. Leer siempre antes de hacer cambios.
 6. El **SPA fallback** en `vercel.json` excluye rutas `/api/`: `/((?!api/)(?!.*\\.).*)`
 7. Las **traducciones** siempre se añaden en paralelo a `es.json` Y `en.json`
 8. El contenido de los posts se guarda como **HTML** (TipTap WYSIWYG). Los posts viejos en Markdown siguen funcionando por detección automática en PostPage/LabPostPage
+9. Para pausas comerciales temporales, no borrar Stripe/Supabase premium: usar flags en `src/config/monetization.ts` y desactivar checkout/portal/webhook de forma reversible
+
+---
+
+## Procedimiento reversible: modo open-source
+
+Objetivo: pausar monetización sin eliminar infraestructura ni romper la reactivación futura.
+
+### 1) Flags a tocar (fuente de verdad)
+
+1. En `src/config/monetization.ts`:
+   - `OPEN_SOURCE_MODE = true` para abrir contenido premium en UI
+   - `PAYMENTS_ENABLED = !OPEN_SOURCE_MODE` para desactivar cobros cuando open-source está activo
+2. Estado esperado:
+   - **Open-source ON**: `OPEN_SOURCE_MODE=true`, `PAYMENTS_ENABLED=false`
+   - **Monetización ON**: `OPEN_SOURCE_MODE=false`, `PAYMENTS_ENABLED=true`
+
+### 2) Comportamiento de endpoints de pago
+
+- `POST /api/guia-checkout` y `POST /api/academia-checkout`:
+  - con pagos desactivados deben responder `410` + `Payments are temporarily disabled`
+- `POST /api/customer-portal`:
+  - con pagos desactivados debe responder `410` + `Customer portal is temporarily disabled`
+- `POST /api/guia-webhook`:
+  - con pagos desactivados debe responder `200` + `Payments disabled` (ack explícito para Stripe)
+- Al reactivar monetización, no cambiar contratos HTTP; solo volver a habilitar flags/env y mantener la misma semántica de errores.
+
+### 3) Notas RLS obligatorias (Supabase) para Guía y Academia
+
+En open-source, la UI puede quitar paywall, pero **RLS sigue mandando**: si no se ajusta, la base de datos seguirá bloqueando contenido premium.
+
+- **Guía (`guia_chapters`)**:
+  - política actual pública: `is_free = true`
+  - política premium actual: requiere `user_access` activo o B2B
+  - para open-source temporal, habilitar SELECT público también para capítulos premium (política adicional o ajuste temporal)
+  - al volver a monetización, revertir esa política para restablecer gating por `user_access`
+- **Academia (`academia_categories`, `academia_exams`, `academia_questions`)**:
+  - validar que existan políticas SELECT consistentes con el modo activo
+  - en open-source: permitir lectura pública de categorías/exámenes/preguntas premium
+  - en monetización: limitar premium por `user_access.product_id='academia'` y mantener inserción de `academia_attempts` para usuarios autenticados
+- Nunca desactivar RLS globalmente como atajo; aplicar cambios puntuales por tabla/política y dejar script reversible documentado.
+
+### 4) Checklist de rollback
+
+1. Cambiar flags en `src/config/monetization.ts`
+2. Verificar respuestas HTTP de endpoints de pago
+3. Aplicar/revertir políticas RLS de Guía y Academia según modo
+4. Probar navegación real: `guia-junior/capitulo/*` y `academia/*` con usuario anónimo y autenticado
 
 ---
 
@@ -75,3 +124,9 @@ Guía interna para Claude Code. Leer siempre antes de hacer cambios.
 - **Por qué ocurrió**: las Vercel Functions corren en Node/Edge, no en el cliente Vite
 - **Solución aplicada**: configurar env vars sin prefijo en Vercel dashboard para uso server-side
 - **Regla derivada**: variables server-side → sin `VITE_`. Variables cliente → con `VITE_`. Nunca mezclar.
+
+### [2026-05-18] Pausa comercial sin romper futura reactivación
+- **Qué pasé**: quitar precios/premium puede llevar a borrar rutas de checkout, webhooks y estructuras de acceso
+- **Por qué ocurrió**: solución rápida orientada a UI, sin estrategia de rollback
+- **Solución aplicada**: introducir flags (`OPEN_SOURCE_MODE` y `PAYMENTS_ENABLED`) y desactivar pagos vía código sin eliminar infraestructura
+- **Regla derivada**: para cambios temporales de negocio, preferir feature flags + desactivación reversible antes que eliminar tablas, rutas o integraciones

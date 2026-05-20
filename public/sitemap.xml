@@ -1,211 +1,217 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.arkeonixlabs.com/blog</loc>
-    <lastmod>2026-04-05</lastmod>
+    <loc>https://arkeonixlabs.com/</loc>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/recursos</loc>
-    <lastmod>2026-04-05</lastmod>
+    <loc>https://arkeonixlabs.com/blog</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://arkeonixlabs.com/lab</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://arkeonixlabs.com/recursos</loc>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/lab</loc>
-    <lastmod>2026-04-05</lastmod>
+    <loc>https://arkeonixlabs.com/recursos/guia-junior</loc>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/guia-junior</loc>
-    <lastmod>2026-04-05</lastmod>
+    <loc>https://arkeonixlabs.com/recursos/guia-junior/capitulo/antes-de-empezar</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://arkeonixlabs.com/recursos/saas-boilerplate</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://arkeonixlabs.com/herramientas</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://arkeonixlabs.com/herramientas/calculadora-salario</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://arkeonixlabs.com/herramientas/test-rol-tech</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://arkeonixlabs.com/herramientas/checklist-portfolio-junior</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://arkeonixlabs.com/rutas</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://arkeonixlabs.com/rutas/primer-empleo-tech</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://arkeonixlabs.com/rutas/qa-automation</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://arkeonixlabs.com/rutas/java-selenium</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://arkeonixlabs.com/rutas/portfolio-junior</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://arkeonixlabs.com/rutas/ci-cd-basico</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://arkeonixlabs.com/rutas/crear-saas</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://arkeonixlabs.com/academia</loc>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/guia-junior/capitulo/antes-de-empezar</loc>
-    <lastmod>2026-04-05</lastmod>
+    <loc>https://arkeonixlabs.com/about</loc>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/arkeonix</loc>
-    <lastmod>2026-04-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.arkeonixlabs.com/about</loc>
-    <lastmod>2026-04-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.arkeonixlabs.com/contact</loc>
-    <lastmod>2026-04-05</lastmod>
+    <loc>https://arkeonixlabs.com/contact</loc>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/privacy</loc>
-    <lastmod>2026-04-05</lastmod>
+    <loc>https://arkeonixlabs.com/affiliate-disclosure</loc>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/terms</loc>
-    <lastmod>2026-04-05</lastmod>
+    <loc>https://arkeonixlabs.com/privacy</loc>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/cookies</loc>
-    <lastmod>2026-04-05</lastmod>
+    <loc>https://arkeonixlabs.com/terms</loc>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/post/alfombrilla-de-escritorio-xxl-coffee-and-ink-stains-wipe-away-even-after-daily-spills</loc>
-    <lastmod>2026-04-04</lastmod>
+    <loc>https://arkeonixlabs.com/cookies</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://arkeonixlabs.com/post/selenium-vs-playwright-vs-cypress-2026</loc>
+    <lastmod>2026-04-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/post/ghome-smart-wifi-plug-with-usb-surprising-separate-control-for-usb-and-ac</loc>
-    <lastmod>2026-04-03</lastmod>
+    <loc>https://arkeonixlabs.com/post/roadmap-qa-automation-2026</loc>
+    <lastmod>2026-04-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/post/rowhammer-nvidia-gpu-attacks-full-system-compromise</loc>
-    <lastmod>2026-04-03</lastmod>
+    <loc>https://arkeonixlabs.com/post/authjs-v5-nextjs-15-complete-guide</loc>
+    <lastmod>2026-04-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/post/amazon-basics-128gb-usb-3-1-flash-drive-surprising-speed-and-space-but-flimsy-build-at-19-86-nbsp</loc>
-    <lastmod>2026-04-02</lastmod>
+    <loc>https://arkeonixlabs.com/post/sueldo-qa-automation-espana-2026</loc>
+    <lastmod>2026-04-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/post/alfombrilla-raton-xxl-surprising-emphasis-on-mouse-control-over-speed</loc>
-    <lastmod>2026-04-01</lastmod>
+    <loc>https://arkeonixlabs.com/lab/homelab-vscode-claude-agentic-workstation-2026</loc>
+    <lastmod>2026-04-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/post/quantum-breaks-ecc-far-fewer-resources</loc>
-    <lastmod>2026-04-01</lastmod>
+    <loc>https://arkeonixlabs.com/lab/saas-boilerplate-nextjs-15-stripe</loc>
+    <lastmod>2026-04-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/post/usb-c-to-hdmi-adapter-instant-reliable-4k-on-macbook-pro-for-just-11-99</loc>
-    <lastmod>2026-03-31</lastmod>
+    <loc>https://arkeonixlabs.com/lab/api-layer-blog-vercel-functions-supabase-stripe-vite</loc>
+    <lastmod>2026-04-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/post/memoria-usb-128gb-dual-usb-a-usb-c-no-real-world-feedback-unproven-performance</loc>
-    <lastmod>2026-03-30</lastmod>
+    <loc>https://arkeonixlabs.com/lab/capa-api-blog-vercel-functions-supabase-stripe-vite</loc>
+    <lastmod>2026-04-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/post/cargador-inalambrico-para-samsung-s25-ultra-practicality-shines-but-charging-indicator-stumbles-with-multi-device-loads</loc>
-    <lastmod>2026-03-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.arkeonixlabs.com/post/proyector-4k-wimius-p62-pro-auto-focus-and-keystone-remove-setup-hassle</loc>
-    <lastmod>2026-03-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.arkeonixlabs.com/post/rode-podmic-broadcast-sound-but-noise-rejection-isn-t-foolproof-at-82</loc>
-    <lastmod>2026-03-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.arkeonixlabs.com/post/google-sets-2029-q-day-readiness-deadline</loc>
-    <lastmod>2026-03-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.arkeonixlabs.com/post/philips-hue-gu10-smart-bulbs-bluetooth-control-caps-expansion-at-10-devices</loc>
-    <lastmod>2026-03-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.arkeonixlabs.com/post/anker-555-usb-c-hub-8-in-1-dual-usb-a-ports-make-this-compact-hub-surprisingly-essential</loc>
-    <lastmod>2026-03-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.arkeonixlabs.com/post/teampcp-malware-wipes-iranian-machines-trivy</loc>
+    <loc>https://arkeonixlabs.com/lab/how-to-install-openclaw</loc>
     <lastmod>2026-03-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/post/sony-gaming-stereo-headset-40mm-drivers-keep-chat-and-game-audio-impressively-distinct-for-16-51</loc>
-    <lastmod>2026-03-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.arkeonixlabs.com/post/tozo-a1-wireless-earbuds-3-7-grams-means-all-day-comfort-without-earplug-fatigue</loc>
-    <lastmod>2026-03-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.arkeonixlabs.com/post/logitech-bcc950-webcam-flawless-1080p-and-80-db-audio-but-remote-frustrates-fast-meetings</loc>
-    <lastmod>2026-03-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.arkeonixlabs.com/post/neewer-basic-7-desk-ring-light-stays-steady-at-full-extension-where-others-wobble</loc>
+    <loc>https://arkeonixlabs.com/lab/openclaw-ai-agent-risks-security-guide</loc>
     <lastmod>2026-03-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.arkeonixlabs.com/post/monodeal-usb-conference-microphone-no-user-data-just-pure-specs-at-35-99</loc>
-    <lastmod>2026-03-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.arkeonixlabs.com/post/analysis-of-javascript-3</loc>
-    <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.arkeonixlabs.com/lab/how-to-install-openclaw</loc>
-    <lastmod>2026-03-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.arkeonixlabs.com/lab/openclaw-ai-agent-risks-security-guide</loc>
-    <lastmod>2026-03-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.arkeonixlabs.com/lab/cheap-mini-pc-server-2026</loc>
+    <loc>https://arkeonixlabs.com/lab/cheap-mini-pc-server-2026</loc>
     <lastmod>2026-02-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

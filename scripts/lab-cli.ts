@@ -156,7 +156,7 @@ async function publish(filePath: string, isDryRun: boolean) {
     }
 
     console.log(`✅ Published! ID: ${data.id}, slug: ${data.slug}`);
-    console.log(`   🔗 https://www.arkeonixlabs.com/lab/${data.slug}\n`);
+    console.log(`   🔗 https://arkeonixlabs.com/lab/${data.slug}\n`);
 
     // Move file to published/
     const publishedDir = resolve(dirname(absPath), "@/published");

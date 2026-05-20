@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
-import type { MetaFunction } from "react-router";
+import { useLoaderData } from "react-router";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const meta: MetaFunction = () => [
@@ -15,24 +16,44 @@ export const meta: MetaFunction = () => [
   { name: "twitter:title", content: "Laboratorio Técnico | Arkeonix Labs" },
   { name: "twitter:description", content: "Guías avanzadas de equipos, servidores y despliegue técnico por Arkeonix Labs." },
   { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  { property: "og:site_name", content: "Arkeonix Labs" },
+  { property: "og:type", content: "website" },
 ];
 import { FiTerminal } from "react-icons/fi";
 import LabPostCard from "@/components/posts/LabPostCard";
+import PageHero from "@/components/ui/PageHero";
 import Pagination from "@/components/ui/Pagination";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import { supabase } from "@/lib/supabase";
 import { useLocale } from "@/hooks/useLocale";
+import { LAB_LIST_SELECT, loadLabListData, type SupabaseListClient } from "@/utils/seoLoaders";
 import type { LabPostListItem } from "@/types/lab";
 
 const PAGE_SIZE = 6;
 
+type LabLoaderData = {
+    posts: LabPostListItem[];
+    totalCount: number;
+    language: "ES" | "EN";
+};
+
+// eslint-disable-next-line react-refresh/only-export-components
+export async function loader({ request }: LoaderFunctionArgs): Promise<LabLoaderData> {
+    return loadLabListData(
+        request,
+        supabase ? (supabase as unknown as SupabaseListClient<LabPostListItem>) : null,
+        PAGE_SIZE,
+    );
+}
+
 export default function LabPage() {
     const { locale, t } = useLocale();
-    const [posts, setPosts] = useState<LabPostListItem[]>([]);
-    const [loading, setLoading] = useState(true);
+    const initialData = useLoaderData<typeof loader>();
+    const [posts, setPosts] = useState<LabPostListItem[]>(initialData.posts);
+    const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalCount, setTotalCount] = useState(0);
+    const [totalCount, setTotalCount] = useState(initialData.totalCount);
     const [activeTag, setActiveTag] = useState<string | null>(null);
 
     const languageFilter = locale.toUpperCase();
@@ -43,40 +64,37 @@ export default function LabPage() {
             setLoading(true);
             setErrorMsg(null);
 
-            const from = (page - 1) * PAGE_SIZE;
-            const to = from + PAGE_SIZE - 1;
+            try {
+                if (!supabase) {
+                    throw new Error("Supabase client is not configured");
+                }
 
-            // Count query
-            let countQuery = supabase
-                .from("lab_posts")
-                .select("id", { count: "exact", head: true })
-                .eq("language", languageFilter)
-                .eq("status", "published");
-            if (tag) countQuery = countQuery.contains("tags", [tag]);
-            const { count } = await countQuery;
-            setTotalCount(count ?? 0);
+                const from = (page - 1) * PAGE_SIZE;
+                const to = from + PAGE_SIZE - 1;
 
-            // Data query
-            let query = supabase
-                .from("lab_posts")
-                .select("id, title, slug, excerpt, cover_image, published_at, language, tags, difficulty")
-                .eq("language", languageFilter)
-                .eq("status", "published")
-                .order("published_at", { ascending: false })
-                .range(from, to);
+                let query = supabase
+                    .from("lab_posts")
+                    .select(LAB_LIST_SELECT, { count: "exact" })
+                    .eq("language", languageFilter)
+                    .eq("status", "published")
+                    .order("published_at", { ascending: false })
+                    .range(from, to);
 
-            if (tag) query = query.contains("tags", [tag]);
+                if (tag) query = query.contains("tags", [tag]);
 
-            const { data, error } = await query;
+                const { data, error, count } = await query;
 
-            if (error) {
+                if (error) throw error;
+
+                setTotalCount(count ?? 0);
+                setPosts((data ?? []) as LabPostListItem[]);
+            } catch (error) {
                 console.error(error);
                 setErrorMsg(t("lab_post_error"));
                 setPosts([]);
-            } else {
-                setPosts((data ?? []) as LabPostListItem[]);
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
         },
         [languageFilter, t]
     );
@@ -108,27 +126,29 @@ export default function LabPage() {
             <Helmet>
                 <title>{t("lab_title")} | Arkeonix Labs</title>
                 <meta name="description" content={t("lab_meta_description")} />
-                <link rel="canonical" href="https://www.arkeonixlabs.com/lab" />
-                <meta property="og:title" content={`${t("lab_title")} | Arkeonix Labs`} />
-                <meta property="og:description" content={t("lab_meta_description")} />
             </Helmet>
+
+            <noscript>
+                <div className="max-w-5xl mx-auto px-6 py-12 text-center">
+                    <p className="text-muted-foreground">
+                        {locale === "es"
+                            ? "Este sitio utiliza JavaScript para cargar los artículos del lab. Explora todo el contenido en nuestro "
+                            : "This site uses JavaScript to load lab articles. Explore all content in our "}
+                        <a href="/sitemap.xml" className="text-primary underline">sitemap</a>.
+                    </p>
+                </div>
+            </noscript>
 
             {/* Header */}
             <ScrollReveal variant="blur" duration={800}>
-                <header className="text-center mb-16">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
-                        <FiTerminal className="w-4 h-4 text-emerald-400" />
-                        <span className="text-emerald-400 text-sm font-semibold tracking-wide uppercase">
-                            Lab
-                        </span>
-                    </div>
-                    <h1 className="text-5xl md:text-6xl font-black text-gray-900 dark:text-white mb-4">
-                        {t("lab_title")}
-                    </h1>
-                    <p className="text-gray-600 dark:text-white/70 text-lg md:text-xl max-w-3xl mx-auto">
-                        {t("lab_description")}
-                    </p>
-                </header>
+                <PageHero
+                    badge={t("lab_badge")}
+                    title={t("lab_title_part1")}
+                    titleHighlight={t("lab_title_part2")}
+                    description={t("lab_description")}
+                    badgeColor="emerald"
+                    badgeIcon={<FiTerminal className="w-4 h-4" />}
+                />
             </ScrollReveal>
 
             {/* Tag filters */}
@@ -161,7 +181,7 @@ export default function LabPage() {
             )}
 
             {/* Posts grid */}
-            {loading ? (
+            {loading && posts.length === 0 ? (
                 <div className="grid md:grid-cols-2 gap-8">
                     {[...Array(4)].map((_, i) => (
                         <div

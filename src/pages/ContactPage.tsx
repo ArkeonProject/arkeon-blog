@@ -10,7 +10,13 @@ export const meta: MetaFunction = () => [
   { property: "og:title", content: "Contacto | Arkeonix Labs" },
   { property: "og:description", content: "Ponte en contacto con el equipo de Arkeonix Labs para consultas técnicas o colaboraciones." },
   { property: "og:url", content: "https://arkeonixlabs.com/contact" },
+  { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  { property: "og:site_name", content: "Arkeonix Labs" },
+  { property: "og:type", content: "website" },
   { name: "twitter:card", content: "summary" },
+  { name: "twitter:title", content: "Contacto | Arkeonix Labs" },
+  { name: "twitter:description", content: "Ponte en contacto con el equipo de Arkeonix Labs para consultas técnicas o colaboraciones." },
+  { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
 ];
 import { useLocale } from "@/hooks/useLocale";
 import { FiMail, FiUser, FiMessageSquare, FiSend } from "react-icons/fi";
@@ -49,17 +55,31 @@ export default function ContactPage() {
       <Helmet>
         <title>{t("contact_title")} | Arkeonix Labs</title>
         <meta name="description" content={t("contact_meta_description")} />
-        <link rel="canonical" href="https://www.arkeonixlabs.com/contact" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={`${t("contact_title")} | Arkeonix Labs`} />
         <meta property="og:description" content={t("contact_meta_description")} />
-        <meta property="og:url" content="https://www.arkeonixlabs.com/contact" />
+        <meta property="og:url" content="https://arkeonixlabs.com/contact" />
         <meta property="og:site_name" content="Arkeonix Labs" />
-        <meta property="og:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta property="og:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${t("contact_title")} | Arkeonix Labs`} />
         <meta name="twitter:description" content={t("contact_meta_description")} />
-        <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta name="twitter:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ContactPage",
+            name: `${t("contact_title")} | Arkeonix Labs`,
+            description: t("contact_meta_description"),
+            url: "https://arkeonixlabs.com/contact",
+            mainEntity: {
+              "@type": "Organization",
+              name: "Arkeonix Labs",
+              url: "https://arkeonixlabs.com",
+              logo: "https://arkeonixlabs.com/arkeonix-logo.png",
+            },
+          })}
+        </script>
       </Helmet>
 
       {/* Header */}

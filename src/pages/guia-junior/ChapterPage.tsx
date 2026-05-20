@@ -1,4 +1,5 @@
 import { useParams, Link, useNavigate } from 'react-router';
+import type { MetaFunction } from 'react-router';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocale } from '@/hooks/useLocale';
@@ -7,6 +8,7 @@ import { supabase } from '@/lib/supabase';
 import { getChapterBySlug, getAdjacentChapters } from '@/data/guia/chapters';
 import Chapter0 from '@/data/guia/chapter-0';
 import ChapterContentRenderer from '@/components/guia/ChapterContentRenderer';
+import { OPEN_SOURCE_MODE } from '@/config/monetization';
 
 interface ChapterData {
   slug: string;
@@ -17,6 +19,35 @@ interface ChapterData {
 }
 
 const FREE_CHAPTERS = ['antes-de-empezar'];
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = ({ params }) => {
+  const slug = params.slug ?? '';
+  const chapter = getChapterBySlug(slug);
+  const title = chapter
+    ? `Capítulo ${chapter.index}: Guía Junior Tech | Arkeonix Labs`
+    : 'Guía Junior Tech | Arkeonix Labs';
+  const description = chapter
+    ? 'Capítulo de la Guía Junior Tech de Arkeonix Labs para preparar tu primer empleo en tecnología.'
+    : 'Guía práctica para juniors que preparan su primer empleo en tecnología.';
+  const url = `https://arkeonixlabs.com/recursos/guia-junior/capitulo/${slug}`;
+
+  return [
+    { title },
+    { name: 'description', content: description },
+    { tagName: 'link', rel: 'canonical', href: url },
+    { property: 'og:title', content: title },
+    { property: 'og:description', content: description },
+    { property: 'og:image', content: 'https://arkeonixlabs.com/arkeonix-logo.png' },
+    { property: 'og:url', content: url },
+    { property: 'og:site_name', content: 'Arkeonix Labs' },
+    { property: 'og:type', content: 'article' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: title },
+    { name: 'twitter:description', content: description },
+    { name: 'twitter:image', content: 'https://arkeonixlabs.com/arkeonix-logo.png' },
+  ];
+};
 
 export default function GuiaChapterPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -41,8 +72,8 @@ export default function GuiaChapterPage() {
       return;
     }
 
-    if (!user || !hasAccess('guia_junior')) {
-      navigate('/guia-junior');
+    if (!OPEN_SOURCE_MODE && (!user || !hasAccess('guia_junior'))) {
+      navigate('/recursos/guia-junior');
       return;
     }
 
@@ -96,7 +127,7 @@ export default function GuiaChapterPage() {
           <h1 className="text-2xl font-display font-bold text-foreground mb-4">
             {t('guia_chapter_not_found_title')}
           </h1>
-          <Link to="/guia-junior/dashboard" className="text-primary hover:underline">
+          <Link to="/recursos/guia-junior/dashboard" className="text-primary hover:underline">
             {t('guia_chapter_back_index')}
           </Link>
         </div>
@@ -109,16 +140,16 @@ export default function GuiaChapterPage() {
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md">
           <h1 className="text-2xl font-display font-bold text-foreground mb-4">
-            Contenido premium
+            {t('guia_access_denied_title')}
           </h1>
           <p className="text-muted-foreground mb-6">
-            Necesitas acceso activo a la Guia Junior para leer este capitulo.
+            {t('guia_access_denied_desc')}
           </p>
           <Link
-            to="/guia-junior"
+            to="/recursos/guia-junior"
             className="inline-block py-2.5 px-4 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity"
           >
-            Ver planes →
+            {t('guia_access_denied_back')}
           </Link>
         </div>
       </div>
@@ -126,10 +157,13 @@ export default function GuiaChapterPage() {
   }
 
   const chapterTitle = chapterData?.title || (chapter ? t(chapter.titleKey) : '');
+  const nextChapterLink = OPEN_SOURCE_MODE && slug === 'antes-de-empezar'
+    ? '/recursos/guia-junior/capitulo/puestos-existentes'
+    : (next ? `/recursos/guia-junior/capitulo/${next.slug}` : null);
   const chapterDesc = isFree
-    ? 'Capítulo gratuito de la Guía para Juniors: qué hacer después de tu curso de programación en España.'
+    ? 'Capítulo de apertura de la Guía para Juniors: qué hacer después de tu curso de programación en España.'
     : `Capítulo ${chapter?.index || ''} de la Guía para Juniors.`;
-  const canonicalUrl = `https://www.arkeonixlabs.com/guia-junior/capitulo/${slug}`;
+  const canonicalUrl = `https://arkeonixlabs.com/recursos/guia-junior/capitulo/${slug}`;
 
   return (
     <div className="py-10 max-w-4xl mx-auto px-4">
@@ -142,20 +176,20 @@ export default function GuiaChapterPage() {
         <meta property="og:description" content={chapterDesc} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:site_name" content="Arkeonix Labs" />
-        <meta property="og:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta property="og:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={chapterTitle || 'Guía Junior | Arkeonix Labs'} />
         <meta name="twitter:description" content={chapterDesc} />
-        <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta name="twitter:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
       </Helmet>
       <div className="mb-10">
-        <Link to="/guia-junior/dashboard" className="text-base text-muted-foreground hover:text-primary transition-colors">
+        <Link to="/recursos/guia-junior/dashboard" className="text-base text-muted-foreground hover:text-primary transition-colors">
           {t('guia_chapter_back_index')}
         </Link>
         <h1 className="text-4xl font-display font-bold text-foreground mt-4 leading-tight">
           {chapterData?.title || t(chapter.titleKey)}
         </h1>
-        {!isFree && chapterData?.is_free === false && (
+        {!OPEN_SOURCE_MODE && !isFree && chapterData?.is_free === false && (
           <span className="inline-block mt-3 text-sm font-bold text-accent uppercase tracking-wider">Premium</span>
         )}
       </div>
@@ -163,7 +197,7 @@ export default function GuiaChapterPage() {
       <div className="text-base leading-relaxed">
         {isFree && <Chapter0 />}
 
-        {chapterData && chapterData.is_free === false && chapterData.content && (
+        {chapterData?.content && (
           <ChapterContentRenderer content={chapterData.content as unknown as { sections: Array<{ type: string; [key: string]: unknown }> }} />
         )}
       </div>
@@ -175,7 +209,7 @@ export default function GuiaChapterPage() {
             <p className="text-sm text-muted-foreground mt-1">{t('cta_boilerplate_from_chapter_desc')}</p>
           </div>
           <Link
-            to="/arkeonix"
+            to="/recursos/saas-boilerplate"
             className="shrink-0 px-5 py-2.5 bg-primary text-primary-foreground text-sm font-semibold rounded-xl hover:opacity-90 transition-opacity whitespace-nowrap"
           >
             {t('cta_boilerplate_from_chapter_btn')}
@@ -201,7 +235,7 @@ export default function GuiaChapterPage() {
       <div className="mt-12 flex justify-between border-t border-border pt-6">
         {prev ? (
           <Link
-            to={`/guia-junior/capitulo/${prev.slug}`}
+            to={`/recursos/guia-junior/capitulo/${prev.slug}`}
             className="text-sm text-muted-foreground hover:text-primary transition-colors"
           >
             {t('guia_chapter_prev')}
@@ -209,16 +243,16 @@ export default function GuiaChapterPage() {
         ) : (
           <span />
         )}
-        {next ? (
+        {nextChapterLink ? (
           <Link
-            to={`/guia-junior/capitulo/${next.slug}`}
+            to={nextChapterLink}
             className="text-sm text-muted-foreground hover:text-primary transition-colors"
           >
             {t('guia_chapter_next')}
           </Link>
         ) : (
           <Link
-            to="/guia-junior/dashboard"
+            to="/recursos/guia-junior/dashboard"
             className="text-sm text-muted-foreground hover:text-primary transition-colors"
           >
             {t('guia_chapter_back_index')}

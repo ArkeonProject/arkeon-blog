@@ -18,7 +18,7 @@ export default function GuiaThanksPage() {
               {t('guia_thanks_message')}
             </p>
             <Link
-              to="/guia-junior/dashboard"
+              to="/recursos/guia-junior/dashboard"
               className="inline-block py-2.5 px-4 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity"
             >
               {t('guia_thanks_cta')}

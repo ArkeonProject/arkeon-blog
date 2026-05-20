@@ -36,7 +36,7 @@ if (!supabase) {
     );
 }
 
-const SITE_URL = "https://www.arkeonixlabs.com";
+const SITE_URL = "https://arkeonixlabs.com";
 
 interface Post {
     slug: string;
@@ -48,14 +48,28 @@ async function generateSitemap(): Promise<void> {
 
     // Static pages with their priorities and change frequencies
     const staticPages = [
+        { url: "/", priority: "1.0", changefreq: "daily" },
         { url: "/blog", priority: "1.0", changefreq: "daily" },
-        { url: "/recursos", priority: "0.9", changefreq: "weekly" },
         { url: "/lab", priority: "0.8", changefreq: "weekly" },
-        { url: "/guia-junior", priority: "0.8", changefreq: "weekly" },
-        { url: "/guia-junior/capitulo/antes-de-empezar", priority: "0.7", changefreq: "monthly" },
-        { url: "/arkeonix", priority: "0.8", changefreq: "monthly" },
+        { url: "/recursos", priority: "0.9", changefreq: "weekly" },
+        { url: "/recursos/guia-junior", priority: "0.8", changefreq: "weekly" },
+        { url: "/recursos/guia-junior/capitulo/antes-de-empezar", priority: "0.7", changefreq: "monthly" },
+        { url: "/recursos/saas-boilerplate", priority: "0.8", changefreq: "monthly" },
+        { url: "/herramientas", priority: "0.9", changefreq: "weekly" },
+        { url: "/herramientas/calculadora-salario", priority: "0.8", changefreq: "monthly" },
+        { url: "/herramientas/test-rol-tech", priority: "0.8", changefreq: "monthly" },
+        { url: "/herramientas/checklist-portfolio-junior", priority: "0.8", changefreq: "monthly" },
+        { url: "/rutas", priority: "0.9", changefreq: "weekly" },
+        { url: "/rutas/primer-empleo-tech", priority: "0.8", changefreq: "monthly" },
+        { url: "/rutas/qa-automation", priority: "0.8", changefreq: "monthly" },
+        { url: "/rutas/java-selenium", priority: "0.8", changefreq: "monthly" },
+        { url: "/rutas/portfolio-junior", priority: "0.8", changefreq: "monthly" },
+        { url: "/rutas/ci-cd-basico", priority: "0.8", changefreq: "monthly" },
+        { url: "/rutas/crear-saas", priority: "0.8", changefreq: "monthly" },
+        { url: "/academia", priority: "0.8", changefreq: "weekly" },
         { url: "/about", priority: "0.7", changefreq: "monthly" },
         { url: "/contact", priority: "0.6", changefreq: "monthly" },
+        { url: "/affiliate-disclosure", priority: "0.3", changefreq: "yearly" },
         { url: "/privacy", priority: "0.3", changefreq: "yearly" },
         { url: "/terms", priority: "0.3", changefreq: "yearly" },
         { url: "/cookies", priority: "0.3", changefreq: "yearly" },

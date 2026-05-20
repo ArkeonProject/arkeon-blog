@@ -1,16 +1,7 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-01-27.acacia' as Stripe.LatestApiVersion,
-});
-
-const supabaseAdmin = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+const PAYMENTS_ENABLED = process.env.PAYMENTS_ENABLED === 'true';
 
 function getSubscriptionId(invoice: Stripe.Invoice): string | null {
   const sub = invoice.parent?.subscription_details?.subscription ?? null;
@@ -19,12 +10,33 @@ function getSubscriptionId(invoice: Stripe.Invoice): string | null {
 }
 
 export async function POST(req: Request) {
+  if (!PAYMENTS_ENABLED) {
+    return new Response('Payments disabled', { status: 200 });
+  }
+  if (req.method !== 'POST') {
+    return new Response('Method Not Allowed', { status: 405 });
+  }
   try {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+      apiVersion: '2025-01-27.acacia' as Stripe.LatestApiVersion,
+    });
+    const supabaseAdmin = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+
     const body = await req.text();
     const sig = req.headers.get('stripe-signature')!;
 
-    // Handle v2 events (pings, etc.) — just acknowledge them
-    if (body.includes('"v2.core.event"')) {
+    // Handle v2 events (pings, etc.) — parse and acknowledge without signature verification
+    let parsedBody: Record<string, unknown> | null = null;
+    try {
+      parsedBody = JSON.parse(body) as Record<string, unknown>;
+    } catch {
+      // Not valid JSON — will fail signature verification below
+    }
+    if (parsedBody && parsedBody.type === 'v2.core.event') {
       return new Response('OK', { status: 200 });
     }
 
@@ -46,15 +58,28 @@ export async function POST(req: Request) {
         const customerEmail = session.customer_details?.email;
         if (customerEmail) {
           // Try to find existing user, otherwise invite (creates account + sends email)
-          const { data: inviteData, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(customerEmail);
+          const { data: inviteData } = await supabaseAdmin.auth.admin.inviteUserByEmail(customerEmail);
           if (inviteData?.user) {
             userId = inviteData.user.id;
-          } else if (inviteError?.message?.toLowerCase().includes('already been registered') || inviteError?.message?.toLowerCase().includes('already registered')) {
-            // User exists — find by listing (acceptable for early-stage user base)
-            const { data: listData } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 });
-            const existing = listData?.users.find(u => u.email === customerEmail);
-            if (existing) {
-              userId = existing.id;
+          } else {
+            // User may already exist — search robustly without relying on error text
+            let page = 1;
+            let found = false;
+            while (!found && page <= 5) {
+              const { data: listData } = await supabaseAdmin.auth.admin.listUsers({
+                perPage: 1000,
+                page,
+              });
+              if (!listData?.users.length) break;
+              const existing = listData.users.find((u) => u.email === customerEmail);
+              if (existing) {
+                userId = existing.id;
+                found = true;
+              } else {
+                page++;
+              }
+            }
+            if (userId) {
               // Send magic link so they get notified of their new purchase
               await supabaseAdmin.auth.admin.generateLink({ type: 'magiclink', email: customerEmail });
             }
@@ -96,10 +121,13 @@ export async function POST(req: Request) {
       }
 
       let expiresAt: string | null = null;
-      if (plan === 'monthly') {
-        expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
-      } else if (plan === 'annual' || plan === 'b2b_annual') {
-        expiresAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
+      if (plan === 'monthly' || plan === 'annual' || plan === 'b2b_annual') {
+        const subscriptionId = session.subscription as string | null;
+        if (subscriptionId) {
+          const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          expiresAt = new Date((subscription as any).current_period_end * 1000).toISOString();
+        }
       }
 
       const { error } = await supabaseAdmin.from('user_access').insert({
@@ -114,7 +142,7 @@ export async function POST(req: Request) {
 
       if (error) {
         console.error('Error inserting user_access:', error);
-        return new Response(JSON.stringify({ error: error.message, code: error.code, details: error.details }), {
+        return new Response(JSON.stringify({ error: 'Internal server error' }), {
           status: 500,
           headers: { 'Content-Type': 'application/json' },
         });

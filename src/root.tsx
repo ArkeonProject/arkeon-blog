@@ -15,6 +15,8 @@ import ScrollToTop from "@/components/ui/ScrollToTop";
 
 import "./styles/index.css";
 
+const googleSiteVerification = import.meta.env.VITE_GOOGLE_SITE_VERIFICATION?.trim();
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
@@ -32,26 +34,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
 
-        {/* Fallback meta tags — overridden by each route's meta export */}
-        <title>Arkeonix Labs — Precisión Técnica</title>
-        <meta name="description" content="Análisis técnicos detallados y vanguardia tecnológica bajo el estándar de Arkeonix Labs." />
+        {/* Global meta tags. Route-specific SEO is provided by each route's meta export. */}
         <meta name="author" content="David López" />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://arkeonixlabs.com/" />
-
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://arkeonixlabs.com/" />
-        <meta property="og:site_name" content="Arkeonix Labs" />
-        <meta property="og:title" content="Arkeonix Labs — Precisión Técnica" />
-        <meta property="og:description" content="Análisis técnicos detallados y vanguardia tecnológica bajo el estándar de Arkeonix Labs." />
-        <meta property="og:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
         <meta property="og:locale" content="es_ES" />
         <meta property="og:locale:alternate" content="en_US" />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Arkeonix Labs — Precisión Técnica" />
-        <meta name="twitter:description" content="Análisis técnicos detallados y vanguardia tecnológica bajo el estándar de Arkeonix Labs." />
-        <meta name="twitter:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
 
         {/* JSON-LD: Organization + WebSite */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
@@ -100,6 +87,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
         {/* Impact.com verification */}
         <meta name="impact-site-verification" content="4523a10c-aa16-4890-8092-0571f75c46f6" />
+
+        {googleSiteVerification ? (
+          <meta name="google-site-verification" content={googleSiteVerification} />
+        ) : null}
 
       </head>
       <body>
