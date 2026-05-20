@@ -170,7 +170,7 @@ export default function Header() {
             }`}
         >
           {/* Logo */}
-          <Link to="/blog" className="flex-shrink-0 flex items-center gap-2.5 group min-w-0">
+          <Link to="/" className="flex-shrink-0 flex items-center gap-2.5 group min-w-0">
             <img
               src="/arkeonix-logo.png"
               alt="Arkeonix Labs Logo"

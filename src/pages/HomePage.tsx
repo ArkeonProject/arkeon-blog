@@ -133,7 +133,7 @@ export default function HomePage() {
       titleKey: "home_ecosystem_tools_title",
       descKey: "home_ecosystem_tools_desc",
       link: "/herramientas",
-      comingSoon: true,
+      comingSoon: false,
     },
     {
       key: "routes",
@@ -143,7 +143,7 @@ export default function HomePage() {
       titleKey: "home_ecosystem_routes_title",
       descKey: "home_ecosystem_routes_desc",
       link: "/rutas",
-      comingSoon: true,
+      comingSoon: false,
     },
     {
       key: "lab",

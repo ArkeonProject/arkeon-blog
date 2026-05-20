@@ -34,6 +34,8 @@
 
 ### Fixed
 
+- El link "Arkeonix Labs" del header ahora apunta a la homepage (`/`) en lugar de `/blog`.
+- Las cards "Herramientas" y "Rutas" en la homepage ya no aparecen como "Próximamente" y son navegables.
 - Contenido de post centrado correctamente cuando no hay tabla de contenidos lateral.
 - Título de página Arkeonix acortado para evitar truncamiento en SERPs.
 - Portfolio checklist: corregidos `aria-label` en controles de formulario y añadidos tests.
