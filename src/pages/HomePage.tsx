@@ -53,6 +53,8 @@ export const meta: MetaFunction = () => {
         "Herramientas gratuitas, rutas de aprendizaje y contenido técnico para juniors, QA y devs en España.",
     },
     { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+    { property: "og:site_name", content: "Arkeonix Labs" },
+    { property: "og:type", content: "website" },
   ];
 };
 
@@ -208,22 +210,21 @@ export default function HomePage() {
           {t("home_meta_title")}
         </title>
         <meta name="description" content={t("home_meta_description")} />
-        <link rel="canonical" href="https://www.arkeonixlabs.com/" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={t("home_meta_title")} />
         <meta property="og:description" content={t("home_meta_description")} />
-        <meta property="og:url" content="https://www.arkeonixlabs.com/" />
+        <meta property="og:url" content="https://arkeonixlabs.com/" />
         <meta property="og:site_name" content="Arkeonix Labs" />
         <meta
           property="og:image"
-          content="https://www.arkeonixlabs.com/arkeonix-logo.png"
+          content="https://arkeonixlabs.com/arkeonix-logo.png"
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={t("home_meta_title")} />
         <meta name="twitter:description" content={t("home_meta_description")} />
         <meta
           name="twitter:image"
-          content="https://www.arkeonixlabs.com/arkeonix-logo.png"
+          content="https://arkeonixlabs.com/arkeonix-logo.png"
         />
       </Helmet>
 

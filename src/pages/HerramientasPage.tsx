@@ -15,16 +15,55 @@ export const meta: MetaFunction = () => [
     content: "Utilidades prácticas para tomar mejores decisiones técnicas y profesionales.",
   },
   { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/herramientas" },
+  { property: "og:title", content: "Herramientas para developers | Arkeonix Labs" },
+  { property: "og:description", content: "Utilidades prácticas para tomar mejores decisiones técnicas y profesionales." },
+  { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  { property: "og:url", content: "https://arkeonixlabs.com/herramientas" },
+  { property: "og:site_name", content: "Arkeonix Labs" },
+  { property: "og:type", content: "website" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: "Herramientas para developers | Arkeonix Labs" },
+  { name: "twitter:description", content: "Utilidades prácticas para tomar mejores decisiones técnicas y profesionales." },
+  { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
 ];
 
 export default function HerramientasPage() {
   const { t } = useLocale();
+  const faqs = [
+    { question: t("tools_faq_q1"), answer: t("tools_faq_a1") },
+    { question: t("tools_faq_q2"), answer: t("tools_faq_a2") },
+    { question: t("tools_faq_q3"), answer: t("tools_faq_a3") },
+  ];
 
   return (
     <div className="max-w-4xl mx-auto py-12">
       <Helmet>
         <title>{t("tools_title")} | Arkeonix Labs</title>
         <meta name="description" content={t("tools_description")} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: t("tools_title"),
+            description: t("tools_description"),
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: t("tools_salary_title"), description: t("tools_salary_description"), url: "https://arkeonixlabs.com/herramientas/calculadora-salario" },
+              { "@type": "ListItem", position: 2, name: t("role_quiz_card_title"), description: t("role_quiz_card_description"), url: "https://arkeonixlabs.com/herramientas/test-rol-tech" },
+              { "@type": "ListItem", position: 3, name: t("portfolio_checklist_card_title"), description: t("portfolio_checklist_card_description"), url: "https://arkeonixlabs.com/herramientas/checklist-portfolio-junior" },
+            ],
+          })}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqs.map((faq) => ({
+              "@type": "Question",
+              name: faq.question,
+              acceptedAnswer: { "@type": "Answer", text: faq.answer },
+            })),
+          })}
+        </script>
       </Helmet>
 
       <PageHero
@@ -100,6 +139,20 @@ export default function HerramientasPage() {
             </Card>
           </div>
         </ScrollReveal>
+      </section>
+
+      <section className="mb-16">
+        <h2 className="text-2xl font-semibold text-[#007EAD] dark:text-[#00aaff] mb-6 text-center">
+          {t("tools_faq_title")}
+        </h2>
+        <div className="grid gap-4">
+          {faqs.map((faq) => (
+            <Card key={faq.question} className="p-5 border border-border">
+              <h3 className="font-display text-lg text-foreground">{faq.question}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{faq.answer}</p>
+            </Card>
+          ))}
+        </div>
       </section>
     </div>
   );

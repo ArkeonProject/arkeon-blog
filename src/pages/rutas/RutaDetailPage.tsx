@@ -6,6 +6,7 @@ import { FiArrowLeft, FiArrowRight, FiExternalLink } from "react-icons/fi";
 import PageHero from "@/components/ui/PageHero";
 import TableOfContents from "@/components/rutas/TableOfContents";
 import { getRutaBySlug, getAdjacentRutas } from "@/data/rutas";
+import { getRutaHowToSteps, getRutaSeoMeta } from "@/utils/rutaSeo";
 import type { RutaSection } from "@/types/ruta";
 import { useLocale } from "@/hooks/useLocale";
 
@@ -40,12 +41,29 @@ export const meta: MetaFunction = ({ params }) => {
     return [
       { title: "Ruta no encontrada | Arkeonix Labs" },
       { name: "description", content: "Ruta de aprendizaje no encontrada." },
+      { name: "robots", content: "noindex, follow" },
       { tagName: "link", rel: "canonical", href: `https://arkeonixlabs.com/rutas/${slug}` },
     ];
   }
+  const seo = getRutaSeoMeta(slug) ?? {
+    title: "Ruta de aprendizaje tech | Arkeonix Labs",
+    description: "Ruta de aprendizaje ordenada para avanzar en tecnología con foco práctico y profesional.",
+  };
+  const url = `https://arkeonixlabs.com/rutas/${slug}`;
   return [
-    { title: "Ruta de aprendizaje | Arkeonix Labs" },
-    { tagName: "link", rel: "canonical", href: `https://arkeonixlabs.com/rutas/${slug}` },
+    { title: seo.title },
+    { name: "description", content: seo.description },
+    { tagName: "link", rel: "canonical", href: url },
+    { property: "og:title", content: seo.title },
+    { property: "og:description", content: seo.description },
+    { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+    { property: "og:url", content: url },
+    { property: "og:site_name", content: "Arkeonix Labs" },
+    { property: "og:type", content: "article" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: seo.title },
+    { name: "twitter:description", content: seo.description },
+    { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
   ];
 };
 
@@ -99,6 +117,16 @@ export default function RutaDetailPage() {
       <Helmet>
         <title>{title} | Arkeonix Labs</title>
         <meta name="description" content={t(ruta.descKey)} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: title,
+            description: t(ruta.descKey),
+            totalTime: "PT1H",
+            step: getRutaHowToSteps(ruta, t, slug ?? ruta.slug),
+          })}
+        </script>
       </Helmet>
 
       <PageHero

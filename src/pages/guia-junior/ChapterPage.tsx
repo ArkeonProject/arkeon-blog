@@ -1,4 +1,5 @@
 import { useParams, Link, useNavigate } from 'react-router';
+import type { MetaFunction } from 'react-router';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocale } from '@/hooks/useLocale';
@@ -18,6 +19,35 @@ interface ChapterData {
 }
 
 const FREE_CHAPTERS = ['antes-de-empezar'];
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = ({ params }) => {
+  const slug = params.slug ?? '';
+  const chapter = getChapterBySlug(slug);
+  const title = chapter
+    ? `Capítulo ${chapter.index}: Guía Junior Tech | Arkeonix Labs`
+    : 'Guía Junior Tech | Arkeonix Labs';
+  const description = chapter
+    ? 'Capítulo de la Guía Junior Tech de Arkeonix Labs para preparar tu primer empleo en tecnología.'
+    : 'Guía práctica para juniors que preparan su primer empleo en tecnología.';
+  const url = `https://arkeonixlabs.com/recursos/guia-junior/capitulo/${slug}`;
+
+  return [
+    { title },
+    { name: 'description', content: description },
+    { tagName: 'link', rel: 'canonical', href: url },
+    { property: 'og:title', content: title },
+    { property: 'og:description', content: description },
+    { property: 'og:image', content: 'https://arkeonixlabs.com/arkeonix-logo.png' },
+    { property: 'og:url', content: url },
+    { property: 'og:site_name', content: 'Arkeonix Labs' },
+    { property: 'og:type', content: 'article' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: title },
+    { name: 'twitter:description', content: description },
+    { name: 'twitter:image', content: 'https://arkeonixlabs.com/arkeonix-logo.png' },
+  ];
+};
 
 export default function GuiaChapterPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -133,7 +163,7 @@ export default function GuiaChapterPage() {
   const chapterDesc = isFree
     ? 'Capítulo de apertura de la Guía para Juniors: qué hacer después de tu curso de programación en España.'
     : `Capítulo ${chapter?.index || ''} de la Guía para Juniors.`;
-  const canonicalUrl = `https://www.arkeonixlabs.com/recursos/guia-junior/capitulo/${slug}`;
+  const canonicalUrl = `https://arkeonixlabs.com/recursos/guia-junior/capitulo/${slug}`;
 
   return (
     <div className="py-10 max-w-4xl mx-auto px-4">
@@ -146,11 +176,11 @@ export default function GuiaChapterPage() {
         <meta property="og:description" content={chapterDesc} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:site_name" content="Arkeonix Labs" />
-        <meta property="og:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta property="og:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={chapterTitle || 'Guía Junior | Arkeonix Labs'} />
         <meta name="twitter:description" content={chapterDesc} />
-        <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta name="twitter:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
       </Helmet>
       <div className="mb-10">
         <Link to="/recursos/guia-junior/dashboard" className="text-base text-muted-foreground hover:text-primary transition-colors">

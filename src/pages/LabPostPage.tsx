@@ -195,7 +195,6 @@ export default function LabPostPage() {
                 <Helmet>
                     <title>{post.title} | Arkeonix Labs</title>
                     <meta name="description" content={description} />
-                    <link rel="canonical" href={`https://www.arkeonixlabs.com/lab/${slug}`} />
                     <meta
                         property="og:title"
                         content={`${post.title} | Arkeonix Labs`}
@@ -238,12 +237,12 @@ export default function LabPostPage() {
                                 "name": "Arkeonix Labs",
                                 "logo": {
                                     "@type": "ImageObject",
-                                    "url": "https://www.arkeonixlabs.com/arkeonix-logo.png",
+                                    "url": "https://arkeonixlabs.com/arkeonix-logo.png",
                                 },
                             },
                             "mainEntityOfPage": {
                                 "@type": "WebPage",
-                                "@id": `https://www.arkeonixlabs.com/lab/${slug}`,
+                                "@id": `https://arkeonixlabs.com/lab/${slug}`,
                             },
                             ...(post.cover_image && { image: post.cover_image }),
                         })}
@@ -311,7 +310,7 @@ export default function LabPostPage() {
                 <div className="border-t border-gray-300 dark:border-[#007EAD]/20 mt-4 mb-8" />
 
                 <div className="mb-8">
-                    <ShareButtons url={typeof window !== "undefined" ? window.location.href : `https://www.arkeonixlabs.com/lab/${slug}`} title={post.title} />
+                    <ShareButtons url={typeof window !== "undefined" ? window.location.href : `https://arkeonixlabs.com/lab/${slug}`} title={post.title} />
                 </div>
 
                 <div className="border-t border-gray-300 dark:border-[#007EAD]/20 mb-8" />

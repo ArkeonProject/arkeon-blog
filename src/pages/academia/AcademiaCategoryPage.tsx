@@ -1,11 +1,32 @@
 import { useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
+import type { MetaFunction } from "react-router";
 import { Link, useParams } from 'react-router';
 import { useLocale } from '@/hooks/useLocale';
 import { useAuth } from '@/context/AuthContext';
 import { useSupabaseQuery } from '@/hooks/useSupabaseQuery';
 import { supabase } from '@/lib/supabase';
 import type { AcademiaCategory, AcademiaExam, AcademiaAttempt } from '@/types/academia';
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = ({ params }) => {
+  const categorySlug = params.category ?? "";
+  return [
+    { title: "Academia | Arkeonix Labs" },
+    { name: "description", content: "Exámenes de práctica y recursos de preparación para entrevistas técnicas." },
+    { tagName: "link", rel: "canonical", href: `https://arkeonixlabs.com/academia/${categorySlug}` },
+    { property: "og:title", content: "Academia | Arkeonix Labs" },
+    { property: "og:description", content: "Exámenes de práctica y recursos de preparación para entrevistas técnicas." },
+    { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+    { property: "og:url", content: `https://arkeonixlabs.com/academia/${categorySlug}` },
+    { property: "og:site_name", content: "Arkeonix Labs" },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: "Academia | Arkeonix Labs" },
+    { name: "twitter:description", content: "Exámenes de práctica y recursos de preparación para entrevistas técnicas." },
+    { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  ];
+};
 
 export default function AcademiaCategoryPage() {
   const { t } = useLocale();
@@ -82,6 +103,17 @@ export default function AcademiaCategoryPage() {
     <div className="max-w-4xl mx-auto py-12">
       <Helmet>
         <title>{category.title} | Academia Arkeonix</title>
+        <meta name="description" content={`Exámenes de práctica de ${category.title} en Arkeonix Labs.`} />
+        <link rel="canonical" href={`https://arkeonixlabs.com/academia/${categorySlug}`} />
+        <meta property="og:title" content={`${category.title} | Academia Arkeonix`} />
+        <meta property="og:description" content={`Exámenes de práctica de ${category.title} en Arkeonix Labs.`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`https://arkeonixlabs.com/academia/${categorySlug}`} />
+        <meta property="og:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${category.title} | Academia Arkeonix`} />
+        <meta name="twitter:description" content={`Exámenes de práctica de ${category.title} en Arkeonix Labs.`} />
+        <meta name="twitter:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
       </Helmet>
 
       <Link to="/academia" className="text-sm text-muted-foreground hover:text-primary transition-colors mb-6 inline-block">

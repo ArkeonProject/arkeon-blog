@@ -1,7 +1,7 @@
-import { useEffect, useState, useCallback, type ReactNode } from "react";
+import { useEffect, useRef, useState, useCallback, type ReactNode } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router";
-import type { MetaFunction } from "react-router";
+import { Link, useLoaderData } from "react-router";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import {
   FiSearch,
   FiArrowRight,
@@ -14,9 +14,16 @@ import ScrollReveal from "@/components/ui/ScrollReveal";
 import PostSkeleton from "@/components/ui/PostSkeleton";
 import { supabase } from "@/lib/supabase";
 import { useLocale } from "@/hooks/useLocale";
+import { loadBlogListData, POST_LIST_SELECT, type SupabaseListClient } from "@/utils/seoLoaders";
 import type { PostListItem } from "@/types/post";
 
 const PAGE_SIZE = 9;
+
+type BlogLoaderData = {
+  posts: PostListItem[];
+  totalCount: number;
+  language: "ES" | "EN";
+};
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const meta: MetaFunction = () => {
@@ -32,8 +39,19 @@ export const meta: MetaFunction = () => {
     { name: "twitter:title", content: "Blog — Arkeonix Labs" },
     { name: "twitter:description", content: "Análisis y guías prácticas sobre desarrollo, testing y crecimiento profesional en el mercado español." },
     { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+    { property: "og:site_name", content: "Arkeonix Labs" },
+    { property: "og:type", content: "website" },
   ];
 };
+
+// eslint-disable-next-line react-refresh/only-export-components
+export async function loader({ request }: LoaderFunctionArgs): Promise<BlogLoaderData> {
+  return loadBlogListData(
+    request,
+    supabase ? (supabase as unknown as SupabaseListClient<PostListItem>) : null,
+    PAGE_SIZE,
+  );
+}
 
 function TitleGlow({ children }: { children: ReactNode }) {
   const [pos, setPos] = useState({ x: 0, y: 0, active: false });
@@ -75,12 +93,14 @@ function TitleGlow({ children }: { children: ReactNode }) {
 
 export default function BlogPage() {
   const { locale, t } = useLocale();
-  const [posts, setPosts] = useState<PostListItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const initialData = useLoaderData<typeof loader>();
+  const didSkipInitialFetch = useRef(false);
+  const [posts, setPosts] = useState<PostListItem[]>(initialData.posts);
+  const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
+  const [totalCount, setTotalCount] = useState(initialData.totalCount);
 
   const languageFilter = locale.toUpperCase();
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
@@ -90,9 +110,13 @@ export default function BlogPage() {
       setLoading(true);
       setErrorMsg(null);
 
+      if (!supabase) {
+        throw new Error("Supabase client is not configured");
+      }
+
       let query = supabase
         .from("posts")
-        .select("*", { count: "exact" })
+        .select(POST_LIST_SELECT, { count: "exact" })
         .eq("language", languageFilter)
         .eq("status", "published")
         .order("published_at", { ascending: false });
@@ -120,8 +144,14 @@ export default function BlogPage() {
   }, [languageFilter, currentPage, searchQuery]);
 
   useEffect(() => {
+    if (!didSkipInitialFetch.current) {
+      didSkipInitialFetch.current = true;
+      if (currentPage === 1 && !searchQuery && initialData.language === languageFilter && initialData.posts.length > 0) {
+        return;
+      }
+    }
     fetchPosts();
-  }, [fetchPosts]);
+  }, [currentPage, fetchPosts, initialData.language, initialData.posts.length, languageFilter, searchQuery]);
 
   const featuredPost = currentPage === 1 ? posts[0] : undefined;
   const otherPosts = currentPage === 1 ? posts.slice(1) : posts;
@@ -170,18 +200,32 @@ export default function BlogPage() {
       <Helmet>
         <title>{t("blog_title")}</title>
         <meta name="description" content={t("blog_meta_description")} />
-        <link rel="canonical" href="https://www.arkeonixlabs.com/blog" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={`${t("blog_title")} — Arkeonix Labs`} />
-        <meta property="og:description" content={t("blog_meta_description")} />
-        <meta property="og:url" content="https://www.arkeonixlabs.com/blog" />
-        <meta property="og:site_name" content="Arkeonix Labs" />
-        <meta property="og:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${t("blog_title")} — Arkeonix Labs`} />
-        <meta name="twitter:description" content={t("blog_meta_description")} />
-        <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Blog",
+            name: "Arkeonix Labs Blog",
+            description: t("blog_meta_description"),
+            url: "https://arkeonixlabs.com/blog",
+            publisher: {
+              "@type": "Organization",
+              name: "Arkeonix Labs",
+              logo: { "@type": "ImageObject", url: "https://arkeonixlabs.com/arkeonix-logo.png" },
+            },
+          })}
+        </script>
       </Helmet>
+
+      <noscript>
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 text-center">
+          <p className="text-muted-foreground">
+            {locale === "es"
+              ? "Este sitio utiliza JavaScript para cargar los posts más recientes. Explora todo el contenido en nuestro "
+              : "This site uses JavaScript to load the latest posts. Explore all content in our "}
+            <a href="/sitemap.xml" className="text-primary underline">sitemap</a>.
+          </p>
+        </div>
+      </noscript>
 
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
         {/* ── HEADER ── */}

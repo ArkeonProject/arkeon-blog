@@ -17,6 +17,16 @@ export const meta: MetaFunction = () => [
       "Caminos ordenados para aprender desarrollo, QA automation, DevOps y crear productos tech desde cero.",
   },
   { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/rutas" },
+  { property: "og:title", content: "Rutas de aprendizaje tech | Arkeonix Labs" },
+  { property: "og:description", content: "Caminos ordenados para aprender desarrollo, QA automation, DevOps y crear productos tech desde cero." },
+  { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  { property: "og:url", content: "https://arkeonixlabs.com/rutas" },
+  { property: "og:site_name", content: "Arkeonix Labs" },
+  { property: "og:type", content: "website" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: "Rutas de aprendizaje tech | Arkeonix Labs" },
+  { name: "twitter:description", content: "Caminos ordenados para aprender desarrollo, QA automation, DevOps y crear productos tech desde cero." },
+  { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
 ];
 
 export default function RutasPage() {
@@ -27,6 +37,21 @@ export default function RutasPage() {
       <Helmet>
         <title>{t("rutas_title")} | Arkeonix Labs</title>
         <meta name="description" content={t("rutas_description")} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: t("rutas_title"),
+            description: t("rutas_description"),
+            itemListElement: rutas.map((ruta, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              name: t(ruta.titleKey),
+              description: t(ruta.descKey),
+              url: `https://arkeonixlabs.com/rutas/${ruta.slug}`,
+            })),
+          })}
+        </script>
       </Helmet>
 
       <PageHero

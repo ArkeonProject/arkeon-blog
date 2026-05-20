@@ -14,6 +14,8 @@ export const meta: MetaFunction = () => [
   { name: "twitter:title", content: "Sobre Nosotros | Arkeonix Labs" },
   { name: "twitter:description", content: "Conoce al equipo de Arkeonix Labs y nuestra misión de precisión técnica en análisis de tecnología." },
   { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  { property: "og:site_name", content: "Arkeonix Labs" },
+  { property: "og:type", content: "website" },
 ];
 import { useLocale } from "@/hooks/useLocale";
 import ScrollReveal from "@/components/ui/ScrollReveal";
@@ -26,17 +28,31 @@ const AboutPage = () => {
       <Helmet>
         <title>{t("about_title")} | Arkeonix Labs</title>
         <meta name="description" content={t("about_meta_description")} />
-        <link rel="canonical" href="https://www.arkeonixlabs.com/about" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={`${t("about_title")} | Arkeonix Labs`} />
         <meta property="og:description" content={t("about_meta_description")} />
-        <meta property="og:url" content="https://www.arkeonixlabs.com/about" />
+        <meta property="og:url" content="https://arkeonixlabs.com/about" />
         <meta property="og:site_name" content="Arkeonix Labs" />
-        <meta property="og:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta property="og:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${t("about_title")} | Arkeonix Labs`} />
         <meta name="twitter:description" content={t("about_meta_description")} />
-        <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta name="twitter:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "AboutPage",
+            name: `${t("about_title")} | Arkeonix Labs`,
+            description: t("about_meta_description"),
+            url: "https://arkeonixlabs.com/about",
+            mainEntity: {
+              "@type": "Organization",
+              name: "Arkeonix Labs",
+              url: "https://arkeonixlabs.com",
+              logo: "https://arkeonixlabs.com/arkeonix-logo.png",
+            },
+          })}
+        </script>
       </Helmet>
 
       {/* Hero Section */}

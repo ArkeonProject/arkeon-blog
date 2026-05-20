@@ -13,6 +13,16 @@ export const meta: MetaFunction = () => [
       "Descubre si tu perfil se ajusta más a Frontend, Backend, QA, DevOps, Data, Cybersecurity o Product. Test gratuito basado en preferencias reales.",
   },
   { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/herramientas/test-rol-tech" },
+  { property: "og:title", content: "Test de Rol Tech — ¿Qué perfil encaja contigo? | Arkeonix Labs" },
+  { property: "og:description", content: "Descubre si tu perfil se ajusta más a Frontend, Backend, QA, DevOps, Data, Cybersecurity o Product. Test gratuito basado en preferencias reales." },
+  { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  { property: "og:url", content: "https://arkeonixlabs.com/herramientas/test-rol-tech" },
+  { property: "og:site_name", content: "Arkeonix Labs" },
+  { property: "og:type", content: "website" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: "Test de Rol Tech — ¿Qué perfil encaja contigo? | Arkeonix Labs" },
+  { name: "twitter:description", content: "Descubre si tu perfil se ajusta más a Frontend, Backend, QA, DevOps, Data, Cybersecurity o Product. Test gratuito basado en preferencias reales." },
+  { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
 ];
 
 export default function TechRoleQuizPage() {

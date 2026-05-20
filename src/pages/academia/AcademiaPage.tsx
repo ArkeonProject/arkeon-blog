@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router';
+import type { MetaFunction } from 'react-router';
 import { useLocale } from '@/hooks/useLocale';
 import { useSupabaseQuery } from '@/hooks/useSupabaseQuery';
 import { supabase } from '@/lib/supabase';
@@ -11,6 +12,23 @@ import { OPEN_SOURCE_MODE } from '@/config/monetization';
 type CategoryWithCount = AcademiaCategory & {
   exams: { count: number }[];
 };
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = () => [
+  { title: "Academia Tech | Arkeonix Labs" },
+  { name: "description", content: "Exámenes de práctica y preparación técnica para entrevistas, QA, desarrollo y fundamentos de tecnología." },
+  { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/academia" },
+  { property: "og:title", content: "Academia Tech | Arkeonix Labs" },
+  { property: "og:description", content: "Exámenes de práctica y preparación técnica para entrevistas, QA, desarrollo y fundamentos de tecnología." },
+  { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  { property: "og:url", content: "https://arkeonixlabs.com/academia" },
+  { property: "og:site_name", content: "Arkeonix Labs" },
+  { property: "og:type", content: "website" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: "Academia Tech | Arkeonix Labs" },
+  { name: "twitter:description", content: "Exámenes de práctica y preparación técnica para entrevistas, QA, desarrollo y fundamentos de tecnología." },
+  { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+];
 
 export default function AcademiaPage() {
   const { t } = useLocale();
@@ -30,16 +48,17 @@ export default function AcademiaPage() {
       <Helmet>
         <title>{t('academia_meta_title')} | Arkeonix Labs</title>
         <meta name="description" content={t('academia_meta_desc')} />
-        <link rel="canonical" href="https://www.arkeonixlabs.com/academia" />
+        <link rel="canonical" href="https://arkeonixlabs.com/academia" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={`${t('academia_meta_title')} | Arkeonix Labs`} />
         <meta property="og:description" content={t('academia_meta_desc')} />
-        <meta property="og:url" content="https://www.arkeonixlabs.com/academia" />
-        <meta property="og:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta property="og:url" content="https://arkeonixlabs.com/academia" />
+        <meta property="og:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
+        <meta property="og:site_name" content="Arkeonix Labs" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${t('academia_meta_title')} | Arkeonix Labs`} />
         <meta name="twitter:description" content={t('academia_meta_desc')} />
-        <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta name="twitter:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -47,8 +66,8 @@ export default function AcademiaPage() {
             "name": t('academia_meta_title'),
             "description": t('academia_meta_desc'),
             "brand": { "@type": "Brand", "name": "Arkeonix Labs" },
-            "url": "https://www.arkeonixlabs.com/academia",
-            "image": "https://www.arkeonixlabs.com/arkeonix-logo.png",
+            "url": "https://arkeonixlabs.com/academia",
+            "image": "https://arkeonixlabs.com/arkeonix-logo.png",
             ...(OPEN_SOURCE_MODE
               ? {}
               : {

@@ -13,6 +13,16 @@ export const meta: MetaFunction = () => [
       "Evalúa tu portfolio junior en 10 categorías: GitHub, README, testing, CI/CD, LinkedIn, CV y más. Obtén una puntuación y 3 mejoras prioritarias.",
   },
   { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/herramientas/checklist-portfolio-junior" },
+  { property: "og:title", content: "Checklist de Portfolio Junior — Evalúa tu perfil | Arkeonix Labs" },
+  { property: "og:description", content: "Evalúa tu portfolio junior en 10 categorías: GitHub, README, testing, CI/CD, LinkedIn, CV y más. Obtén una puntuación y 3 mejoras prioritarias." },
+  { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  { property: "og:url", content: "https://arkeonixlabs.com/herramientas/checklist-portfolio-junior" },
+  { property: "og:site_name", content: "Arkeonix Labs" },
+  { property: "og:type", content: "website" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: "Checklist de Portfolio Junior — Evalúa tu perfil | Arkeonix Labs" },
+  { name: "twitter:description", content: "Evalúa tu portfolio junior en 10 categorías: GitHub, README, testing, CI/CD, LinkedIn, CV y más. Obtén una puntuación y 3 mejoras prioritarias." },
+  { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
 ];
 
 export default function PortfolioChecklistPage() {

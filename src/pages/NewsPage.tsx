@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
+import type { MetaFunction } from "react-router";
 import { FiRadio } from "react-icons/fi";
 import PostList from "@/components/posts/PostList";
 import Pagination from "@/components/ui/Pagination";
@@ -10,6 +11,23 @@ import type { PostListItem } from "@/types/post";
 
 const NEWS_CATEGORY_VALUES = ["news", "News", "noticias", "Noticias", "NOTICIAS", "NEWS"];
 const PAGE_SIZE = 6;
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = () => [
+  { title: "Arkeonix News | Arkeonix Labs" },
+  { name: "description", content: "Noticias tecnológicas analizadas por el equipo de Arkeonix Labs." },
+  { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/news" },
+  { property: "og:title", content: "Arkeonix News | Arkeonix Labs" },
+  { property: "og:description", content: "Noticias tecnológicas analizadas por el equipo de Arkeonix Labs." },
+  { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  { property: "og:url", content: "https://arkeonixlabs.com/news" },
+  { property: "og:site_name", content: "Arkeonix Labs" },
+  { property: "og:type", content: "website" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: "Arkeonix News | Arkeonix Labs" },
+  { name: "twitter:description", content: "Noticias tecnológicas analizadas por el equipo de Arkeonix Labs." },
+  { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+];
 
 export default function NewsPage() {
   const { locale, t } = useLocale();
@@ -76,7 +94,7 @@ export default function NewsPage() {
       <Helmet>
         <title>{t("news_title")} — Arkeonix Labs</title>
         <meta name="description" content={t("news_meta_description")} />
-        <link rel="canonical" href="https://www.arkeonixlabs.com/news" />
+        <link rel="canonical" href="https://arkeonixlabs.com/news" />
         <meta property="og:title" content={`${t("news_title")} — Arkeonix Labs`} />
         <meta property="og:description" content={t("news_meta_description")} />
       </Helmet>

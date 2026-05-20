@@ -42,6 +42,7 @@ labs
 
 # Build output y artefactos locales
 build/
+reports/
 .react-router/
 .vercel/
 .kilocode/

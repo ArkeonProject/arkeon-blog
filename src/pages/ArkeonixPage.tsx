@@ -16,6 +16,8 @@ export const meta: MetaFunction = () => [
   { name: "twitter:title", content: "Arkeonix SaaS — Enterprise Boilerplate | Arkeonix Labs" },
   { name: "twitter:description", content: "Arkeonix SaaS es un boilerplate listo para producción con autenticación, pagos con Stripe, multi-tenancy y RBAC. Lanza tu SaaS en días, no meses." },
   { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  { property: "og:site_name", content: "Arkeonix Labs" },
+  { property: "og:type", content: "website" },
 ];
 import { useLocale } from "@/hooks/useLocale";
 import { useAuth } from "@/context/AuthContext";
@@ -202,17 +204,16 @@ export default function ArkeonixPage() {
       <Helmet>
         <title>Arkeonix SaaS — {t("arkeonix_meta_title")}</title>
         <meta name="description" content={OPEN_SOURCE_MODE ? t("arkeonix_meta_description_open_source") : t("arkeonix_meta_description")} />
-        <link rel="canonical" href="https://www.arkeonixlabs.com/recursos/saas-boilerplate" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Arkeonix SaaS — Arkeonix Labs" />
         <meta property="og:description" content={OPEN_SOURCE_MODE ? t("arkeonix_meta_description_open_source") : t("arkeonix_meta_description")} />
-        <meta property="og:url" content="https://www.arkeonixlabs.com/recursos/saas-boilerplate" />
+        <meta property="og:url" content="https://arkeonixlabs.com/recursos/saas-boilerplate" />
         <meta property="og:site_name" content="Arkeonix Labs" />
-        <meta property="og:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta property="og:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Arkeonix SaaS — Arkeonix Labs" />
         <meta name="twitter:description" content={OPEN_SOURCE_MODE ? t("arkeonix_meta_description_open_source") : t("arkeonix_meta_description")} />
-        <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta name="twitter:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -220,8 +221,8 @@ export default function ArkeonixPage() {
             "name": "Arkeonix SaaS Boilerplate",
             "description": OPEN_SOURCE_MODE ? t("arkeonix_meta_description_open_source") : t("arkeonix_meta_description"),
             "brand": { "@type": "Brand", "name": "Arkeonix Labs" },
-            "url": "https://www.arkeonixlabs.com/recursos/saas-boilerplate",
-            "image": "https://www.arkeonixlabs.com/arkeonix-logo.png",
+            "url": "https://arkeonixlabs.com/recursos/saas-boilerplate",
+            "image": "https://arkeonixlabs.com/arkeonix-logo.png",
             ...(OPEN_SOURCE_MODE
               ? {}
               : {
@@ -232,7 +233,7 @@ export default function ArkeonixPage() {
                     "price": "149",
                     "priceCurrency": "EUR",
                     "availability": "https://schema.org/InStock",
-                    "url": "https://www.arkeonixlabs.com/recursos/saas-boilerplate"
+                    "url": "https://arkeonixlabs.com/recursos/saas-boilerplate"
                   },
                   {
                     "@type": "Offer",
@@ -240,7 +241,7 @@ export default function ArkeonixPage() {
                     "price": "299",
                     "priceCurrency": "EUR",
                     "availability": "https://schema.org/InStock",
-                    "url": "https://www.arkeonixlabs.com/recursos/saas-boilerplate"
+                    "url": "https://arkeonixlabs.com/recursos/saas-boilerplate"
                   }
                 ],
               }),

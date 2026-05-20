@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import type { MetaFunction } from "react-router";
 import { Link, useParams } from 'react-router';
 import { useLocale } from '@/hooks/useLocale';
 import { useAuth } from '@/context/AuthContext';
@@ -13,6 +15,18 @@ interface ExamWithCategory extends AcademiaExam {
 }
 
 const PASS_THRESHOLD = 65;
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = ({ params }) => {
+  const categorySlug = params.category ?? "";
+  const examSlug = params.slug ?? "";
+  return [
+    { title: "Examen de práctica | Arkeonix Labs" },
+    { name: "description", content: "Examen de práctica técnico en Arkeonix Labs." },
+    { name: "robots", content: "noindex, nofollow" },
+    { tagName: "link", rel: "canonical", href: `https://arkeonixlabs.com/academia/${categorySlug}/${examSlug}` },
+  ];
+};
 
 export default function AcademiaExamPage() {
   const { t } = useLocale();
@@ -360,6 +374,11 @@ export default function AcademiaExamPage() {
 
   return (
     <div className="max-w-5xl mx-auto py-6">
+      <Helmet>
+        <title>{exam ? `${exam.title} | Arkeonix Labs` : "Examen de práctica | Arkeonix Labs"}</title>
+        <meta name="description" content={exam ? `Examen de práctica de ${exam.title} en Arkeonix Labs.` : "Examen de práctica técnico en Arkeonix Labs."} />
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       {/* Header bar */}
       <div className="flex items-center justify-between mb-6 p-4 rounded-xl bg-surface border border-border">
         <div className="flex items-center gap-3">

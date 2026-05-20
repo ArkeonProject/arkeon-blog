@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router';
+import type { MetaFunction } from 'react-router';
 import { useLocale } from '@/hooks/useLocale';
 import { useAuth } from '@/context/AuthContext';
 import { chapters } from '@/data/guia/chapters';
@@ -10,6 +11,23 @@ import { OPEN_SOURCE_MODE } from '@/config/monetization';
 
 const PRICE_LIFETIME = import.meta.env.VITE_STRIPE_PRICE_GUIA_LIFETIME;
 const PRICE_B2B_LIFETIME = import.meta.env.VITE_STRIPE_PRICE_GUIA_B2B_LIFETIME;
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const meta: MetaFunction = () => [
+  { title: "Guía Junior Tech | Arkeonix Labs" },
+  { name: "description", content: "Guía práctica para juniors: roles, salarios, aprendizaje, CV, portfolio y primer empleo tech en España." },
+  { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/recursos/guia-junior" },
+  { property: "og:title", content: "Guía Junior Tech | Arkeonix Labs" },
+  { property: "og:description", content: "Guía práctica para juniors: roles, salarios, aprendizaje, CV, portfolio y primer empleo tech en España." },
+  { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  { property: "og:url", content: "https://arkeonixlabs.com/recursos/guia-junior" },
+  { property: "og:site_name", content: "Arkeonix Labs" },
+  { property: "og:type", content: "website" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: "Guía Junior Tech | Arkeonix Labs" },
+  { name: "twitter:description", content: "Guía práctica para juniors: roles, salarios, aprendizaje, CV, portfolio y primer empleo tech en España." },
+  { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+];
 
 export default function GuiaLandingPage() {
   const { t } = useLocale();
@@ -60,17 +78,17 @@ export default function GuiaLandingPage() {
       <Helmet>
         <title>{t('guia_landing_meta_title')} | Arkeonix Labs</title>
         <meta name="description" content={t('guia_landing_meta_desc')} />
-        <link rel="canonical" href="https://www.arkeonixlabs.com/recursos/guia-junior" />
+        <link rel="canonical" href="https://arkeonixlabs.com/recursos/guia-junior" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={`${t('guia_landing_meta_title')} | Arkeonix Labs`} />
         <meta property="og:description" content={t('guia_landing_meta_desc')} />
-        <meta property="og:url" content="https://www.arkeonixlabs.com/recursos/guia-junior" />
+        <meta property="og:url" content="https://arkeonixlabs.com/recursos/guia-junior" />
         <meta property="og:site_name" content="Arkeonix Labs" />
-        <meta property="og:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta property="og:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${t('guia_landing_meta_title')} | Arkeonix Labs`} />
         <meta name="twitter:description" content={t('guia_landing_meta_desc')} />
-        <meta name="twitter:image" content="https://www.arkeonixlabs.com/arkeonix-logo.png" />
+        <meta name="twitter:image" content="https://arkeonixlabs.com/arkeonix-logo.png" />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -78,8 +96,8 @@ export default function GuiaLandingPage() {
             "name": t('guia_landing_meta_title'),
             "description": t('guia_landing_meta_desc'),
             "brand": { "@type": "Brand", "name": "Arkeonix Labs" },
-            "url": "https://www.arkeonixlabs.com/recursos/guia-junior",
-            "image": "https://www.arkeonixlabs.com/arkeonix-logo.png",
+            "url": "https://arkeonixlabs.com/recursos/guia-junior",
+            "image": "https://arkeonixlabs.com/arkeonix-logo.png",
             ...(OPEN_SOURCE_MODE
               ? {}
               : {
@@ -90,7 +108,7 @@ export default function GuiaLandingPage() {
                     "price": "19",
                     "priceCurrency": "EUR",
                     "availability": "https://schema.org/InStock",
-                    "url": "https://www.arkeonixlabs.com/recursos/guia-junior"
+                    "url": "https://arkeonixlabs.com/recursos/guia-junior"
                   },
                   {
                     "@type": "Offer",
@@ -98,7 +116,7 @@ export default function GuiaLandingPage() {
                     "price": "299",
                     "priceCurrency": "EUR",
                     "availability": "https://schema.org/InStock",
-                    "url": "https://www.arkeonixlabs.com/recursos/guia-junior"
+                    "url": "https://arkeonixlabs.com/recursos/guia-junior"
                   }
                 ],
               }),

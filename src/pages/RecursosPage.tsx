@@ -19,6 +19,8 @@ export const meta: MetaFunction = () => [
   { property: "og:description", content: "Guía Junior y SaaS Boilerplate para acelerar tu crecimiento técnico y profesional." },
   { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
   { property: "og:url", content: "https://arkeonixlabs.com/recursos" },
+  { property: "og:site_name", content: "Arkeonix Labs" },
+  { property: "og:type", content: "website" },
   { name: "twitter:card", content: "summary_large_image" },
   { name: "twitter:title", content: "Recursos para developers | Arkeonix Labs" },
   { name: "twitter:description", content: "Guía Junior y SaaS Boilerplate para acelerar tu crecimiento técnico y profesional." },
@@ -33,7 +35,42 @@ export default function RecursosPage() {
       <Helmet>
         <title>{t("resources_title")} | Arkeonix Labs</title>
         <meta name="description" content={t("resources_description")} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: t("resources_title"),
+            description: t("resources_description"),
+            url: "https://arkeonixlabs.com/recursos",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: t("resources_guide_title"),
+                description: t("resources_guide_description"),
+                url: "https://arkeonixlabs.com/recursos/guia-junior",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: t("resources_saas_title"),
+                description: t("resources_saas_description"),
+                url: "https://arkeonixlabs.com/recursos/saas-boilerplate",
+              },
+            ],
+          })}
+        </script>
       </Helmet>
+
+      <noscript>
+        <section className="mb-8 rounded-2xl border border-border bg-surface p-6 text-sm text-muted-foreground">
+          <h2 className="mb-3 text-lg font-semibold text-foreground">Recursos principales</h2>
+          <ul className="space-y-2">
+            <li><a className="text-primary underline" href="/recursos/guia-junior">Guía Junior</a>: guía práctica para juniors que buscan su primer empleo tech.</li>
+            <li><a className="text-primary underline" href="/recursos/saas-boilerplate">Arkeonix SaaS Boilerplate</a>: base técnica para lanzar productos SaaS.</li>
+          </ul>
+        </section>
+      </noscript>
 
       <PageHero
         badge={t("nav_recursos")}

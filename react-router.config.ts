@@ -44,15 +44,18 @@ export default {
       "/privacy",
       "/terms",
       "/cookies",
+      "/affiliate-disclosure",
       "/recursos/saas-boilerplate",
       "/recursos/guia-junior",
+      "/recursos/guia-junior/capitulo/antes-de-empezar",
       "/rutas",
       "/rutas/primer-empleo-tech",
       "/rutas/qa-automation",
       "/rutas/java-selenium",
       "/rutas/portfolio-junior",
       "/rutas/ci-cd-basico",
-      "/rutas/crear-saas"
+      "/rutas/crear-saas",
+      "/academia"
     ];
 
     let dynamicRoutes: string[] = [];

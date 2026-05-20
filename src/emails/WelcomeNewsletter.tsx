@@ -71,7 +71,7 @@ export default function WelcomeNewsletter({ email = "" }: WelcomeNewsletterProps
             </Section>
 
             <Section style={ctaSection}>
-              <Button style={button} href="https://www.arkeonixlabs.com/blog">
+              <Button style={button} href="https://arkeonixlabs.com/blog">
                 Read the latest analysis →
               </Button>
             </Section>

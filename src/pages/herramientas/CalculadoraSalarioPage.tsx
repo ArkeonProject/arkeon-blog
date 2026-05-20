@@ -15,6 +15,16 @@ export const meta: MetaFunction = () => [
       "Calcula salario neto en España 2026 por comunidad, IRPF, Seguridad Social, hijos, edad y número de pagas.",
   },
   { tagName: "link", rel: "canonical", href: "https://arkeonixlabs.com/herramientas/calculadora-salario" },
+  { property: "og:title", content: "Calculadora Salario España 2026 | Arkeonix Labs" },
+  { property: "og:description", content: "Calcula salario neto en España 2026 por comunidad, IRPF, Seguridad Social, hijos, edad y número de pagas." },
+  { property: "og:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
+  { property: "og:url", content: "https://arkeonixlabs.com/herramientas/calculadora-salario" },
+  { property: "og:site_name", content: "Arkeonix Labs" },
+  { property: "og:type", content: "website" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: "Calculadora Salario España 2026 | Arkeonix Labs" },
+  { name: "twitter:description", content: "Calcula salario neto en España 2026 por comunidad, IRPF, Seguridad Social, hijos, edad y número de pagas." },
+  { name: "twitter:image", content: "https://arkeonixlabs.com/arkeonix-logo.png" },
 ];
 
 export default function CalculadoraSalarioPage() {
