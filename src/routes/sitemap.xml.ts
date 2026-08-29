@@ -1,4 +1,3 @@
-import type { LoaderFunctionArgs } from "react-router";
 import { createClient } from "@supabase/supabase-js";
 import { buildSitemapXml, type SitemapPost } from "@/utils/sitemap";
 
@@ -37,8 +36,7 @@ async function fetchPublishedPosts(table: "posts" | "lab_posts", env: SupabaseEn
   return (data ?? []) as SitemapPost[];
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
-export async function loader(_args: LoaderFunctionArgs) {
+export async function loader() {
   const env = getSupabaseEnv();
   const [posts, labPosts] = await Promise.all([
     fetchPublishedPosts("posts", env),
