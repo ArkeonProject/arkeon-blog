@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback, type ReactNode } from "react";
+import { useEffect, useState, useCallback, type ReactNode } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useLoaderData } from "react-router";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
@@ -94,7 +94,6 @@ function TitleGlow({ children }: { children: ReactNode }) {
 export default function BlogPage() {
   const { locale, t } = useLocale();
   const initialData = useLoaderData<typeof loader>();
-  const didSkipInitialFetch = useRef(false);
   const [posts, setPosts] = useState<PostListItem[]>(initialData.posts);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -144,14 +143,8 @@ export default function BlogPage() {
   }, [languageFilter, currentPage, searchQuery]);
 
   useEffect(() => {
-    if (!didSkipInitialFetch.current) {
-      didSkipInitialFetch.current = true;
-      if (currentPage === 1 && !searchQuery && initialData.language === languageFilter && initialData.posts.length > 0) {
-        return;
-      }
-    }
     fetchPosts();
-  }, [currentPage, fetchPosts, initialData.language, initialData.posts.length, languageFilter, searchQuery]);
+  }, [fetchPosts]);
 
   const featuredPost = currentPage === 1 ? posts[0] : undefined;
   const otherPosts = currentPage === 1 ? posts.slice(1) : posts;

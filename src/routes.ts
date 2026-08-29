@@ -68,6 +68,7 @@ export default [
   route("api/guia-chapter", "routes/api.guia-chapter.ts"),
   route("api/newsletter-subscribe", "routes/api.newsletter-subscribe.ts"),
   route("api/og", "routes/api.og.ts"),
+  route("sitemap.xml", "routes/sitemap.xml.ts"),
 
   // Fallback 404
   route("*", "pages/NotFoundPage.tsx"),
